@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.5.3)  8 JAN 2019 14:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.5.3)  8 JAN 2019 15:39
 entering extended mode
 **./CC_draft.tex
 (CC_draft.tex
@@ -170,21 +170,21 @@ G,.JBIG2,.JB2,.eps]
 ) [1
 
 {C:/Users/Owner/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-[2] (CC_draft.aux) ) 
+[2] [3] (CC_draft.aux) ) 
 Here is how much of TeX's memory you used:
  1549 strings out of 493305
  23312 string characters out of 3129803
- 82205 words of memory out of 3000000
+ 83205 words of memory out of 3000000
  5107 multiletter control sequences out of 15000+200000
  3948 words of font info for 15 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,5n,25p,1104b,115s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Users/Owner/AppData/Local/Programs/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Owner/AppData/Local/Programs/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on CC_draft.pdf (2 pages, 44455 bytes).
+ 41i,5n,25p,1569b,115s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/Owner/AppData/Local/Programs/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Owner/AppData/Local/Programs/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+Output written on CC_draft.pdf (3 pages, 50109 bytes).
 PDF statistics:
- 17 PDF objects out of 1000 (max. 8388607)
+ 20 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
