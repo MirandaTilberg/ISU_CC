@@ -1,5 +1,4 @@
 \documentclass{article}
-
 %%% Word count functionality - \write18 must be enabled %%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\wordcount{
 \immediate\write18{texcount -sub=section \jobname.tex | grep "Section" | sed -e 's/+.*//' | sed -n \thesection p > 'count.txt'}
@@ -18,14 +17,13 @@
 \graphicspath{{images/}}
 
 \begin{document}
-\makeatletter Wordcount: \@@input|"echo `texcount -1 CC_draft.tex`| cut -c1-4"\makeatother
-
+\noindent\makeatletter Wordcount: \@@input|"echo `texcount -1 CC_draft.tex`| cut -c1-4"\makeatother
 
 \textbf{Background: Footwear and Forensic Analysis}
 
-In forensic science, shoe prints and outsole characteristics fall into the category of pattern evidence. When a shoe print \svp{or impression} is found at a crime scene, \svp{the investigator may ask a series of questions}. \svp{Initially, it may be important to} determine the make and model of the shoe\svp{, which may help detectives locate comparison shoes from suspects}. \svp{Later in the investigation, the forensic examiner may consider individualizing characteristics found in the print; that is, small defects that make it possible to tie a specific shoe to the print left at the scene. In cases where such individualizing characteristics are not considered (estimated at 95\% of cases in the United States according to some experts\footnote{Leslie Hammer, presentation to CSAFE on March 5, 2018}), it is important to be able to assess the probability that the specific model of shoe which made the print would be found in the suspect's posessions}. \svp{This question is much more difficult than identifying the make and model of the shoe, because it requires that the forensic examiner have access to a database containing information about the frequency of shoes in the local population, where the local population itself may be difficult to define. Any tractable solution to the problem of assessing the random match probability of a shoeprint based only on class characteristics (make, model, and other characteristics determined during the manufacturing process) requires a way to assemble this database:} an automated solution to efficiently classify many types of shoes within a common system.
+In forensic science, shoe prints and outsole characteristics fall into the category of pattern evidence. When a shoe print \svp{or impression} is found at a crime scene, \svp{the investigator may ask a series of questions}. \svp{Initially, it may be important to} determine the make and model of the shoe\svp{, which may help detectives locate comparison shoes from suspects}. \svp{Later in the investigation, the forensic examiner may consider individualizing characteristics found in the print; that is, small defects that make it possible to tie a specific shoe to the print left at the scene. In cases where such individualizing characteristics are not considered (estimated at 95\% of cases in the United States according to some experts\footnote{Leslie Hammer, presentation to CSAFE on March 5, 2018}), it is important to be able to assess the probability that the specific model of shoe which made the print would be found in the suspect's posessions}. \svp{This question is much more difficult than identifying the make and model of the shoe, because it requires that the forensic examiner have access to a database containing information about the frequency of shoes in the local population, where the local population itself may be difficult to define. Any tractable solution to the problem of assessing the random match probability of a shoeprint based only on class characteristics\citep{bodziak_footwear_2000} (make, model, and other characteristics determined during the manufacturing process) requires a way to assemble this database:} an automated solution to efficiently classify many types of shoes within a common system.
 
-\parbox{\svp{I took a stab at re-phrasing this paragraph - all the thoughts are yours, I've just tweaked the language a bit and added things you didn't have - like the citation/stat from the conversation with Leslie Hammer. If you agree with the changes, go ahead and remove the \textbackslash{}svp\{\} highlights - those are there to draw your attention to the changed text. Then delete this comment :)}}
+\noindent\fbox{\parbox{.98\textwidth}{\svp{I took a stab at re-phrasing this paragraph - all the thoughts are yours, I've just tweaked the language a bit and added things you didn't have - like the citation/stat from the conversation with Leslie Hammer. If you agree with the changes, go ahead and remove the \textbackslash{}svp\{\} highlights - those are there to draw your attention to the changed text. Then delete this box/paragraph :)}}}
 
 
 \textbf{Classification}
