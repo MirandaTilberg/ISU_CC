@@ -35,3 +35,11 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
+
+# Knitr intermediate files
+*-concordance.tex
+*.log
+*.synctex.gz
+cache/
+*.tex
+*.bbl
