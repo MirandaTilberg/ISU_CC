@@ -17,13 +17,11 @@
 \graphicspath{{images/}}
 
 \begin{document}
-\noindent\makeatletter Wordcount: \@@input|"echo `texcount -1 CC_draft.tex`| cut -c1-4"\makeatother
+%\noindent\makeatletter Wordcount: \@@input|"echo `texcount -1 CC_draft.tex`| cut -c1-4"\makeatother
 
 \textbf{Background: Footwear and Forensic Analysis}
 
-In forensic science, shoe prints and outsole characteristics fall into the category of pattern evidence. When a shoe print \svp{or impression} is found at a crime scene, \svp{the investigator may ask a series of questions}. \svp{Initially, it may be important to} determine the make and model of the shoe\svp{, which may help detectives locate comparison shoes from suspects}. \svp{Later in the investigation, the forensic examiner may consider individualizing characteristics found in the print; that is, small defects that make it possible to tie a specific shoe to the print left at the scene. In cases where such individualizing characteristics are not considered (estimated at 95\% of cases in the United States according to some experts\footnote{Leslie Hammer, presentation to CSAFE on March 5, 2018}), it is important to be able to assess the probability that the specific model of shoe which made the print would be found in the suspect's posessions}. \svp{This question is much more difficult than identifying the make and model of the shoe, because it requires that the forensic examiner have access to a database containing information about the frequency of shoes in the local population, where the local population itself may be difficult to define. Any tractable solution to the problem of assessing the random match probability of a shoeprint based only on class characteristics\citep{bodziak_footwear_2000} (make, model, and other characteristics determined during the manufacturing process) requires a way to assemble this database:} an automated solution to efficiently classify many types of shoes within a common system.
-
-\noindent\fbox{\parbox{.98\textwidth}{\svp{I took a stab at re-phrasing this paragraph - all the thoughts are yours, I've just tweaked the language a bit and added things you didn't have - like the citation/stat from the conversation with Leslie Hammer. If you agree with the changes, go ahead and remove the \textbackslash{}svp\{\} highlights - those are there to draw your attention to the changed text. Then delete this box/paragraph :)}}}
+In forensic science, shoe prints and outsole characteristics fall into the category of pattern evidence. When a shoe print or impression is found at a crime scene, the investigator may ask a series of questions. Initially, it may be important to determine the make and model of the shoe, which may help detectives locate comparison shoes from suspects. Later in the investigation, the forensic examiner may consider individualizing characteristics found in the print; that is, small defects that make it possible to tie a specific shoe to the print left at the scene. In cases where such individualizing characteristics are not considered (estimated at 95\% of cases in the United States according to some experts\footnote{Leslie Hammer, presentation to CSAFE on March 5, 2018}), it is important to be able to assess the probability that the specific model of shoe which made the print would be found in the suspect's posessions. This question is much more difficult than identifying the make and model of the shoe, because it requires that the forensic examiner have access to a database containing information about the frequency of shoes in the local population, where the local population itself may be difficult to define. Any tractable solution to the problem of assessing the random match probability of a shoeprint based only on class characteristics\citep{bodziak_footwear_2000} (make, model, and other characteristics determined during the manufacturing process) requires a way to assemble this database: an automated solution to efficiently classify many types of shoes within a common system.
 
 
 \textbf{Classification}
@@ -33,7 +31,6 @@ Visual classification is a complex task that our brains have been trained to do 
 \textbf{Convolutional Neural Networks (CNNs)}
 
 While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers. Convolutional neural networks (CNNs) are a tool for supervised deep-learning that have become standard in recent years for automatic image classification. CNNS use combinations of convolutional and pooling hidden layers to filter raw information into features, which are then fed into densely connected layers which are trained to associate given sets of features with their desired labels. This translation-invariant automated classification mimics the human eye-to-brain classification process and has become one of the most widely used machine learning techniques for image classification.
-
 
 \textbf{Pre-trained CNNs}
 
@@ -61,15 +58,39 @@ Densely connected layers are typically the final layers in a CNN. These layers f
 *I went off on a tangent and am purposely not restructuring this paragraph yet. Sorry.*
 As we have just seen, convolutional layers and max-pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. VGG16, in particular, has over 14.7 million trainable parameters in its "eyes" alone. Luckily, CNNs offer one benefit that humans do not: you can utilize the eyes and replace the brain for new tasks. In terms of CNNs, it is possible to build a CNN that uses the weights already trained on over 1.2 million images in the convolutional layers, and then only retrain a new classifier for any new classification task. This reduced task brings the number of required training images down from millions to only thousands. Furthermore, this kind of approach is quite reasonable when considering what the CNN was originally trained to classsify. Since the 1,000 categories from the ILSVRC span a huge variety of natural and unnatural objects, we can likely trust that the features detected by the pre-trained CNN to be diverse enough to be applied to a new task.
 
-<<<<<<< HEAD
+
 \textbf{Outsole Class Characteristics}
+*Include something that explains what class characteristics are?*
+*Transition from CNN to shoes* In the beginning of this project, the literature (source IDK) indicated that geometric shapes are unique and well-defined enough to provide most of the necessary information to classify a shoe outsole. We have since settled on nine geometric categories, modified from (source): bowtie, chevron, circle, line, polygon, quadrilateral, star, text, and triangle. Many of these categories are self-explanatory, such as circle and triangle. Polygon is a catch-all for pentagons, hexagons, and octagons. Star is any concave shape, including X- or plus-shapes. Line is a difficult distinction, as most shapes are simply a combination of lines, but in this case it is reserved for cases where the other categies do not readily apply, such as repeating patterns of lines that are not distinctly quadrilaterals.
 
-*Transition from CNN to shoes* In the beginning of this project, the literature (source IDK) indicated that geometric shapes are unique and well-defined enough to provide most of the necessary information to classify a shoe outsole. 
+Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter "v" can easily be considered a chevron, and the letter "o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process.
 
-\end{document}
-=======
+\textbf{Data Collection and Structure}
+
+*Pick a date cut-off and use information true as of that date.*
+*Build up to final model somehow? Start with 
+
+Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe, a labeling/annotating interface [connected to] Matlab, which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* *Number of images per category?* To train the CNN, data was split such that 70\% went to training, and 15\% each to validation and test data.
+
+\textbf{Model Training}
+
+Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend.
+
+***I want to include the following ideas, but just don't want to spend the time writing them out when I'm unsure about the format.***
+
+-Use VGG16 Convolutional base and train new classifier, done by getting features from conv base and training only dense layers
+-Model training parameters (e.g., augmentation parameters, drop-out rate)
+-Model predictions are multi-label binary, probabilities don't add to one
+
+
+\textbf{Model Performance}
+
+*I feel like graphs will speak more here*
+-Accuracy and loss during training
+-Examples of prediction
+-Ways to measure accuracy (TPR, FPR, ROC/AUC)
+-Interesting case studies
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
 \end{document}
->>>>>>> b16d876cd9dac464360bf9646399a4d9747f61cb
