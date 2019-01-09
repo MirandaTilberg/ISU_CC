@@ -42,3 +42,4 @@ rsconnect/
 *.synctex.gz
 cache/
 *.tex
+*.bbl
