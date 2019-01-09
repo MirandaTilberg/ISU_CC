@@ -1,8 +1,14 @@
+\newcommand\wordcount{
+\immediate\write18{texcount -sub=section \jobname.tex | grep "Section" | sed -e 's/+.*//' | sed -n \thesection p > 'count.txt'}
+(\input{count.txt}words)}
+
 \documentclass{article}
 \usepackage{graphicx}
 \graphicspath{{images/}}
 
 \begin{document}
+\makeatletter Wordcount: \@@input|"echo `texcount -1 CC_draft.tex`| cut -c1-4"\makeatother
+
 
 \textbf{Background: Footwear and Forensic Analysis}
 
