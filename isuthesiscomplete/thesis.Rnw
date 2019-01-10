@@ -1,0 +1,163 @@
+% Template file for a standard thesis
+\documentclass[11pt]{isuthesis}
+\usepackage{graphicx}
+% Standard, old-style thesis
+\usepackage{isutraditional}   
+\chaptertitle
+% Old-style, thesis numbering down to subsubsection
+\alternate
+\usepackage{rotating}
+% Bibliography without numbers or labels
+\usepackage{natbib}
+\bibliographystyle{apa}
+%\includeonly{titletoc,chapter1}
+%Optional Package to add PDF bookmarks and hypertext links
+\usepackage[pdftex,hypertexnames=false,linktocpage=true]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,anchorcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue,bookmarksnumbered=true,pdfview=FitB}
+
+\usepackage{titletoc}
+\usepackage{hyperref}
+
+% Force TOC/LOT/LOF to add a pagebreak if there isn't room 
+% for at least N lines on the current page
+\usepackage{needspace}
+\newcommand\chaptocbreak{
+	\addtocontents{toc}{\protect\needspace{4\baselineskip}}
+	\addtocontents{lof}{\protect\needspace{2\baselineskip}}
+	\addtocontents{lot}{\protect\needspace{2\baselineskip}}
+}
+
+% %------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%
+
+% The following piece of code removes extra space on the top of each chapter
+%  that is default of latex report class documents
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@makechapterhead}{50\p@}{0pt}{}{}
+\patchcmd{\@makeschapterhead}{50\p@}{0pt}{}{}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Removing Bold characters in the Table of Contents
+% % Alternatively to this the isuthesis.cls file has been changed by default in the
+% % line section \renewcommand{\l@chapter}[2]{\addpenalty{-\@highpenalty}....
+%\titlecontents{chapter}
+%[0pt]                                               % left margin
+%{}%
+%{\contentsmargin{0pt}                               % numbered entry format
+%    \thecontentslabel\enspace%
+%    \large}
+%{\contentsmargin{0pt}\large}                        % unnumbered entry format
+%{\titlerule*[.5pc]{.}\contentspage}                 % filler-page format (e.g dots)
+%[]                                                  % below code (e.g vertical space)
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% In order to change space between the Table of contents items go to isuthesis.cls
+% line  \renewcommand{\l@chapter}[2]{\addpenalty{-\@highpenalty}....
+% change \vkip values
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This is to minimize orphan lines. Might not be possible to entirely remove them
+% Method 1 of doing this
+%\widowpenalty10000
+%\clubpenalty10000
+
+% Method 2 of doing this
+\usepackage[all]{nowidow}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Set the margins in the whole document
+\geometry{letterpaper, left=1in, top=1in, right=1in, bottom=1in, includehead=true} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png}
+%\begin{singlespace}
+\def\@makechapterheada{\vspace*{-2cm}\titlepage} % in order to reduce the space between margin and heading in titlepage
+\include{Preface/titlepage}
+%\end{singlespace}
+% Optional thesis dedication
+\include{Preface/dedication}
+% Table of Contents, List of Tables and List of Figures
+\pdfbookmark[1]{TABLE OF CONTENTS}{table}
+\tableofcontents
+%% The line below adds the word "Page" over the page numbers in TOC, LOT, LOF
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\addtocontents{lot}{~\hfill\textbf{Page}\par}
+\addtocontents{lof}{~\hfill\textbf{Page}\par}
+%%
+\addtocontents{toc}{\def\protect\@chapapp{}} \cleardoublepage \phantomsection
+\addcontentsline{toc}{chapter}{LIST OF TABLES}
+\listoftables
+\cleardoublepage \phantomsection \addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\listoffigures
+% Comment out the next line if NOT using chaptertitle
+\addtocontents{toc}{\def\protect\@chapapp{CHAPTER\ }}
+%Optional Acknowledgements
+\cleardoublepage \phantomsection
+\include{Preface/acknowl}
+%Optional thesis abstract
+\cleardoublepage \phantomsection
+\include{Preface/abstract}
+\newpage
+\pagenumbering{arabic}
+
+<<litReview, child='Body/chapter1.Rnw'>>=
+@
+\chaptocbreak
+<<litReview, child='Body/chapter2.Rnw'>>=
+@
+\chaptocbreak
+<<litReview, child='Body/chapter3.Rnw'>>=
+@
+\chaptocbreak
+<<litReview, child='Body/chapter4.Rnw'>>=
+@
+\chaptocbreak
+<<litReview, child='Body/chapter5.Rnw'>>=
+@
+\include{Reference/bibtex}
+<<litReview, child='Appendix/appendix1.Rnw'>>=
+@
+\chaptocbreak
+<<litReview, child='Appendix/appendix2.Rnw'>>=
+@
+%\include{Reference/bibtex}
+
+\end{document}
+
+% IMPORTANT NOTES
+% TABLE OF CONTENTS :
+% TOPIC 1:  If you need a page break follow the steps below
+% step1
+% check before which chapter in the table of contents you want a page break
+% step 2
+% go the folder "body". There open the chapter tex file that you noted needed page break in the table of contents..
+% step 3
+% insert  \addtocontents{toc}{\protect\newpage} before the first line i.e. before the line \chapter{RESULTS}.
+
+% TOPIC 2: Rearrage the reference before or after the appendix where the include statements are given and it 
+% gets rearranged in the toc
+% 
+% subtopic:  Including the references before the appendix only in the table of contents and not actually
+% Step 1: Go to the last chapter of your thesis
+% Step 2: Copy paste the following lines
+%
+% % Rearranging the table of contents to show references before appendix
+% \unappendixtitle
+% \addcontentsline{toc}{chapter}{REFERENCES} %this line is to be included before the last chapter so that in toc it appears after  the last chapter. If you want the reference to be the last entry of the toc, remove this line and in the biblio.tex file insert this line (or uncomment the line  )
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \def\@makechapterhead#1{%   
+% IN ORDER TO MAKE spacing changes in the title page got to the section in the isuthesis.cls file
+% that starts with \long\def\maketitle{\begin{titlepage} and you can use options like
+% singlespace (less spacing)
+%singlespacing (comparitively more spacing almost like 2 spacing)
+% onehalfspacing
+%doublespacing (this is more spacing than the singlespacing above )
+% more definitions on spacing can be found by going through the class file
+
