@@ -18,6 +18,17 @@
 \usepackage{titletoc}
 \usepackage{hyperref}
 
+%for class examples images
+\usepackage{tabu}
+\usepackage{subcaption}
+
+
+%%% Commenting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[table]{xcolor}
+\newcommand{\mt}[1]{{\color{magenta} #1}}
+\newcommand{\svp}[1]{{\color{blue} #1}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Force TOC/LOT/LOF to add a pagebreak if there isn't room 
 % for at least N lines on the current page
 \usepackage{needspace}
@@ -82,7 +93,7 @@
 \include{Preface/titlepage}
 %\end{singlespace}
 % Optional thesis dedication
-\include{Preface/dedication}
+%\include{Preface/dedication}
 % Table of Contents, List of Tables and List of Figures
 \pdfbookmark[1]{TABLE OF CONTENTS}{table}
 \tableofcontents
@@ -99,8 +110,8 @@
 % Comment out the next line if NOT using chaptertitle
 \addtocontents{toc}{\def\protect\@chapapp{CHAPTER\ }}
 %Optional Acknowledgements
-\cleardoublepage \phantomsection
-\include{Preface/acknowl}
+%\cleardoublepage \phantomsection
+%\include{Preface/acknowl}
 %Optional thesis abstract
 \cleardoublepage \phantomsection
 \include{Preface/abstract}
@@ -118,9 +129,9 @@
 \chaptocbreak
 <<litReview, child='Body/chapter4.Rnw'>>=
 @
-\chaptocbreak
-<<litReview, child='Body/chapter5.Rnw'>>=
-@
+%\chaptocbreak
+%<<litReview, child='Body/chapter5.Rnw'>>=
+%@
 \include{Reference/bibtex}
 <<litReview, child='Appendix/appendix1.Rnw'>>=
 @
