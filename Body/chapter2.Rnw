@@ -2,7 +2,7 @@
 %   which includes bibliographic references.
 
 \Sexpr{set_parent('../thesis.Rnw')}
-\graphicspath{{Images/ch2/}}
+\graphicspath{{Images/chapter2/}}
 
 \chapter{DATA AND METHODS}
 
