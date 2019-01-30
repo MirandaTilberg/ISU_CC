@@ -1,7 +1,7 @@
 % Chapter 3 from the thesis template file
 %   that contains an example table and figure.
 
-\Sexpr{set_parent('../thesis.Rnw')}
+\Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter3/}}
 
 \chapter{RESULTS}

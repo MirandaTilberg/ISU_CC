@@ -1,7 +1,7 @@
 % Chapter 2 of the Thesis Template File
 %   which includes bibliographic references.
 
-\Sexpr{set_parent('../thesis.Rnw')}
+\Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter2/}}
 
 \chapter{DATA AND METHODS}

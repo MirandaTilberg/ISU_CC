@@ -1,6 +1,6 @@
 % Chapter 1 of the Thesis Template File
 
-\Sexpr{set_parent('../thesis.Rnw')}
+\Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter1/}}
 
 \chapter{INTRODUCTION}

@@ -1,7 +1,7 @@
 % Chapter 5 from the standard thesis template
 %   with a full page figure and a sideways table.
 
-\Sexpr{set_parent('../thesis.Rnw')}
+\Sexpr{knitr::set_parent('../thesis.Rnw')}
 %\graphicspath{{Images/}}
 
 \chapter{SUMMARY AND DISCUSSION}

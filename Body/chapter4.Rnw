@@ -1,7 +1,7 @@
 % Chapter 4 from the standard thesis template
 %   that contains an adv. example table and figure.
 
-\Sexpr{set_parent('../thesis.Rnw')}
+\Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter4/}}
 
  \addtocontents{toc}{\protect\newpage}
