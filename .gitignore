@@ -53,3 +53,7 @@ Reference/*.aux
 *.toc
 *.dvi
 *.blg
+Body/*.aux
+Body/*.tex
+Body/*.pdf
+Body/figure
