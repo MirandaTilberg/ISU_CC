@@ -15,25 +15,24 @@
 
 Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter "v" can easily be considered a chevron, and the letter "o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process.
 
-\setlength{\tabcolsep}{3.5pt}
-\begin{minipage}{\linewidth}
+\begin{table}
 \centering
-\tabulinesep=1mm
-\begin{tabu}{rlll}
+
+\setlength\tabcolsep{1mm}
+\begin{tabular}{rccl}
      Bowtie & \raisebox{-.5\height}{\includegraphics[width=.3\linewidth]{class_examples/bowtie_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=.3\linewidth]{class_examples/chevron_examples.png}} & Chevron \\
+     \raisebox{-.5\height}{\includegraphics[width=.3\linewidth]{class_examples/chevron_examples.png}} & Chevron \vspace{1mm}\\
      Circle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/circle_examples.png}} & 
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/line_examples.png}} & Line \\
+     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/line_examples.png}} & Line  \vspace{1mm}\\
      Polygon & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/polygon_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/quad_examples.png}} & Quad \\
+     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/quad_examples.png}} & Quad  \vspace{1mm}\\
      Star & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/star_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/text_examples.png}} & Text \\
+     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/text_examples.png}} & Text  \vspace{1mm}\\
      Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/triangle_examples.png}} &
       \raisebox{-.5\height}{} & \\
-\end{tabu}
-\label{tab:classchars}
-\captionof{table}{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}}
-\end{minipage}
+\end{tabular}
+\caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}}
+\end{table}
 
 \subsection{Data Collection}
 
