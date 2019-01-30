@@ -43,3 +43,13 @@ rsconnect/
 cache/
 *.tex
 *.bbl
+*.aux
+Preface/*.aux
+Reference/*.aux
+*.fls
+*.lot
+*.lof
+*.fdb_latexmk
+*.toc
+*.dvi
+*.blg
