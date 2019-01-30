@@ -8,7 +8,10 @@
 \chapter{CONCLUSION}
 
 I don't heckin' know
+\svp{Write this part last... :) But, we can conclude that CoNNOR works well for identifying features within outsole images, that the geometric feature set is able to classify many common tread elements (and we can compute statistics for how many shoes have recognizable features...)}
 
 \section{Future Work}
+
+\svp{Integrate features for whole shoes - add spatial information; explore color histogram normalization to increase discrimination power}
 
 \section{Philosophical Conclusions}

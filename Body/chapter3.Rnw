@@ -22,12 +22,15 @@ Model training was conducted using the *keras* package in R, which provides an i
 
 \textbf{Model Performance}
 
-*I feel like graphs will speak more here*
+*I feel like graphs will speak more here* \svp{Yes, but you have to interpret them :)}
 -Accuracy and loss during training
 -Examples of prediction
--Ways to measure accuracy (TPR, FPR, ROC/AUC)
+-Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them}
 -Interesting case studies
 
 \subsection{Model Accuracy}
 
 \subsection{Model Consistency}
+\svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
+
+\subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}

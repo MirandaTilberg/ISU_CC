@@ -36,13 +36,21 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \subsection{Data Collection}
 
-Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe, a labeling/annotating interface [connected to] Matlab, which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* *Number of images per category?* To train the CNN, data was split such that 70\% went to training, and 15\% each to validation and test data.
+Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \svp{need to cite it}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* \svp{R code, using the imager package and spatial packages - check code to get a good list} *Number of images per category?* To train the CNN, data was split such that 70\% went to training, and 15\% each to validation and test data. \svp{Actually using 60/20/20 right now, but that's easily changed in the model or in here...}
 
 
 \subsection{Data Characteristics}
 
 -Quantities, examples, etc
+\svp{Show histogram of class distribution}
+\svp{Talk about ``other" - it's necessary to train the model on null data as well}
 
+\svp{256x256 images, aspect ratio not maintained (but efforts to label with relatively square labels). }
+
+\svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
+
+\subsection{Augmentation}
+\svp{Talk about image augmentation}
 
 
 
