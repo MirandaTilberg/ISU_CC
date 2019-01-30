@@ -138,7 +138,7 @@
 \chaptocbreak
 <<litReview, child='Appendix/appendix2.Rnw'>>=
 @
-%\include{Reference/bibtex}
+\include{Reference/bibtex}
 
 \end{document}
 
