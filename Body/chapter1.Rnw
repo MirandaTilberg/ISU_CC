@@ -65,7 +65,7 @@ Class characteristics are defined as the set of features which allow an object t
 \textbf{Classification}
 
 \begin{itemize}
-\item Visual classification (i.e., assinging a label to an object based on features that can be seen) is a complex task that humans do very well. 
+\item Visual classification (i.e., assinging a label to an object based on features that can be seen) is a complex task that humans do very well.
 \item Sight is our dominant sense and a significant part of our brain is dedicated to vision --> our visual process is refined and skilled (cite somehow?). \svp{You are 100\% encouraged to use the xkcd comic here to talk about how hard it is to emulate this with a computer}
 \item (Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.}
 \item Want to make a point about how subtle some differences can be. Can use the caterpillar/carrot example with "fuzzy texture" difference, or use corgi/fox and say that the differences are in the presence of the tongue, curve of the body, size of the mouth.
@@ -75,7 +75,7 @@ Class characteristics are defined as the set of features which allow an object t
 % Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
 
 % \vskip .2cm
-% 
+%
 % \begin{figure}[htbp]\centering
 % \includegraphics[height=.25\linewidth]{caterpillar.png}
 % \hskip 1cm
@@ -91,13 +91,13 @@ Convolutional neural networks (CNNs) are a tool for supervised deep-learning tha
 
 
 \textbf{Filters and Convolution}
-Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. To a computer, an image is stored as a 3-dimensional array with a length and width corresponding to its number of pixels and a depth of 3 to represent the typical RBG color channels. 
+Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. To a computer, an image is stored as a 3-dimensional array with a length and width corresponding to its number of pixels and a depth of 3 to represent the typical RBG color channels.
 
 \mt{Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\)
 
 The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$}
 
-\mt{What's the balance between describing with math and using plain English? I like the plainspeak, but maybe it's not so necessary?} A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the imagea single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
+\mt{What's the balance between describing with math and using plain English? I like the plainspeak, but maybe it's not so necessary?} \svp{Use math, describe in plain English, then add pictures to be sure. The goal is to communicate.} A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the imagea single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
 
 
