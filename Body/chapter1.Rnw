@@ -30,12 +30,26 @@ In forensic science, shoe prints and outsole characteristics fall into the categ
 
 \subsection{Outsole Class Characteristics}
 
-\svp{This section needs to describe different class characteristics - make, model, size, etc. and the discriminative power of each (if possible). Use Bodziak's book to get some of this information; intro sections of footwear papers may also be useful, and Gross (2013) is probably going to be useful too. This is a research paper section - cite bits from different papers to make the point. If you start with Bodziak and other papers, and end with Gross (2013), you can probably make the point fairly conclusively that make and model are difficult to work with, but that geometric shapes provide a useful feature set for discriminating shoes.}
+\mt{This paragraph is going to be a project for me on its own. I'll overload quickly if I try to go through all the sources at once, so for now I'm going to collect important bits from the textbook and continue from there another day.}
 
-Footwear class characteristics include the size and shape of geometric design elements. Size, orientation, and position of geometric elements are capable of distinguishing most shoes collected in samples from the general population \cite{hancockInterpretationShoeprintComparison2012}. \mt{More on why class characteristics matter? But how best to distinguish from info in motivation above?}
+Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically-similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, or matching an imprint from a crime scene to a specific shoe, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}. \mt{I forget APA guidelines for multiple ideas coming from the same source. If multiple sentences come from the same source, is it cite at the end of them?}
+
+\textbf{\citet{bodziak_footwear_2000}}
+\begin{itemize}
+\item Size: MANY metrics for size, not consistent across manufacturers/countries, many conversion charts differ widely, so not an easy or consistent metric. Also different shoe styles with same size inside may be differently sized outside
+\item Size difficult to determine from crime scene if poor images/impression records
+\item Model: If a shoe is popular, can have multiple molds in same size that may all have slight differences
+\item Make/model: (Ch 12) Counterfeit designs and look-alikes, shoe models constantly changing, old ones coming back -> make and model are difficult
+\end{itemize}
+
+%\svp{This section needs to describe different class characteristics - make, model, size, etc. and the discriminative power of each (if possible). Use Bodziak's book to get some of this information; intro sections of footwear papers may also be useful, and Gross (2013) is probably going to be useful too. This is a research paper section - cite bits from different papers to make the point. If you start with Bodziak and other papers, and end with Gross (2013), you can probably make the point fairly conclusively that make and model are difficult to work with, but that geometric shapes provide a useful feature set for discriminating shoes.}
+
+%Footwear class characteristics include the size and shape of geometric design elements. Size, orientation, and position of geometric elements are capable of distinguishing most shoes collected in samples from the general population \cite{hancockInterpretationShoeprintComparison2012}.
 
 
 \subsection{Image Analysis}
+
+\mt{Question: I looked into these, but I'm still not quite sure how feature detection isn't just convolutional filters.}
 
 \svp{Methods that are worth briefly describing: (links to wiki, but you can use Computer Vision textbook to get a citeable reference)}
 \begin{itemize}
@@ -45,8 +59,6 @@ Footwear class characteristics include the size and shape of geometric design el
 \svp{Gist: these methods 1) work at a very low level, 2) produce features that aren't ``global" - corners are 3x3 pixel region corners, not quadrilateral corners, 3) are computationally intensive, and 4) are very fragile - the parameters used break with lighting or color changes. Even if we did use them, we'd need many different random forest models to handle aggregating low-level features into things like quadrilaterals, lines, etc., and those models would be as fragile as the methods producing the input data.}
 
 \svp{Additional paragraph: Why CNNs are a good option - they've taken over image recognition, they're fast and work at scale on new images, they produce results that are interpretable, and they match human visual structure architecture, so the features they pick out should match human-labeled features (unlike low-level CV methods).}
-
-\mt{A number of methods} were tried, but they were not well suited to this problem because of \mt{X, Y, and Z (Susan, help?)}. As a result, we brought out the big guns: Convolutional Neural Networks.
 
 \subsection{CNN Theory}
 
@@ -132,6 +144,8 @@ Max-pooling is a technique to reduce the size, and therefore computational load,
 \textbf{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, if we see an item that is orange, small, and fuzzy, we are taught to call it "caterpillar". Fuzzzy is not a feature we meaningfully associate with a baby carrot, so there is little connection between the feature "fuzzy" and the label "carrot". Similarly, in CNNs, each final feature is connected to each label through a weight (hence the name "densely connected"), and those weights are learned through the training process (using an algorithm called back-propogation) to minimize loss and thus improve classification accuracy. \svp{Go ahead and add the pictures in here - you have them, may as well use them...}
 
+%\includegraphics
+
 
 \textbf{Using a Pre-Trained CNN for a New Task}
 \svp{"Transfer learning" is the technical term.} \svp{You may also want to talk about "modularity" in that the Convolutional part is one module, the head is another, and they're separately trainable and useable. }
@@ -155,6 +169,13 @@ The main difference between different CNNs is their structure, meaning the numbe
 \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
 
 \subsection{Model Evaluation Metrics}
+
+Multi-class classification refers to the number of categories to which an item may be identified. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive and, thus, an item may fall into a combination of categories simultaneously. Evaluating the accuracy of multi-label predictions requires attention to both false-positive and false-negative predictions. When predictions are probablistic and labels are binary, like in the case of our CNN, \mt{something about cut-offs for 0-1 metrics}
+
+Will include graphic from:
+https://towardsdatascience.com/precision-vs-recall-386cf9f89488
+
+Confusion matrix shows 
 
 \svp{Accuracy, Precision/Recall, Confusion Matrix, and any other brilliant ways of examining multi-label multi-class model effectiveness.}
 TBD
