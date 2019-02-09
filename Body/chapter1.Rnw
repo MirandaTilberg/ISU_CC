@@ -32,7 +32,7 @@ In forensic science, shoe prints and outsole characteristics fall into the categ
 
 \mt{This paragraph is going to be a project for me on its own. I'll overload quickly if I try to go through all the sources at once, so for now I'm going to collect important bits from the textbook and continue from there another day.}
 
-Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically-similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, or matching an imprint from a crime scene to a specific shoe, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}. \mt{I forget APA guidelines for multiple ideas coming from the same source. If multiple sentences come from the same source, is it cite at the end of them?}
+Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically-similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, or matching an imprint from a crime scene to a specific shoe, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}. \mt{I forget APA guidelines for multiple ideas coming from the same source. If multiple sentences come from the same source, is it cite at the end of them?} \svp{I don't know about APA guidelines (it's been a while), but more generally, just cite them all at the end of the thought unless they're easily separated, then cite at the end of each clause.}
 
 \textbf{\citet{bodziak_footwear_2000}}
 \begin{itemize}
@@ -52,6 +52,11 @@ Class characteristics are defined as the set of features which allow an object t
 There are a number of algorithms available for image analysis. In perticular, 
 
 \mt{Question: I looked into these, but I'm still not quite sure how feature detection isn't just convolutional filters.}
+\svp{Low-level feature detection uses convolution in some cases, but generally there are other steps in the process that also matter. The filter thing is definitely true for edge/corner detection. Ridge detection uses watershed segmentation, which is not convolutional in nature as I understand it, though it does use a gaussian kernel as part of the process. Blob detection also uses watershed segmentation, at least with some methods.}
+
+\svp{Hough transforms and other pattern matching algorithms are very different, though they do also use convolution (almost everything image related does at one point or another). \url{https://www.youtube.com/watch?v=4zHbI-fFIlI} (about halfway through) to see this in action.}
+
+\svp{The more important point is that these methods exist and are more primitive than CNNs, but are also more fragile.  You don't have to explain every method - find a paper describing the method, cite it, move to the next method. Or just cite a textbook with all of the methods. You want to show we didn't just leap to the shiny new toy - we actually need all 9 million parameters to get what we want.}
 
 \svp{Methods that are worth briefly describing: (links to wiki, but you can use Computer Vision textbook to get a citeable reference)}
 \begin{itemize}
@@ -177,7 +182,7 @@ Multi-class classification refers to the number of categories to which an item m
 Will include graphic from:
 https://towardsdatascience.com/precision-vs-recall-386cf9f89488
 
-Confusion matrix shows 
+Confusion matrix shows
 
 \svp{Accuracy, Precision/Recall, Confusion Matrix, and any other brilliant ways of examining multi-label multi-class model effectiveness.}
 TBD

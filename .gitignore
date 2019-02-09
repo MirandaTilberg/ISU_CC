@@ -41,7 +41,8 @@ rsconnect/
 *.log
 *.synctex.gz
 cache/
-*.tex
+Body/*.tex
+thesis.tex
 *.bbl
 *.aux
 Preface/*.aux
