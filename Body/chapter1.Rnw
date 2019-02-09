@@ -49,6 +49,8 @@ Class characteristics are defined as the set of features which allow an object t
 
 \subsection{Image Analysis}
 
+There are a number of algorithms available for image analysis. In perticular, 
+
 \mt{Question: I looked into these, but I'm still not quite sure how feature detection isn't just convolutional filters.}
 
 \svp{Methods that are worth briefly describing: (links to wiki, but you can use Computer Vision textbook to get a citeable reference)}
