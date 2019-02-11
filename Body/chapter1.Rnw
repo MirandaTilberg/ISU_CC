@@ -30,26 +30,21 @@ In forensic science, shoe prints and outsole characteristics fall into the categ
 
 \subsection{Outsole Class Characteristics}
 
-\mt{This paragraph is going to be a project for me on its own. I'll overload quickly if I try to go through all the sources at once, so for now I'm going to collect important bits from the textbook and continue from there another day.}
+According to \citet{grossVariabilitySignificanceClass2013}, the four generally accepted conclusions that can be made from a footwear examination are identification, elimination, class association, and inconclusive. Typically, the ultimate goal of an examination is identification, which is matching a shoe print to an individual shoe, perhaps owned by a suspect of an the investigation. This is difficult because identification to a specific individual's shoe requires the matching of randomly acquired characterisics, such as damage, and often times that information is not available from the print left at the scene \mt{quality, etc}. Most of the \mt{work being done with shoeprints?} involves class association \mt{cite Leslie Hammer?}, which means identifying a group of shoe types that could have made the print. 
 
-Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically-similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, or matching an imprint from a crime scene to a specific shoe, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}. \mt{I forget APA guidelines for multiple ideas coming from the same source. If multiple sentences come from the same source, is it cite at the end of them?} \svp{I don't know about APA guidelines (it's been a while), but more generally, just cite them all at the end of the thought unless they're easily separated, then cite at the end of each clause.}
+Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically-similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}.
 
-\textbf{\citet{bodziak_footwear_2000}}
-\begin{itemize}
-\item Size: MANY metrics for size, not consistent across manufacturers/countries, many conversion charts differ widely, so not an easy or consistent metric. Also different shoe styles with same size inside may be differently sized outside
-\item Size difficult to determine from crime scene if poor images/impression records
-\item Model: If a shoe is popular, can have multiple molds in same size that may all have slight differences
-\item Make/model: (Ch 12) Counterfeit designs and look-alikes, shoe models constantly changing, old ones coming back -> make and model are difficult
-\end{itemize}
+\mt{The gist:
+When we think about categorizing a shoe, we typically think of brand, size, and a broad type (e.g., boot, tennis shoe, dress shoe). Size is not as easy to work with as we would hope, because size is difficult to measure (not consistent across manufacturers/countries) and different shoe styles with same size inside may be differently sized outside \citep{bodziak_footwear_2000}. Model of shoe is also difficult because so many shoes can look similar but come from different brands, models are constantly being introduced or being brought back. However, using geometric shapes to describe outsole designs provides useful information as class characteristics to differentiate different types of shoes \citep{grossVariabilitySignificanceClass2013} and pattern matching "is of considerable evidential value" \citep{hancockInterpretationShoeprintComparison2012}. }
+
+
 
 %\svp{This section needs to describe different class characteristics - make, model, size, etc. and the discriminative power of each (if possible). Use Bodziak's book to get some of this information; intro sections of footwear papers may also be useful, and Gross (2013) is probably going to be useful too. This is a research paper section - cite bits from different papers to make the point. If you start with Bodziak and other papers, and end with Gross (2013), you can probably make the point fairly conclusively that make and model are difficult to work with, but that geometric shapes provide a useful feature set for discriminating shoes.}
-
-%Footwear class characteristics include the size and shape of geometric design elements. Size, orientation, and position of geometric elements are capable of distinguishing most shoes collected in samples from the general population \cite{hancockInterpretationShoeprintComparison2012}.
 
 
 \subsection{Image Analysis}
 
-There are a number of algorithms available for image analysis. In perticular, 
+\mt{This paragraph will happen later :)}
 
 \mt{Question: I looked into these, but I'm still not quite sure how feature detection isn't just convolutional filters.}
 \svp{Low-level feature detection uses convolution in some cases, but generally there are other steps in the process that also matter. The filter thing is definitely true for edge/corner detection. Ridge detection uses watershed segmentation, which is not convolutional in nature as I understand it, though it does use a gaussian kernel as part of the process. Blob detection also uses watershed segmentation, at least with some methods.}
