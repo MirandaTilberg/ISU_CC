@@ -28,7 +28,7 @@ In forensic science, shoe prints and outsole characteristics fall into the categ
 
 \section{Background}
 
-\subsection{Outsole Class Characteristics}
+\subsection{Outsole Class Characteristics}\label{sec:class-chars-desc}
 
 According to \citet{grossVariabilitySignificanceClass2013}, the four generally accepted conclusions that can be made from a footwear examination are identification, elimination, class association, and inconclusive. Typically, the ultimate goal of an examination is identification, which is matching a shoe print to an individual shoe, perhaps owned by a suspect of an the investigation. This is difficult because identification to a specific individual's shoe requires the matching of randomly acquired characterisics, such as damage, and often times that information is not available from the print left at the scene \mt{quality, etc}. Most of the \mt{work being done with shoeprints?} involves class association \mt{cite Leslie Hammer?}, which means identifying a group of shoe types that could have made the print. 
 
