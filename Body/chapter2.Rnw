@@ -2,7 +2,7 @@
 %   which includes bibliographic references.
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
-\graphicspath{{Images/chapter2/}}
+\graphicspath{{Images/chapter2/}{../Images/chapter2/}}
 
 <<ch2-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 options(replace.assign=TRUE,width=70,scipen=3)
@@ -24,7 +24,7 @@ if(!"Body" %in% list.files()){
 
 \section{Data}
 
-\subsection{Choosing Class Characteristics}
+\subsection{\svp{Geometric} Class Characteristics}
 
 \svp{Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes.}
 % *Include something that explains what class characteristics are?* % This is done in the background section
@@ -33,7 +33,7 @@ if(!"Body" %in% list.files()){
  % In the beginning of this project, the literature (source IDK) indicated that geometric shapes are unique and well-defined enough to provide most of the necessary information to classify a shoe outsole.
 
 % We have since settled on nine geometric categories, modified from (source): bowtie, chevron, circle, line, polygon, quadrilateral, star, text, and triangle.
-\svp{\citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). }
+\svp{\citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class. }
 % Many of these categories are self-explanatory, such as circle and triangle. Polygon is a catch-all for pentagons, hexagons, and octagons. Star is any concave shape, including X- or plus-shapes. Line is a difficult distinction, as most shapes are simply a combination of lines, but in this case it is reserved for cases where the other categies do not readily apply, such as repeating patterns of lines that are not distinctly quadrilaterals. % svp - defined more clearly using description env below
 
 \svp{\begin{description}
@@ -68,7 +68,7 @@ Defining categories this way does not remove all ambiguities. The best example l
      Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/triangle_examples.png}} &
       \raisebox{-.5\height}{} & \\
 \end{tabular}
-\caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}}
+\caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
 
 \subsection{Data Collection}
