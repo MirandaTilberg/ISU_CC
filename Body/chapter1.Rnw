@@ -28,7 +28,7 @@ In forensic science, shoe prints and outsole characteristics fall into the categ
 
 \section{Background}
 
-\subsection{Outsole Class Characteristics}
+\subsection{Outsole Class Characteristics}\label{sec:class-chars-desc}
 
 \mt{This paragraph is going to be a project for me on its own. I'll overload quickly if I try to go through all the sources at once, so for now I'm going to collect important bits from the textbook and continue from there another day.}
 
