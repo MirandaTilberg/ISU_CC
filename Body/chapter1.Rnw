@@ -44,23 +44,38 @@ When we think about categorizing a shoe, we typically think of brand, size, and 
 
 \subsection{Image Analysis}
 
-\mt{This paragraph will happen later :)}
+\mt{
+Summarizing your notes to create paragraph structure:
 
-\mt{Question: I looked into these, but I'm still not quite sure how feature detection isn't just convolutional filters.}
-\svp{Low-level feature detection uses convolution in some cases, but generally there are other steps in the process that also matter. The filter thing is definitely true for edge/corner detection. Ridge detection uses watershed segmentation, which is not convolutional in nature as I understand it, though it does use a gaussian kernel as part of the process. Blob detection also uses watershed segmentation, at least with some methods.}
+Gist: 
+\begin{itemize}
+\item Automatic classification of shoe outsoles is an image analysis task, becuase we get images of prints and shoes from crime scenes etc.
+\item Hough transform finds straight lines using Hough space
+\item Low-level feature detection can be used to identify edges, corners, ridges blobs
+\item \svp{Gist: these methods 1) work at a very low level, 2) produce features that aren't ``global" - corners are 3x3 pixel region corners, not quadrilateral corners, 3) are computationally intensive, and 4) are very fragile - the parameters used break with lighting or color changes. Even if we did use them, we'd need many different random forest models to handle aggregating low-level features into things like quadrilaterals, lines, etc., and those models would be as fragile as the methods producing the input data.}
+\
+\end{itemize}
+}
 
-\svp{Hough transforms and other pattern matching algorithms are very different, though they do also use convolution (almost everything image related does at one point or another). \url{https://www.youtube.com/watch?v=4zHbI-fFIlI} (about halfway through) to see this in action.}
 
-\svp{The more important point is that these methods exist and are more primitive than CNNs, but are also more fragile.  You don't have to explain every method - find a paper describing the method, cite it, move to the next method. Or just cite a textbook with all of the methods. You want to show we didn't just leap to the shiny new toy - we actually need all 9 million parameters to get what we want.}
 
 \svp{Methods that are worth briefly describing: (links to wiki, but you can use Computer Vision textbook to get a citeable reference)}
 \begin{itemize}
 \item\svp{\href{https://en.wikipedia.org/wiki/Feature_extraction\#Low-level}{Low level feature detectors - edge, corner, ridge, blob}}
 \item\svp{\href{https://en.wikipedia.org/wiki/Hough_transform}{Hough transforms}}
 \end{itemize}
-\svp{Gist: these methods 1) work at a very low level, 2) produce features that aren't ``global" - corners are 3x3 pixel region corners, not quadrilateral corners, 3) are computationally intensive, and 4) are very fragile - the parameters used break with lighting or color changes. Even if we did use them, we'd need many different random forest models to handle aggregating low-level features into things like quadrilaterals, lines, etc., and those models would be as fragile as the methods producing the input data.}
 
-\svp{Additional paragraph: Why CNNs are a good option - they've taken over image recognition, they're fast and work at scale on new images, they produce results that are interpretable, and they match human visual structure architecture, so the features they pick out should match human-labeled features (unlike low-level CV methods).}
+
+\mt{I'll try to gist your gist :D
+
+\begin{itemize}
+\item For image classification, Convolutional Neural Networks have become standard/ubiquitous (since better computing, how to say this with reference?)
+\item Fast and easy to apply to new images (idk what you meant by "work at scale")
+\item Clear structure, match human visual structure architecture
+\item Deep architectures can identify complex patterns
+\item Output binary or probabilistic predictions for given labels, so easily interpreted by human
+\end{itemize}
+}
 
 \subsection{CNN Theory}
 
@@ -165,6 +180,8 @@ Pre-trained CNNs are CNNs that have been trained on a standard data set. The sta
 
 \textbf{VGG16 Architecture}
 The main difference between different CNNs is their structure, meaning the number of layers they contain and the pattern those layers are in. In our research, we have tested a few pre-trained CNNs, and we are currently using VGG16. Developed by Oxford's Visual Graphics Group, VGG16 has 16 "functional" (i.e., convolutional and densely connected) layers and 5 max-pooling layers, which function more to alter the structure of the information at each step.
+
+\includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
 
 \svp{Show VGG16 architecture image (use gimp + XCF file from my presentation to get the "right" image - let me know if you need help tweaking it...) and talk through the image dimension changes.}
 
