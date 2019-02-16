@@ -172,12 +172,15 @@ The main difference between different CNNs is their structure, meaning the numbe
 
 \subsection{Model Evaluation Metrics}
 
-Multi-class classification refers to the number of categories to which an item may be identified. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive and, thus, an item may fall into a combination of categories simultaneously. Evaluating the accuracy of multi-label predictions requires attention to both false-positive and false-negative predictions. When predictions are probablistic and labels are binary, like in the case of our CNN, \mt{something about cut-offs for 0-1 metrics}
+Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive and, thus, an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications on a scale of probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
-Will include graphic from:
-https://towardsdatascience.com/precision-vs-recall-386cf9f89488
+Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. The good scenarios: a true positive is assigning a correct label to an item, and a true negative is when a label is not assigned to an item that should not have that label. Errors can be made in failing to assign a correct label (false positive) or assigning an incorrect label (false negative).
 
-Confusion matrix shows
+Recall is the proportion of true labels that are assigned by the model. The converse of recall is precision, which measures the proportion of false positives to true positives. An ideal model has high recall and high precision, which means it accurately identifies labels that should be present but does not assign too many false positives in the process.
 
-\svp{Accuracy, Precision/Recall, Confusion Matrix, and any other brilliant ways of examining multi-label multi-class model effectiveness.}
-TBD
+A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others.
+
+Receiver Operating Characteristic (ROC) curves show the relationship between the true positive rate and the false positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
+
+\mt{possible graphic: https://towardsdatascience.com/precision-vs-recall-386cf9f89488}
+
