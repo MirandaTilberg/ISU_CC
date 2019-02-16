@@ -108,11 +108,12 @@ Convolutional neural networks (CNNs) are a tool for supervised deep-learning tha
 
 
 \textbf{Filters and Convolution}
-Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. To a computer, an image is stored as a 3-dimensional array with a length and width corresponding to its number of pixels and a depth of 3 to represent the typical RBG color channels.
 
 \mt{Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\)
 
 The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$}
+
+Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. To a computer, an image is stored as a 3-dimensional array with a length and width corresponding to its number of pixels and a depth of 3 to represent the typical RBG color channels.
 
 \mt{What's the balance between describing with math and using plain English? I like the plainspeak, but maybe it's not so necessary?} \svp{Use math, describe in plain English, then add pictures to be sure. The goal is to communicate.} A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the imagea single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
