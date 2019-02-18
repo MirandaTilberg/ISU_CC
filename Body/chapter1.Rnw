@@ -40,80 +40,74 @@ When categorizing a shoe in daily life, it is common to use features like brand,
 
 Shoeprint evidence from crime scenes is most commonly collected in the form of a photograph, so any useful method to automatically identify outsole characteristics must take the form of an image analysis task. There are a number of methods that may be employed to identify shapes and features in an image. The Hough transform is a feature extraction technique carried out in parameter space that was classically used to identify straight lines but has been extended to identifying circles and ellipses, as well as other shapes (cite Wikipedia, lol). In addition, there are a number of low-level feature extraction methods aimed at detecting specific shapes, such as edges, corners, blobs, or ridges. While these methods are useful in identifying these specific features at a low level, they are very computationally intensive and features they produce/identify exist on a very small scale, often only a few pixels wide, and they are thus not able to identify large geometric shapes like those that may be found in an outsole image. Furthermore, these methods are extremely sensitive to lighting or color changes, and thus require additional modeling (like random forests) to aggregate low-level features into the geometric shapes found on outsoles.
 
-For novel image classification tasks, Convolutional Neural Networks (CNNs) have become standard/ubiquitous (cite). Once a network is trained, it is relatively fast and easy to apply the model to new images and obtain classifications. CNNs have deep architectures that can be trained to identify complex patterns, but they are structurally similar to the human visual architecture and output binary or probabilistic predictions for given labels that are readily interpretable by humans. For a task like classifying outsole shapes, CNNs are a smart and tractable solution/method.
+For novel image classification tasks, Convolutional Neural Networks (CNNs) have become standard/ubiquitous (cite). Once a network is trained, it is relatively fast and easy to apply the model to new images and obtain classifications. CNNs have deep architectures that can be trained to identify complex patterns, but they are structurally similar to the human visual architecture and output binary or probabilistic predictions for given labels that are readily interpretable by humans. For a task like classifying outsole shapes, CNNs are a useful and tractable solution/method.
 
 \subsection{CNN Theory}
 
-\textbf{Classification}
+\mt{I will read Goldstein this week and fill in this paragraph.}
+Visual classification (i.e., assinging a label to an object based on features that can be seen) is a complex task that humans do very well. Sight is our dominant sense and a significant part of our brain is dedicated to vision --> our visual process is refined and skilled (cite somehow?).
+(Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.}
 
-\begin{itemize}
-\item Visual classification (i.e., assinging a label to an object based on features that can be seen) is a complex task that humans do very well.
-\item Sight is our dominant sense and a significant part of our brain is dedicated to vision --> our visual process is refined and skilled (cite somehow?). \svp{You are 100\% encouraged to use the xkcd comic here to talk about how hard it is to emulate this with a computer}
-\item (Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.}
-\item Want to make a point about how subtle some differences can be. Can use the caterpillar/carrot example with "fuzzy texture" difference, or use corgi/fox and say that the differences are in the presence of the tongue, curve of the body, size of the mouth.
-\end{itemize}
+Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
+
+\vskip .2cm
+
+\begin{figure}[htbp]\centering
+\includegraphics[height=.25\linewidth]{caterpillar.png}
+\hskip 1cm
+\includegraphics[height=.25\linewidth]{carrots.png}
+\end{figure}
 
 
-% Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
+While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers. Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and remained difficult for decades. 
 
-% \vskip .2cm
-%
-% \begin{figure}[htbp]\centering
-% \includegraphics[height=.25\linewidth]{caterpillar.png}
-% \hskip 1cm
-% \includegraphics[height=.25\linewidth]{carrots.png}
-% \end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width = .3\linewidth]{xkcd.png}
+\end{figure}
 
-\textbf{Convolutional Neural Networks (CNNs)}
-
-While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers. Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and remained difficult for decades. Now, CNNs are a widely implemented method for automated image recognition and perform comparably to humans on certain tasks. The ImageNet Large Scale Visual Recognition Competition (ILSVRC)is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}.
+Now, CNNs are a widely implemented method for automated image recognition and perform comparably to humans on certain tasks (cite). The ImageNet Large Scale Visual Recognition Competition (ILSVRC)is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}.
 
 
 Convolutional neural networks (CNNs) are a tool for supervised deep-learning that have become standard in recent years for automatic image classification. CNNs are a form of artificial neural network, which were inspired by biological processes in the brain \citep{ANNasModelsofNeuralInfoProcessing}. CNNs primarily use combinations of convolutional and pooling layers to filter raw information into features. These features are then fed into densely connected layers which are trained to associate given sets of features with their desired labels. This translation-invariant automated classification closely mimics the human eye-to-brain classification process.
 
 
-\textbf{Filters and Convolution}
+\subsubsection{Filters and Convolution}
 
-\mt{Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\)
+Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
 
-The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$}
+Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the image, a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
-Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. To a computer, an image is stored as a 3-dimensional array with a length and width corresponding to its number of pixels and a depth of 3 to represent the typical RBG color channels.
+\subsubsection{Max-Pooling}
+Max-pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max-pooling layers apply a maximum function over adjacent regions of a feature map (like using a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4! Max-pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
 
-\mt{What's the balance between describing with math and using plain English? I like the plainspeak, but maybe it's not so necessary?} \svp{Use math, describe in plain English, then add pictures to be sure. The goal is to communicate.} A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the imagea single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
-
-
-%In the case of VGG16, early convolutional layers contain 64 features that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
-
-\textbf{Max-Pooling}
-Max-pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max-pooling layers apply a maximum function over adjacent regions of a feature map (like using a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4! Max-pooling is also beneficial in that it allows CNN "vision" to be translation invariant, because it emphasizes the relative position of a feature rather than its absolute position. VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which ultimately takes in initial feature maps of size 224x224 and ends with maps of size 7x7.
-
-\textbf{Densely Connected Layers}
+\subsubsection{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, if we see an item that is orange, small, and fuzzy, we are taught to call it "caterpillar". Fuzzzy is not a feature we meaningfully associate with a baby carrot, so there is little connection between the feature "fuzzy" and the label "carrot". Similarly, in CNNs, each final feature is connected to each label through a weight (hence the name "densely connected"), and those weights are learned through the training process (using an algorithm called back-propogation) to minimize loss and thus improve classification accuracy. \svp{Go ahead and add the pictures in here - you have them, may as well use them...}
 
 %\includegraphics
 
 
-\textbf{Using a Pre-Trained CNN for a New Task}
-\svp{"Transfer learning" is the technical term.} \svp{You may also want to talk about "modularity" in that the Convolutional part is one module, the head is another, and they're separately trainable and useable. }
+\subsection{Transfer learning}
+\svp{You may also want to talk about "modularity" in that the Convolutional part is one module, the head is another, and they're separately trainable and useable}
 
-*I went off on a tangent and am purposely not restructuring this paragraph yet. Sorry.*
+\mt{This paragraph is another beast for another night. Goal: establish the need for transfer learning by explaining the problem of training from scratch and showing how much easier the task is without it}
 As we have just seen, convolutional layers and max-pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. VGG16, in particular, has over 14.7 million trainable parameters in its "eyes" alone. Luckily, CNNs offer one benefit that humans do not: you can utilize the eyes and replace the brain for new tasks. In terms of CNNs, it is possible to build a CNN that uses the weights already trained on over 1.2 million images in the convolutional layers, and then only retrain a new classifier for any new classification task. This reduced task brings the number of required training images down from millions to only thousands. Furthermore, this kind of approach is quite reasonable when considering what the CNN was originally trained to classsify. Since the 1,000 categories from the ILSVRC span a huge variety of natural and unnatural objects, we can likely trust that the features detected by the pre-trained CNN to be diverse enough to be applied to a new task.
 
-
-\textbf{Pre-trained CNNs}
-
+% An alternative approach to the above paragraph:
 %The structure of convolutional neural networks can vary depending on the type of classification the model is designed for, as well as the desired speed and accuracy. While networks can be built and trained from scratch, to do so typically requires a large amount of computing power and millions of images for any practical classification task. Another common way to use CNNS for a novel task is to use a pre-trained network
 
 *I don't love this paragraph. Not sure how much to include, awkward flow.*
-Pre-trained CNNs are CNNs that have been trained on a standard data set. The standard data set comes from ImageNet, a database containing over 14 million images in about 22,000 categories (called "synsets", short for "synonym sets"). The ImageNet Large Scale Visual Recognition Challenge (ILSVRC) was established in 2010 as a contest for CNN accuracy on a specific subset of ImageNet. Various CNN structures are tested on about 1.2 million images spanning 1,00 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a grass snake and a vine snake. *Something about the best CNNs for this task are the ones that are famous.* Some of the most well-known pre-trained CNNs include AlexNet, GoogLeNet/Inception, VGG, and ResNet. *Can use just structure and train weights yourself, use fully trained model to reproduce ILSVRC results, or just use pre-trained weights for feature detection*
+Pre-trained CNNs are CNNs that have been trained on a standard data set. The standard data set comes from ImageNet, a database containing over 14 million images in about 22,000 categories (called "synsets", short for "synonym sets"). The ImageNet Large Scale Visual Recognition Challenge (ILSVRC) was established in 2010 as a contest for CNN accuracy on a specific subset of ImageNet. Various CNN structures are tested on about 1.2 million images spanning 1,00 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a grass snake and a vine snake. \mt{Something about the best CNNs for this task are the ones that are famous.} Some of the most well-known pre-trained CNNs include AlexNet, GoogLeNet/Inception, VGG, and ResNet. \mt{modularity property: Can use just structure and train weights yourself, use fully trained model to reproduce ILSVRC results, or just use pre-trained weights for feature detection}
 
 \textbf{VGG16 Architecture}
 The main difference between different CNNs is their structure, meaning the number of layers they contain and the pattern those layers are in. In our research, we have tested a few pre-trained CNNs, and we are currently using VGG16. Developed by Oxford's Visual Graphics Group, VGG16 has 16 "functional" (i.e., convolutional and densely connected) layers and 5 max-pooling layers, which function more to alter the structure of the information at each step.
 
+%In the case of VGG16, early convolutional layers contain 64 features that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+
+%VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which ultimately takes in initial feature maps of size 224x224 and ends with maps of size 7x7.
+
 \includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
 
-\svp{Show VGG16 architecture image (use gimp + XCF file from my presentation to get the "right" image - let me know if you need help tweaking it...) and talk through the image dimension changes.}
+\svp{Show VGG16 architecture image ... and talk through the image dimension changes.}
 
 \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
 
