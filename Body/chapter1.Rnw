@@ -53,7 +53,7 @@ Visual classification (i.e., assigning a label to an object based on visual inpu
 \mt{I will read Goldstein this week and fill in this paragraph.}
 (Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.} \svp{Skip the retina, talk briefly about "feature detectors" e.g. Hubel and Wiesel (flag 1). Describe how those feature detectors are assembled into progressively higher-order features (flag 2), and then talk about special processing regions (flag 3). Describe why object recognition is hard(things look different from different angles, general class vs. specifics, etc.) and talk about recognition-by-components (flag 4). The assembly of these components into an intelligent framework is what makes human object recognition so much more advanced (flag 5), and only recently have we been able to mimic that level of organizational structure with computer modeling. You can integrate the caterpillar/carrot example here with feature integration and recognition-by-components (we're using a more general definition of components than the geom-based components in the text)}
 
-Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
+Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, \svp{as shown in \autoref{fig:caterpillar-carrots},} an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
 
 \vskip .2cm
 
@@ -61,6 +61,7 @@ Differentiating between two objects is quite easy when features are distinct; ho
 \includegraphics[height=.25\linewidth]{caterpillar.png}
 \hskip 1cm
 \includegraphics[height=.25\linewidth]{carrots.png}
+\caption{\svp{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}}\label{fig:caterpillar-carrots}
 \end{figure}
 
 
