@@ -26,9 +26,9 @@ if(!"Body" %in% list.files()){
 
 In forensic science, shoe prints and outsole characteristics fall into the category of pattern evidence. When a shoe print or impression is found at a crime scene, the investigator may ask a series of questions. Initially, it may be important to determine the make and model of the shoe, which may help detectives locate comparison shoes from suspects. Later in the investigation, the forensic examiner may consider individualizing characteristics found in the print; that is, small defects that make it possible to tie a specific shoe to the print left at the scene. In cases where such individualizing characteristics are not considered (estimated at 95\% of cases in the United States according to some experts\footnote{Leslie Hammer, presentation to CSAFE on March 5, 2018}), it is important to be able to assess the probability that the specific model of shoe which made the print would be found in the suspect's posessions. This question is much more difficult than identifying the make and model of the shoe, because it requires that the forensic examiner have access to a database containing information about the frequency of shoes in the local population, where the local population itself may be difficult to define. Any tractable solution to the problem of assessing the random match probability of a shoeprint based only on class characteristics \citep{bodziak_footwear_2000} (make, model, and other characteristics determined during the manufacturing process) requires a way to assemble this database: an automated solution to efficiently classify many types of shoes within a common system. This project is designed to address the computational and statistical process of assembling statistical features which can be used to assess similarity beteween two or more images.
 
-\section{Background}
+% \section{Background}
 
-\subsection{Outsole Class Characteristics}\label{sec:class-chars-desc}
+\section{Outsole Class Characteristics}\label{sec:class-chars-desc}
 
 According to \citet{grossVariabilitySignificanceClass2013}, the four generally accepted conclusions that can be made from a footwear examination are identification, elimination, class association, and inconclusive. Typically, the ultimate goal of an examination is identification, which is matching a shoe print to an individual shoe, perhaps owned by a suspect of an the investigation. This is difficult because identification to a specific individual's shoe requires the matching of randomly acquired characterisics, such as damage, and often times that information is not available from the print left at the scene due to quality of the print or the impression or image of the print. Most of the work being done with shoeprints involves class association \mt{cite Leslie Hammer?}, which means identifying a group of shoe types that could have made the print.
 
@@ -36,7 +36,7 @@ Class characteristics are defined as the set of features which allow an object t
 
 When categorizing a shoe in daily life, it is common to use features like brand, size, and general type (e.g., boot, tennis shoe, dress shoe). When defining useful class characteristics for identification or exclusion, however, these features prove quite difficult to use. Size, for example, is far from straightforward. Size standards vary significantly across different manufacturers and scales in different countries, and different shoe styles with same size inside may be differently sized outside, making direct measurement or estimation of foot size difficult \citep{bodziak_footwear_2000}. Model of shoe is also not easily characterized due to the large number of look-alikes and the constantly changing market. Thus, when defining features to describe any possible shoe outsole that may be found at a crime scene, it is important to be both general enough to describe a large variety of shoes and specific enough to differentiate between shoes that may have similar qualities. This provides ample motivation for using geometric shapes to describe outsole designs, as geometric elements have been found to be able to differentiate between different shoes \citep{grossVariabilitySignificanceClass2013} and pattern matching "is of considerable evidential value" \citep{hancockInterpretationShoeprintComparison2012}.
 
-\subsection{Image Analysis}
+\section{\svp{Computational} Image Analysis and Convolutional Neural Networks}
 
 Shoeprint evidence from crime scenes is most commonly collected in the form of a photograph, so any useful method to automatically identify outsole characteristics must take the form of an image analysis task. There are a number of methods that may be employed to identify shapes and features in an image. The Hough transform is a feature extraction technique carried out in parameter space that was classically used to identify straight lines but has been extended to identifying circles and ellipses, as well as other shapes (cite Wikipedia, lol). In addition, there are a number of low-level feature extraction methods aimed at detecting specific shapes, such as edges, corners, blobs, or ridges. While these methods are useful in identifying these specific features at a low level, they are very computationally intensive and features they produce/identify exist on a very small scale, often only a few pixels wide, and they are thus not able to identify large geometric shapes like those that may be found in an outsole image. Furthermore, these methods are extremely sensitive to lighting or color changes, and thus require additional modeling (like random forests) to aggregate low-level features into the geometric shapes found on outsoles.
 
@@ -44,9 +44,9 @@ For novel image classification tasks, Convolutional Neural Networks (CNNs) have 
 \footnote{The Google Trends interest graph shows a massive increase in convolutional neural networks between mid-2014 and 2018 \url{https://trends.google.com/trends/explore?date=2010-01-01\%202019-02-18&q=convolutional\%20neural\%20network,computer\%20vision}}
 \svp{\citep{guRecentAdvancesConvolutional2018}}. CNNs have deep architectures that can be trained to identify complex patterns, but they are structurally similar to the human visual architecture and output binary or probabilistic predictions for given labels that are readily interpretable by humans. As CNNs make use of labeled training data, the predictions generated are for features which are similar to those identified by humans, providing greater face validity to the model. Once a CNN is trained, it is relatively fast and easy to apply the model to new images and obtain classifications.
 
-\subsection{Convolutional Neural Networks}
+% \subsection{Convolutional Neural Networks}
 
-\subsubsection{General Approach}
+\subsection{General Approach}
 Visual classification (i.e., assigning a label to an object based on visual input) is a complex task that humans do very well \citep{mallot2000computational}. Sight is our dominant sense and a significant part of our brain is dedicated to vision, which means that the structures used to impart meaning on a visual scene have been optimized through millions of years of evolution. As Convolutional Neural Networks are organized to mimic the process of object recognition in the human visual cortex, it will be useful to briefly describe that process.
 
 
@@ -78,23 +78,23 @@ Now, CNNs are a widely implemented method for automated image recognition and pe
 Convolutional neural networks (CNNs) are a tool for supervised deep-learning that have become standard in recent years for automatic image classification. CNNs are a form of artificial neural network, which were inspired by biological processes in the brain \citep{ANNasModelsofNeuralInfoProcessing}. CNNs primarily use combinations of convolutional and pooling layers to filter raw information into features. These features are then fed into densely connected layers which are trained to associate given sets of features with their desired labels. This translation-invariant automated classification closely mimics the human eye-to-brain classification process.
 
 
-\subsubsection{Filters and Convolution}
+\paragraph{Image Convolution and Convolutional Layers}
 
 Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
 
 Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the image, a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
-\subsubsection{Max-Pooling}
+\paragraph{Max Pooling Layers}
 Max-pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max-pooling layers apply a maximum function over adjacent regions of a feature map (like using a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4! Max-pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
 
-\subsubsection{Densely Connected Layers}
+\paragraph{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, if we see an item that is orange, small, and fuzzy, we are taught to call it "caterpillar". Fuzzy is not a feature we meaningfully associate with a baby carrot, so there is little connection between the feature "fuzzy" and the label "carrot". Similarly, in CNNs, each final feature is connected to each label through a weight (hence the name "densely connected"), and those weights are learned through the training process (using an algorithm called back-propogation) to minimize loss and thus improve classification accuracy. \svp{Go ahead and add the pictures in here - you have them, may as well use them...}
 
-\subsection{Activation Function}
 \mt{Include a description of relu and softmax and when each is used.}
+\paragraph{Output Classification Layer}
 
 
-\subsection{Transfer Learning}
+\subsubsection{Transfer Learning}
 \svp{You may also want to talk about "modularity" in that the Convolutional part is one module, the head is another, and they're separately trainable and useable}
 
 \mt{This paragraph is another beast for another night. Goal: establish the need for transfer learning by explaining the problem of training from scratch and showing how much easier the task is without it}
@@ -108,7 +108,7 @@ Pre-trained CNNs are CNNs that have been trained on a standard data set. The sta
 
 
 
-\subsection{Model Evaluation Metrics}
+\section{Machine Learning Model Evaluation}
 
 Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive \svp{, that is, }an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications \svp{using} probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
