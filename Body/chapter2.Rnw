@@ -26,25 +26,17 @@ if(!"Body" %in% list.files()){
 
 \subsection{\svp{Geometric} Class Characteristics}
 
-\svp{Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes.}
-% *Include something that explains what class characteristics are?* % This is done in the background section
-% *Transition from CNN to shoes*
-\svp{Class characteristics have been used to separate shoes; a sufficiently well-defined set of characteristics can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}.}
- % In the beginning of this project, the literature (source IDK) indicated that geometric shapes are unique and well-defined enough to provide most of the necessary information to classify a shoe outsole.
-
-% We have since settled on nine geometric categories, modified from (source): bowtie, chevron, circle, line, polygon, quadrilateral, star, text, and triangle.
-\svp{\citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class. }
-% Many of these categories are self-explanatory, such as circle and triangle. Polygon is a catch-all for pentagons, hexagons, and octagons. Star is any concave shape, including X- or plus-shapes. Line is a difficult distinction, as most shapes are simply a combination of lines, but in this case it is reserved for cases where the other categies do not readily apply, such as repeating patterns of lines that are not distinctly quadrilaterals. % svp - defined more clearly using description env below
+Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of characteristics can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
 
 \svp{\begin{description}
 \item [Bowtie] Bowtie shapes are roughly quadrilateral, with two opposite concave faces. The remaining two faces can be convex or straight, and the concave faces may have straight portions, so long as there is a concave region. Using this definition, shapes such as butterflies are included as bowties.
 \item [Chevron] Chevron shapes include repeating parallel lines as well as individual ``v" shapes. They may be angular but can also be curved.
 \item [Circle] Circles include ellipses and ovals; they must be round.
-\item [Line] Lines are repeated, parallel; a more general definition of a line would be difficult to differentiate from many other patterns. Lines can be mildly curved.
+\item [Line] Lines are repeated and parallel; a more general definition of a line would be difficult to differentiate from many other patterns. Lines can be mildly curved.
 \item [Polygon] Polygons are defined in this standard to have more than 4 sides. They include pentagons, hexagons, and octagons.
 \item [Quadrilateral] Quadrilaterals (quads) have four sides. They may have rounded or square corners.
 \item [Star] Stars are any shape with alternating concave and convex regions, or lines which emanate from a central point. ``X" and ``+" shapes are also classified as stars.
-\item [Text] Text is any shape which would be identified as text by a reasonable human. In most cases, the text on our images is made up of latin alphabet charcters; the model will likely not recognize text in other scripts at this point (but could be trained with text in other scripts if such training images could be obtained). Text frequently includes component shapes such as circles; where these shapes are clearly defined, they are labeled as well, as the model does not have the ability at this time to impose context on images and differentiate an ``o" from a circle.
+\item [Text] Text is any shape which would be identified as text by a reasonable human. In most cases, the text on our images is made up of latin alphabet charcters; the model will likely not recognize text in other scripts at this point (but could be trained with text in other scripts if such training images could be obtained). Text frequently includes component shapes such as circles; where these shapes are clearly defined, they are labeled as well, as the model does not have the ability at this time to impose the necessary context on images to differentiate an ``o" from a circle.
 \item [Triangle] Triangles are any three-sided figure. Like quadrilaterals, they can have rounded corners. In some cases, it is difficult to distinguish between a trapezoidal shape and a triangle when rounded corners are involved.
 \item [Other] Other features which were marked include logos, various textures (including crepe, stippling, etc.), and smooth regions with no discernible features. These regions are grouped and provide additional information - that none of the previous nine categories are present.
 \end{description}
@@ -73,7 +65,13 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \subsection{Data Collection}
 
-Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \svp{need to cite it}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* \svp{R code, using the imager package and spatial packages - check code to get a good list} *Number of images per category?* To train the CNN, data was split such that 70\% went to training, and 15\% each to validation and test data. \svp{Actually using 60/20/20 right now, but that's easily changed in the model or in here...}
+Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* \svp{R code, using the imager package and spatial packages - check code to get a good list}
+
+\mt{Should "Image Processing" be a new section? I'm thinking about the scripts that take the images from LabelMe to the data folders. It's also relevant for the point about not maintaining aspect ratio that you added in the Data Characteristics section below.}
+
+\mt{Is the 60/20/20 split a data characteristic for Ch 2 or a Training Parameters thing for ch3?} 
+
+To train the CNN, data was split such that 60\% went to training, and 20\% each to validation and test data.
 
 
 \subsection{Data Characteristics}
@@ -87,7 +85,22 @@ Thousands of outsole images were web-scraped from Zappos.com, a large online sho
 \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
-\svp{Talk about image augmentation}
+\mt{Augmentation includes crop, zoom, skew, rotate, and color}
+
+\section{VGG16}
+
+\textbf{VGG16 Architecture}
+The main difference between different CNNs is their structure, meaning the number of layers they contain and the pattern those layers are in. In our research, we have tested a few pre-trained CNNs, and we are currently using VGG16. Developed by Oxford's Visual Graphics Group, VGG16 has 16 "functional" (i.e., convolutional and densely connected) layers and 5 max-pooling layers, which function more to alter the structure of the information at each step.
+
+%In the case of VGG16, early convolutional layers contain 64 features that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+
+%VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which ultimately takes in initial feature maps of size 224x224 and ends with maps of size 7x7.
+
+\includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
+
+\svp{Show VGG16 architecture image ... and talk through the image dimension changes.}
+
+\svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
 
 
 
