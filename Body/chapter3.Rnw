@@ -6,21 +6,7 @@
 
 \chapter{RESULTS}
 
-\section{Model Specs}
-
-\textbf{Model Training}
-
-Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend.
-
-***I want to include the following ideas, but just don't want to spend the time writing them out when I'm unsure about the format.***
-
--Use VGG16 Convolutional base and train new classifier, done by getting features from conv base and training only dense layers
--Model training parameters (e.g., augmentation parameters, drop-out rate)
--Model predictions are multi-label binary, probabilities don't add to one
-
-\section{Evaluating the model}
-
-\textbf{Model Performance}
+\section{Model Evaluation}
 
 *I feel like graphs will speak more here* \svp{Yes, but you have to interpret them :)}
 -Accuracy and loss during training

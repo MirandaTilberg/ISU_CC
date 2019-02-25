@@ -24,11 +24,11 @@ if(!"Body" %in% list.files()){
 
 \section{Data}
 
-\subsection{\svp{Geometric} Class Characteristics}
+\subsection{Geometric Class Characteristics}
 
 Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of characteristics can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
 
-\svp{\begin{description}
+\begin{description}
 \item [Bowtie] Bowtie shapes are roughly quadrilateral, with two opposite concave faces. The remaining two faces can be convex or straight, and the concave faces may have straight portions, so long as there is a concave region. Using this definition, shapes such as butterflies are included as bowties.
 \item [Chevron] Chevron shapes include repeating parallel lines as well as individual ``v" shapes. They may be angular but can also be curved.
 \item [Circle] Circles include ellipses and ovals; they must be round.
@@ -40,7 +40,7 @@ Class characteristics, as defined in \autoref{sec:class-chars-desc}, are charact
 \item [Triangle] Triangles are any three-sided figure. Like quadrilaterals, they can have rounded corners. In some cases, it is difficult to distinguish between a trapezoidal shape and a triangle when rounded corners are involved.
 \item [Other] Other features which were marked include logos, various textures (including crepe, stippling, etc.), and smooth regions with no discernible features. These regions are grouped and provide additional information - that none of the previous nine categories are present.
 \end{description}
-}
+
 
 Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter "v" can easily be considered a chevron, and the letter "o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process.
 
@@ -67,15 +67,17 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. 
 
-Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.
+\mt{Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.}
 
 
 \subsection{Data Characteristics}
 
 -Quantities, examples, etc
 \svp{Show histogram of class distribution}
-\svp{Talk about ``other" - it's necessary to train the model on null data as well}
-\mt{Ideally, I'll assemble three "other" examples and we can add them to the class examples above. It will even out the 2-column grid and makes more sense to include there. Add it to my to-do list :)}
+\svp{Talk about ``other" - it's necessary to train the model on null data as well} \mt{It's already in the description above. Does it need more discussion?}
+
+
+\mt{Ideally, I'll assemble three "other" examples to add to the class examples above. I'll add it to my to-do list :)}
 
 
 \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
@@ -85,7 +87,7 @@ Once images are labeled in LabelMe, they are processed in R by a script that emp
 
 \section{VGG16}
 
-\textbf{VGG16 Architecture}
+\subsection{Architecture}
 Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. \mt{XXX In contrast to some popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy.}
 
 \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
@@ -104,16 +106,25 @@ The early convolutional layers of VGG16 contain 64 filters that primarily detect
 
 \mt{
 
-\subsection{Implementation}
+\subsection{Implementation (Moved here from Ch 3)}
 
 \subsubsection{Computation}
 
-Keras in R, GPU
+\begin{itemize}
+\item Keras in R: Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend.
+\item GPU, big computation power needed, amt of time required?
+\end{itemize}
 
 \subsubsection{Model Training Parameters}
 
-60/20/20 data split
-Drop-out rate
+\begin{itemize}
+\item 60/20/20 data split
+\item Training data weighted to equal
+\item Drop-out rate
+\item Number of epochs and why
+\item Train only dense layers
+\item Training image here or in results? (I.e. training and validation loss and accuracy plot)
+\end{itemize}
 
 
 }
