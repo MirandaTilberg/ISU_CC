@@ -65,13 +65,9 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \subsection{Data Collection}
 
-Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. *Image processing?* \svp{R code, using the imager package and spatial packages - check code to get a good list}
+Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. 
 
-\mt{Should "Image Processing" be a new section? I'm thinking about the scripts that take the images from LabelMe to the data folders. It's also relevant for the point about not maintaining aspect ratio that you added in the Data Characteristics section below.}
-
-\mt{Is the 60/20/20 split a data characteristic for Ch 2 or a Training Parameters thing for ch3?} 
-
-To train the CNN, data was split such that 60\% went to training, and 20\% each to validation and test data.
+Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.
 
 
 \subsection{Data Characteristics}
@@ -79,28 +75,45 @@ To train the CNN, data was split such that 60\% went to training, and 20\% each 
 -Quantities, examples, etc
 \svp{Show histogram of class distribution}
 \svp{Talk about ``other" - it's necessary to train the model on null data as well}
+\mt{Ideally, I'll assemble three "other" examples and we can add them to the class examples above. It will even out the 2-column grid and makes more sense to include there. Add it to my to-do list :)}
 
-\svp{256x256 images, aspect ratio not maintained (but efforts to label with relatively square labels). }
 
 \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
-\mt{Augmentation includes crop, zoom, skew, rotate, and color}
+\mt{Augmentation includes crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
 
 \section{VGG16}
 
 \textbf{VGG16 Architecture}
-The main difference between different CNNs is their structure, meaning the number of layers they contain and the pattern those layers are in. In our research, we have tested a few pre-trained CNNs, and we are currently using VGG16. Developed by Oxford's Visual Graphics Group, VGG16 has 16 "functional" (i.e., convolutional and densely connected) layers and 5 max-pooling layers, which function more to alter the structure of the information at each step.
-
-%In the case of VGG16, early convolutional layers contain 64 features that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
-
-%VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which ultimately takes in initial feature maps of size 224x224 and ends with maps of size 7x7.
-
-\includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
-
-\svp{Show VGG16 architecture image ... and talk through the image dimension changes.}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. \mt{XXX In contrast to some popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy.}
 
 \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
 
+\includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
+
+The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+
+\mt{Really want to include bird head images here. When will the KerasVis stuff be ready in R? :)}
+
+\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
 
 
+
+
+
+\mt{
+
+\subsection{Implementation}
+
+\subsubsection{Computation}
+
+Keras in R, GPU
+
+\subsubsection{Model Training Parameters}
+
+60/20/20 data split
+Drop-out rate
+
+
+}
