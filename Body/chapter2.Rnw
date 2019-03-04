@@ -65,7 +65,7 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \subsection{Data Collection}
 
-Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images. 
+Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images.
 
 \mt{Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.}
 
@@ -91,9 +91,9 @@ Image augmentation is a common technique to both increase the amount of data ava
 \section{VGG16}
 
 \subsection{Architecture}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. \mt{XXX In contrast to some popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy.}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy. \svp{VGG16 is also widely used in transfer learning due to its' structure and broad generalizability. XXX Citations}
 
-\svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
+% \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
 
 \includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
 
@@ -103,7 +103,19 @@ The early convolutional layers of VGG16 contain 64 filters that primarily detect
 
 \mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
 
-
+<<kerasvis, echo = F, eval = F>>=
+library(KerasVis)
+KerasVis:::import_all_dependendices()
+source("/models/shoe_nn/Generate_Model_Images.R")
+model_path <- "/models/shoe_nn/TrainedModels/"
+newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
+model_wts_file <- file.path(newest_model$path, newest_model$base_file)
+loaded_model <- set_weights(model_wts_file)
+layer_names <- list("block1_conv1")
+visualize_filter(loaded_model,
+                 selected_filters = list(list(1L:8L)),
+                 layer_names = layer_names)
+@
 
 
 
