@@ -83,7 +83,10 @@ Thousands of outsole images were web-scraped from Zappos.com, a large online sho
 \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
-\mt{Augmentation includes crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
+
+Image augmentation is a common technique to both increase the amount of data available for training a model and improve the generalizability of model predictions. Augmenting an image refers to applying a number of visual transformations, including (but not limited to) cropping, zooming, skewing or shearing), rotating, and adjusting color channels.
+
+\mt{Add image examples here when Bigfoot isn't busy}
 
 \section{VGG16}
 
