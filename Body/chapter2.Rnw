@@ -135,9 +135,9 @@ visualize_filter(loaded_model,
 \item 60/20/20 data split
 \item Training data weighted to equal
 \item Drop-out rate
-\item Number of epochs and why
+\item Number of epochs and why \svp{Move to Ch3 - first subsec is model results}
 \item Train only dense layers
-\item Training image here or in results? (I.e. training and validation loss and accuracy plot)
+\item Training image here or in results? (I.e. training and validation loss and accuracy plot) \svp{Move to Ch3 - first subsec is model results}
 \end{itemize}
 
 
