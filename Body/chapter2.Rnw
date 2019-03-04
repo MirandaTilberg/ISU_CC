@@ -67,7 +67,8 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images.
 
-\mt{Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.}
+\svp{After annotation using the LabelMe software package, images are processed by an R script, which identifies the minimum bounding rectangle of the region, crops the image to that region, and scales the cropped area to a 256 x 256 pixel image suitable for analysis by the convolutional neural network. During this process, aspect ratio is not preserved, though efforts are made to label images which are relatively square to minimize the effect of this distortion.}
+%\mt{Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.} % Slight rephrasing for a bit tidier flow of thought.
 
 
 \subsection{Data Characteristics}
@@ -80,9 +81,11 @@ Thousands of outsole images were web-scraped from Zappos.com, a large online sho
 \mt{Ideally, I'll assemble three "other" examples to add to the class examples above. I'll add it to my to-do list :)}
 
 
-\svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
+% \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
+\mt{Augmentation includes crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
+\svp{Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation\citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features of the image corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above.}
 
 Image augmentation is a common technique to both increase the amount of data available for training a model and improve the generalizability of model predictions. Augmenting an image refers to applying a number of visual transformations, including (but not limited to) cropping, zooming, skewing or shearing), rotating, and adjusting color channels.
 

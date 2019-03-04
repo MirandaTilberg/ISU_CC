@@ -61,14 +61,14 @@ Differentiating between two objects is quite easy when features are distinct; ho
 \includegraphics[height=.25\linewidth]{caterpillar.png}
 \hskip 1cm
 \includegraphics[height=.25\linewidth]{carrots.png}
-\caption{\svp{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}}\label{fig:caterpillar-carrots}
+\caption[\svp{Feature Similarity.}]{\svp{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}}\label{fig:caterpillar-carrots}
 \end{figure}
 
 While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers, as evidenced by \autoref{fig:xkcd-img-recognition}.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width = .3\linewidth]{xkcd.png}
-\caption{Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and \svp{has only become tractable with convolutional neural network based approaches.}}\label{fig:xkcd-img-recognition}
+\caption[\svp{Computer vision is a difficult problem.}]{Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and \svp{has only become tractable with convolutional neural network based approaches.}}\label{fig:xkcd-img-recognition}
 \end{figure}
 
 Now, CNNs are a widely implemented method for automated image recognition and perform comparably to humans on certain tasks \citep{geirhosComparingDeepNeural2017}. The ImageNet Large Scale Visual Recognition Competition (ILSVRC) is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}.
