@@ -49,13 +49,13 @@ For novel image classification tasks, Convolutional Neural Networks (CNNs) have 
 \subsection{General Approach}
 Visual classification (i.e., assigning a label to an object based on visual input) is a complex task that humans do very well \citep{mallot2000computational}. Sight is our dominant sense and a significant part of our brain is dedicated to vision, which means that the structures used to impart meaning on a visual scene have been optimized through millions of years of evolution. As Convolutional Neural Networks are organized to mimic the process of object recognition in the human visual cortex, it will be useful to briefly describe that process.
 
+\paragraph{Human Vision}
+\svp{The visual perception process begins with the transfer of information from the visual world to the brain via rods and cones in the retina. Chemical signals travel along the optic nerve from the retina into the brain, where the signals are processed by a series of biological modules which aggregate information across multiple cells and provide meaning and order on otherwise chaotic chemical and electrical signaling.}
+\svp{As information is aggregated, spatial relationships between objects in the physical world are maintained in the brain. Specialized feature detector cells respond preferentially to specific stimuli (e.g. cells which respond to lines oriented horizontally, vertically, or at specific angles), and these feature detectors are aggregated to identify more complex stimuli\citep[Ch. 4]{goldsteinSensationPerception2016}. In addition to the successive compilation of increasingly complex features, there are also specific modules for particularly important tasks, such as facial recognition; information from these regions is also integrated into the overall hierarchy of recognized objects from the visual input.}
 
-\mt{I will read Goldstein this week and fill in this paragraph.}
-(Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.} \svp{Skip the retina, talk briefly about "feature detectors" e.g. Hubel and Wiesel (flag 1). Describe how those feature detectors are assembled into progressively higher-order features (flag 2), and then talk about special processing regions (flag 3). Describe why object recognition is hard(things look different from different angles, general class vs. specifics, etc.) and talk about recognition-by-components (flag 4). The assembly of these components into an intelligent framework is what makes human object recognition so much more advanced (flag 5), and only recently have we been able to mimic that level of organizational structure with computer modeling. You can integrate the caterpillar/carrot example here with feature integration and recognition-by-components (we're using a more general definition of components than the geom-based components in the text)}
+\svp{The problem of general object recognition is quite difficult - a three-dimensional object has infinitely many projections into two-dimensional space, and in real scenes objects are often at least partially obscured. In addition, a two-dimensional image can map back to many different three-dimensional objects, because of the ambiguity introduced by the projection onto a flat sufrace. Several psychological theories exist as to how object recognition occurs within the brain (gestalt heuristics, recognition-by-components, and inferential contexts all have experimental support), but in general the process seems to require both spatial integration and learned associations\citep[Ch. 5]{goldsteinSensationPerception2016}.}
 
-Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, \svp{as shown in \autoref{fig:caterpillar-carrots},} an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture becomes an important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
-
-\vskip .2cm
+Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, \svp{as shown in \autoref{fig:caterpillar-carrots},} an orange caterpillar and a baby carrot may be of similar color, shape, and size, but one is distinctly more fuzzy than the other\svp{; the distinction between the two categories is very strong even with all of the features that are shared}. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture \svp{is a critically} important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
 
 \begin{figure}[htbp]\centering
 \includegraphics[height=.25\linewidth]{caterpillar.png}
@@ -64,14 +64,18 @@ Differentiating between two objects is quite easy when features are distinct; ho
 \caption[\svp{Feature Similarity.}]{\svp{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}}\label{fig:caterpillar-carrots}
 \end{figure}
 
-While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers, as evidenced by \autoref{fig:xkcd-img-recognition}.
+\paragraph{Computer Vision Using Neural Networks}
+While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers, as evidenced by \autoref{fig:xkcd-img-recognition}. \svp{Human visual processing is so complex in part because of the successive aggregation of increasingly complex features; only within the last 10 years have we been able to adequately mimic this process with computer modeling. }
+
+% \mt{I will read Goldstein this week and fill in this paragraph.}
+% (Describe the human visual/classification process: feature detection, routing to the brain, and label application) \svp{Use Sensation \& Perception (Goldstein) heavily here. You might also use some of the computer vision books to compare/contrast.} \svp{Skip the retina, talk briefly about "feature detectors" e.g. Hubel and Wiesel (flag 1). Describe how those feature detectors are assembled into progressively higher-order features (flag 2), and then talk about special processing regions (flag 3). Describe why object recognition is hard(things look different from different angles, general class vs. specifics, etc.) and talk about recognition-by-components (flag 4). The assembly of these components into an intelligent framework is what makes human object recognition so much more advanced (flag 5), and only recently have we been able to mimic that level of organizational structure with computer modeling. You can integrate the caterpillar/carrot example here with feature integration and recognition-by-components (we're using a more general definition of components than the geom-based components in the text)}
 
 \begin{figure}[htbp]\centering
 \includegraphics[width = .3\linewidth]{xkcd.png}
 \caption[\svp{Computer vision is a difficult problem.}]{Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and \svp{has only become tractable with convolutional neural network based approaches.}}\label{fig:xkcd-img-recognition}
 \end{figure}
 
-Now, CNNs are a widely implemented method for automated image recognition and perform comparably to humans on certain tasks \citep{geirhosComparingDeepNeural2017}. The ImageNet Large Scale Visual Recognition Competition (ILSVRC) is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}. \svp{Various models} are tested on about 1.2 million images spanning 1000 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a grass snake and a vine snake.
+Convolutional Neural Networks are a widely implemented method for automated image recognition; their structure typically emulates the successive aggregation of low-level features into higher-level features that is seen in the human visual cortex. CNNs perform comparably to humans on certain image recognition tasks \citep{geirhosComparingDeepNeural2017}. The ImageNet Large Scale Visual Recognition Competition (ILSVRC) is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}. \svp{Various models} are tested on about 1.2 million images spanning 1000 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a grass snake and a vine snake.
 
 Convolutional neural networks (CNNs) are a tool for supervised deep-learning that have become standard in recent years for automatic image classification. CNNs are a form of artificial neural network, which were inspired by biological processes in the brain \citep{ANNasModelsofNeuralInfoProcessing}. CNNs primarily use combinations of convolutional and pooling layers to filter raw information into features. These features are then fed into densely connected layers which are trained to associate given sets of features with their desired labels. This translation-invariant automated classification closely mimics the human eye-to-brain classification process.
 
@@ -83,16 +87,54 @@ Convolutional neural networks (CNNs) are a tool for supervised deep-learning tha
 
 Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
 
-Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the image, a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
+Convolutional Neural Networks are named to highlight their use of \svp{image convolution operations} to extract information from an image. \svp{As shown in \autoref{fig:image-convolution-setup},} a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image\svp{, as shown in \autoref{fig:image-convolution-illustration}}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
-\svp{XXX Add in pictures showing convolutional layer, activation map. Be sure to talk about the fact that there is a nonlinear activation function (ReLU) applied - this is what makes the convolution operation part of a neural network.}
+\begin{figure}
+\centering
+\includegraphics[width=.5\textwidth]{filter.png}
+\caption{An image (blue) and a convolutional filter (green)}\label{fig:image-convolution-setup}
+\end{figure}
 
-\svp{Convolutional layers typically do not hugely decrease the dimensions of the matrix; dimension reduction is typically performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.}
+\begin{figure}
+\centering
+\includegraphics[width=.45\textwidth]{filter1.png}\hfill\includegraphics[width=.45\textwidth]{filter2.png}
+\caption[Image convolution, illustrated]{The convolution operation consists of the smaller filter (green) applied to each region of the larger image (blue); each application results in a single value which is stored in the feature map. }\label{fig:image-convolution-illustration}
+\end{figure}
+
+% \svp{XXX Add in pictures showing convolutional layer, activation map. Be sure to talk about the fact that there is a nonlinear activation function (ReLU) applied - this is what makes the convolution operation part of a neural network.}
+
+\svp{Convolutional layers typically do not hugely decrease the dimensions of the matrix; in many cases, the input image is padded in order to prevent any reduction in dimension. In many neural network structures, dimension reduction is performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.}
 
 \paragraph{Max Pooling Layers}
-Max-pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max-pooling layers apply a maximum function over adjacent regions of a feature map (like using a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4! Max-pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
+Max-pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max-pooling layers apply a maximum function over adjacent regions of a feature map (like using a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4\svp{, as shown in \autoref{fig:max-pooling}}. Max-pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
+
+\begin{figure}
+\centering
+\includegraphics[width=.5\textwidth]{maxpooling}
+\caption{Max pooling layer illustration}\label{fig:max-pooling}
+\end{figure}
 
 \svp{Once the dimension of the image has been reduced and features have been identified using a combination of convolutional and pooling layers, local features must be integrated into a more unified whole. This integration is performed using densely connected layers.}
+
+\paragraph{Activation Functions}
+\svp{The convolution and max pooling operations discussed above rely on activation functions, which operate on each feature map value. Different activation functions are used to produce different network effects - in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.}
+
+<<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks.", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
+library(tidyverse)
+sigmoid <- function(x) 1/(1 + exp(-x))
+relu <- function(x) pmax(x, 0)
+elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
+softplus <- function(x) log(1 + exp(x))
+
+x <- seq(-3, 3, .005)
+tibble(x = x, Linear = x, Sigmoid = sigmoid(x), ReLU = relu(x), ELU = elu(x, 1), SoftPlus = softplus(x)) %>%
+  gather(key = key, value = value, -x) %>%
+  mutate(key = factor(key, levels = c("Linear", "ReLU", "ELU", "SoftPlus", "Sigmoid"))) %>%
+  ggplot(aes(x = x, y = value)) + geom_line() + facet_grid(.~key) +
+  ggtitle("Common Activation Functions") +
+  theme(axis.title = element_blank()) +
+  coord_fixed()
+@
 
 \paragraph{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, if we see an item that is orange, small, and fuzzy, we are taught to call it "caterpillar". Fuzzy is not a feature we meaningfully associate with a baby carrot, so there is little connection between the feature "fuzzy" and the label "carrot". Similarly, in CNNs, each final feature is connected to each label through a weight (hence the name "densely connected"), and those weights are learned through the training process (using an algorithm called back-propogation) to minimize loss and thus improve classification accuracy.
@@ -102,14 +144,16 @@ Densely connected layers are typically the final layers in a CNN. These layers f
 \paragraph{Output Classification Layer}
 \mt{Include a description of } \svp{sigmoid} \mt{ and softmax and when each is used.}
 
+\subsection{Forward and Backward Propagation}
+\svp{All the equations go in here. }
 
-\subsubsection{Transfer Learning}
+\subsection{Transfer Learning}
 Convolutional layers and max-pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. \svp{Even relatively simple convnets can have many millions of trainable parameters in the model base (the convolutional and pooling layers). Optimizing all of these weights requires an incredible amount of computational power. In addition, the features learned by a neural network trained on one dataset often generalize to different data sets: particularly in the initial layers, the feature maps of a trained neural network typically activate based on color, low-level textures, and other features which are broadly generalizable\citep{yosinskiHowTransferableAre2014}.} \svp{\emph{Transfer learning} is the process of using layers from a CNN (or other classification model) trained on a general image recognition task when fitting a model intended for a more specific purpose. The layers which are deemed to identify broadly generalizable patterns are used with their pre-trained weights; new layers are added to customize the model to the specific task at hand, and typically, only these new weights are updated when the model is fit. Transfer learning allows CNNs to be applied to smaller datasets of several thousand images, with additional gains in the amount of time required to fit the model.}
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{vgg16-base-head}
-\caption{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
+\caption[Transfer learning using pre-trained neural networks]{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
 \end{figure}
 
 \svp{Transfer learning leverages the modularity of neural networks - the pretrained base of the model can be separated from the full model and a new model head can be trained to connect that base to the output classes, as shown in \autoref{fig:transfer-learning-diagram}. One of the simpler pre-trained convolutional networks available, VGG16, has a structure which is ideal for our purposes - it consists of several blocks of convolutional layers, with a fully connected head, as shown in \autoref{fig:vgg16-structure}. The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.}
@@ -117,7 +161,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{vgg16-layer-size}
-\caption{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
+\caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 
 \svp{VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.}
