@@ -87,9 +87,36 @@ Convolutional neural networks (CNNs) are a tool for supervised deep-learning tha
 
 Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
 
-Convolutional Neural Networks are named to highlight their use of convolution to extract information from an image. A single convolutional filter is a small array (say 5x5x3) of real valued weights that represents some feature of the image. When a filter is applied to a portion of the image, a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
+Convolutional Neural Networks are named to highlight their use of \svp{image convolution operations} to extract information from an image. \svp{As shown in \autoref{fig:image-convolution-setup},} a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image\svp{, as shown in \autoref{fig:image-convolution-illustration}}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
-\svp{XXX Add in pictures showing convolutional layer, activation map. Be sure to talk about the fact that there is a nonlinear activation function (ReLU) applied - this is what makes the convolution operation part of a neural network.}
+\begin{figure}
+\centering
+\includegraphics[width=.5\textwidth]{filter.png}
+\caption{An image (blue) and a convolutional filter (green)}\label{fig:image-convolution-setup}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=.45\textwidth]{filter1.png}\hfill\includegraphics[width=.45\textwidth]{filter2.png}
+\caption[Image convolution, illustrated]{The convolution operation consists of the smaller filter (green) applied to each region of the larger image (blue); each application results in a single value which is stored in the feature map. }\label{fig:image-convolution-illustration}
+\end{figure}
+
+<<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks. ReLU, the Rectified Linear Unit, is one of the most common; it simply truncates the feature map at 0, keeping only the positive values. ELU, the Exponential Linear Unit, is an attempt to make a continuous version of ReLU. The sigmoid activation function is used when outputs between 0 and 1 are desired (for instance, in the output layer to produce class probabilities).", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
+library(tidyverse)
+sigmoid <- function(x) 1/(1 + exp(-x))
+relu <- function(x) pmax(x, 0)
+elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
+
+x <- seq(-3, 3, .005)
+tibble(x = x, Linear = x, Sigmoid = sigmoid(x), ReLU = relu(x), ELU = elu(x, 1)) %>%
+  gather(key = key, value = value, -x) %>%
+  mutate(key = factor(key, levels = c("Linear", "ReLU", "ELU", "Sigmoid"))) %>%
+  ggplot(aes(x = x, y = value)) + geom_line() + facet_grid(.~key) +
+  ggtitle("Common Activation Functions") +
+  theme(axis.title = element_blank()) +
+  coord_fixed()
+@
+% \svp{XXX Add in pictures showing convolutional layer, activation map. Be sure to talk about the fact that there is a nonlinear activation function (ReLU) applied - this is what makes the convolution operation part of a neural network.}
 
 \svp{Convolutional layers typically do not hugely decrease the dimensions of the matrix; dimension reduction is typically performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.}
 
