@@ -13,10 +13,12 @@ if(!"Body" %in% list.files()){
   opts_chunk$set(fig.path='figure/chapter1/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, root.dir="../", message=F, warning=F, error=F)
   datadir <- "../data/chapter1/"
   imgdir <- "../figure/chapter1/"
+  codedir <- "../code/"
 } else {
   opts_chunk$set(fig.path='figure/chapter1/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F, error=F)
   datadir <- "data/chapter1/"
   imgdir <- "figure/chapter1/"
+  codedir <- "code/"
 }
 @
 
@@ -137,12 +139,26 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x), ReLU = relu(x), ELU = elu(x, 1),
 @
 
 \paragraph{Densely Connected Layers}
-Densely connected layers are typically the final layers in a CNN. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, if we see an item that is orange, small, and fuzzy, we are taught to call it "caterpillar". Fuzzy is not a feature we meaningfully associate with a baby carrot, so there is little connection between the feature "fuzzy" and the label "carrot". Similarly, in CNNs, each final feature is connected to each label through a weight (hence the name "densely connected"), and those weights are learned through the training process (using an algorithm called back-propogation) to minimize loss and thus improve classification accuracy.
+Densely connected layers are typically the final layers in a CNN, \svp{making up what is known as the model head}. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item \svp{which} is orange, small, and fuzzy \svp{is commonly associated with the word ``caterpillar"}. Fuzzy is not a feature \svp{typically associated with the word} carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot". Similarly, in densely connected or fully connected layers, each final feature is connected to each label through \svp{weights} (hence the name ``densely connected") \svp{learned during the training process}. \svp{Weights are optimized in order to minimize errors (measured by a loss function)} and thus improve classification accuracy.
 
-\svp{XXX Go ahead and add the pictures in here - you have them, may as well use them...}
+<<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes and 4 output nodes.">>=
+source(file.path(codedir, "Generate_Model_Images.R"))
+plot_deepviz2(c(12, 4), r = .005)
+@
+
+\svp{In some cases, fully connected layers may utilize a pruning mechanism known as a dropout rate, which forces a set percentage of the weights to be zero. This results in the maintenance of only the strongest connections between two layers of the model.}
+<<dense-layer2, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
+source(file.path(codedir, "Generate_Model_Images.R"))
+plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0))
+@
 
 \paragraph{Output Classification Layer}
 \mt{Include a description of } \svp{sigmoid} \mt{ and softmax and when each is used.}
+\svp{In order to transform the neural network node values into output class probabilities, the final layer of the model head uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). }
+\svp{In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}$. The softmax activation function produces class probabilities which sum to 1. }
+
+\svp{In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.}
 
 \subsection{Forward and Backward Propagation}
 \svp{All the equations go in here. }
