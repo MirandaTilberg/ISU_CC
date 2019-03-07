@@ -1,4 +1,4 @@
-% Chapter 1 of the Thesis Template File
+% Chapter 1: Motivation and Background
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter1/}{figure/chapter1/}}
@@ -10,12 +10,20 @@ require(knitr)
 wd <- getwd()
 # Set paths for everything for compiling subdocument
 if(!"Body" %in% list.files()){
-  opts_chunk$set(fig.path='figure/chapter1/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, root.dir="../", message=F, warning=F, error=F)
+  opts_chunk$set(fig.path = 'figure/chapter1/fig-', cache.path = 'cache/',
+                 fig.align ='center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE, root.dir = "../",
+                 message = F, warning = F, error = F)
   datadir <- "../data/chapter1/"
   imgdir <- "../figure/chapter1/"
   codedir <- "../code/"
 } else {
-  opts_chunk$set(fig.path='figure/chapter1/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F, error=F)
+  opts_chunk$set(fig.path = 'figure/chapter1/fig-', cache.path = 'cache/',
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE,
+                 message = F, warning = F, error = F)
   datadir <- "data/chapter1/"
   imgdir <- "figure/chapter1/"
   codedir <- "code/"
@@ -141,13 +149,13 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x), ReLU = relu(x), ELU = elu(x, 1),
 \paragraph{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN, \svp{making up what is known as the model head}. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as we learned which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item \svp{which} is orange, small, and fuzzy \svp{is commonly associated with the word ``caterpillar"}. Fuzzy is not a feature \svp{typically associated with the word} carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot". Similarly, in densely connected or fully connected layers, each final feature is connected to each label through \svp{weights} (hence the name ``densely connected") \svp{learned during the training process}. \svp{Weights are optimized in order to minimize errors (measured by a loss function)} and thus improve classification accuracy.
 
-<<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes and 4 output nodes.">>=
+<<dense-layer, eval = F, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes and 4 output nodes.">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz2(c(12, 4), r = .005)
 @
 
 \svp{In some cases, fully connected layers may utilize a pruning mechanism known as a dropout rate, which forces a set percentage of the weights to be zero. This results in the maintenance of only the strongest connections between two layers of the model.}
-<<dense-layer2, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
+<<dense-layer2, eval = F, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
   theme(legend.position = c(1, 0), legend.justification = c(1, 0))
