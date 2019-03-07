@@ -121,9 +121,6 @@ visualize_filter(loaded_model,
 @
 
 
-
-\mt{
-
 \subsection{Implementation (Moved here from Ch 3)}
 
 \subsubsection{Computation}
@@ -145,4 +142,3 @@ visualize_filter(loaded_model,
 \end{itemize}
 
 
-}
