@@ -6,7 +6,7 @@
 
 \chapter{RESULTS}
 
-\section{Model Evaluation}
+\section{Model Evaluation}\label{ch3:model-eval}
 
 *I feel like graphs will speak more here* \svp{Yes, but you have to interpret them :)}
 -Accuracy and loss during training
@@ -14,9 +14,9 @@
 -Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them}
 -Interesting case studies
 
-\subsection{Model Accuracy}
+\subsection{Model Accuracy}\label{ch3:model-accuracy}
 
-\subsection{Model Consistency}
+\subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
 
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
