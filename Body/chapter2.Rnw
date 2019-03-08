@@ -124,18 +124,12 @@ visualize_filter(loaded_model,
 
 \subsubsection{Computation}
 
-\begin{itemize}
-\item Keras in R: Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend.
-\item GPU, big computation power needed, amt of time required?
-\end{itemize}
+\mt{Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend. Our model was trained using a 20dB GPU powered by a 4000 kJ hamster wheel and graduate student tears (JK, Susan help?.}
 
 \subsubsection{Model Training Parameters}
 
-\begin{itemize}
-\item 60/20/20 data split
-\item Training data weighted to equal
-\item Drop-out rate
-\item Train only dense layers
-\end{itemize}
+\mt{The available [24,000] multi-label images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion to have equal \mt{XXX strength} during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, 20\% were used for validation, to monitor the training process, and the remaining data were for testing. \mt{Someone} recommends a dropout rate of 50\% to ensure generalizability of model predictions.
+
+Two dense layers were added \mt{(units = 256 and 9, I don't remember why 256)}}
 
 
