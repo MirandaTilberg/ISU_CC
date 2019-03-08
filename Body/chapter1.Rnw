@@ -159,7 +159,8 @@ source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz2(c(12, 4), r = .005)
 @
 
-\svp{In some cases, fully connected layers may utilize a pruning mechanism known as a dropout rate, which forces a set percentage of the weights to be zero. This results in the maintenance of only the strongest connections between two layers of the model.}
+\svp{In some cases, fully connected layers may utilize a pruning mechanism known as a dropout rate, which forces a set percentage of the weights to be zero. This results in the maintenance of only the strongest connections between two layers of the model.} \mt{I'm not sure this is true? My understanding is that it prevents any one node from deciding the prediction for a whole class -- like making sure multiple people in an office can do a job in case one is sick.}
+
 <<dense-layer2, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
@@ -167,11 +168,9 @@ plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
 @
 
 \paragraph{Output Classification Layer}
-\mt{Include a description of } \svp{sigmoid} \mt{ and softmax and when each is used.}
-\svp{In order to transform the neural network node values into output class probabilities, the final layer of the model head uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). }
-\svp{In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}$. The softmax activation function produces class probabilities which sum to 1. }
+In order to transform the neural network node values into output class probabilities, the final layer of the model head uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}$. The softmax activation function produces class probabilities which sum to 1.
 
-\svp{In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.}
+In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
 \subsection{Forward and Backward Propagation}
 \svp{All the equations go in here. }
