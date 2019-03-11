@@ -3,6 +3,34 @@
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter3/}}
 
+<<ch3-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
+options(replace.assign=TRUE,width=70,scipen=3)
+require(knitr)
+
+wd <- getwd()
+# Set paths for everything for compiling subdocument
+if(!"Body" %in% list.files()){
+  opts_chunk$set(fig.path = 'figure/chapter3/fig-', cache.path = 'cache/',
+                 fig.align ='center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE, root.dir = "../",
+                 message = F, warning = F, error = F)
+  datadir <- "../data/chapter3/"
+  imgdir <- "../figure/chapter3/"
+  codedir <- "../code/"
+} else {
+  opts_chunk$set(fig.path = 'figure/chapter3/fig-', cache.path = 'cache/',
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE,
+                 message = F, warning = F, error = F)
+  datadir <- "data/chapter3/"
+  imgdir <- "figure/chapter3/"
+  codedir <- "code/"
+}
+@
+
+
 \chapter{RESULTS}
 
 \section{Model Evaluation}\label{ch3:model-eval}
@@ -23,6 +51,30 @@
 -Interesting case studies
 
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
+
+<<eval = F, echo = F>>=
+source(file.path(codedir, "keras_test.R"))
+
+get_confusion_matrix(predictions = preds, classes = classes, 
+                     test_labels = test_labs) %>%
+  set_names(str_to_title(classes)) %>%
+  ggcorrplot(., hc.order = F, outline.col = "white", lab = T) +
+  scale_fill_gradient("Classification\nRate", low = "white", 
+                      high = "cornflowerblue", limits = c(0, 1)) +
+  scale_x_discrete("Image Label") + scale_y_discrete("Prediction") +
+  theme(axis.title.x = element_text(size = 14), 
+        axis.title.y = element_text(size = 14, angle = 90, vjust = 1)) +
+  ggtitle("CoNNOR Multi-Class Confusion Matrix: Test Set Performance") + 
+  theme_bw() + 
+  theme(panel.grid.major = element_line(color = "grey50"),
+        panel.grid.minor = element_line(color = "grey60")) +
+  theme(plot.margin = grid::unit(c(0,0,0,0), "mm"), 
+        plot.background = element_rect(fill = "transparent", color = NA),
+        plot.subtitle = element_blank(), plot.caption = element_blank(), 
+        panel.spacing = unit(c(0, 0, 0, 0), "mm"))
+
+
+@
 
 \mt{Let's get rid of this :) :) :)}
 \subsection{Model Consistency}\label{ch3:model-consistency}
