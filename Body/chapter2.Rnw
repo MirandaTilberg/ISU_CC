@@ -4,20 +4,150 @@
 \graphicspath{{Images/chapter2/}{../Images/chapter2/}}
 
 <<ch2-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
-options(replace.assign=TRUE,width=70,scipen=3)
+options(replace.assign = TRUE, width = 70, scipen = 3)
 require(knitr)
 
 wd <- getwd()
 # Set paths for everything for compiling subdocument
-if(!"Body" %in% list.files()){
-  opts_chunk$set(fig.path='figure/chapter2/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, root.dir="../", message=F, warning=F, error=F)
+if (!"Body" %in% list.files()) {
+  opts_chunk$set(fig.path = 'figure/chapter2/fig-', cache.path = 'cache/',
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE, root.dir = "../",
+                 message = F, warning = F, error = F)
   datadir <- "../data/chapter2/"
   imgdir <- "../figure/chapter2/"
 } else {
-  opts_chunk$set(fig.path='figure/chapter2/fig-', cache.path='cache/', fig.align='center', fig.width=5, fig.height=5, fig.show='hold', par=TRUE, cache=TRUE, concordance=TRUE, autodep=TRUE, message=F, warning=F, error=F)
+  opts_chunk$set(fig.path = 'figure/chapter2/fig-', cache.path = 'cache/',
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
+                 fig.show = 'hold', par = TRUE, cache = TRUE,
+                 concordance = TRUE, autodep = TRUE, root.dir = "../",
+                 message = F, warning = F, error = F)
   datadir <- "data/chapter2/"
   imgdir <- "figure/chapter2/"
 }
+@
+
+<<model-setup, cache = F, echo = F, eval = T, include = F>>=
+library(magrittr)
+library(tidyverse)
+library(ggplot2)
+library(keras)
+library(furrr)
+plan(multicore)
+mytheme <- theme_bw() #+
+  # theme(panel.grid.major = element_line(color = "grey50"),
+  #       panel.grid.minor = element_line(color = "grey60"))
+
+theme_set(mytheme)
+knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, cache = T, dpi = 300, dev = 'png')
+
+source("~/models/shoe_nn/Generate_Model_Images.R")
+@
+
+<<labeled-data-setup, include = F>>=
+model_path <- "~/models/shoe_nn/TrainedModels/"
+
+newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
+newest_data_file <- file.path("~/models/shoe_nn/RProcessedImages/",
+                              newest_model$process_dir, "cropped_photos.Rdata")
+
+load(newest_data_file)
+
+label_fixes <- c("triangles" = "triangle",
+                 "trianglee" = "triangle",
+                 "circlemtraignle" = "circle_triangle",
+                 "circle triangle" = "circle_triangle",
+                 "circleline" = "circle_line",
+                 "circle text" = "circle_text",
+                 "circle_elongated" = "circle",
+                 "cricle|cirle" = "circle",
+                 "chrevron" = "chevron",
+                 "lie" = "line",
+                 "texxt" = "text",
+                 "star quad" = "star_quad",
+                 "exc_idd" = "exclude",
+                 "quad?" = "quad",
+                 "qaud|qud" = "quad",
+                 "stars|start" = "star",
+                 "exlude" = "exclude",
+                 "rounded" = "",
+                 "smooth_texture" = "other",
+                 "octagon" = "polygon",
+                 "crepe" = "other",
+                 "hex" = "polygon",
+                 "smooth|hatching" = "other"
+                 )
+
+annotated_imgs <- select(dfunion, image, name) %>%
+  mutate(base_image = basename(image)) %>%
+  mutate(num_labels = str_count(name, "_") + 1,
+         annot_num = 1:n()) %>%
+  mutate(labels = str_remove_all(name, "\\(.{1,2}\\)") %>%
+           str_replace_all(label_fixes) %>%
+           str_split("_")) %>%
+  unnest(labels) %>%
+  mutate(labels = str_replace_all(labels, label_fixes)) %>%
+  mutate(label_type = ifelse(num_labels == 1, "single", "multi")) %>%
+  filter(labels != "") %>%
+  filter(labels != "exclude") %>%
+  filter(labels != "ribbon" & labels != "logo") %>%
+  filter(labels %in% c(default_classes, "other"))
+
+fix_annotation <- function(annot) {
+  useful_vars <- c("name", "deleted", "date", "id", "username")
+  new_vars <- set_names(useful_vars, c("name", "deleted", "date", "objID", "username"))
+
+  get_vars <- new_vars[new_vars %in% names(annot)]
+
+  if (!is.null(annot)) select(annot, !!get_vars) %>% as_tibble() else tibble()
+}
+
+# authors <- df %>%
+#   filter(!is.null(fullannot)) %>%
+#   mutate(base_image = basename(image)) %>%
+#   select(id, base_image, image, fullannot) %>%
+#   filter(!is.null(date)) %>%
+#   mutate(miniannot = map(fullannot, fix_annotation)) %>%
+#   select(-fullannot) %>%
+#   unnest(miniannot)
+@
+
+<<img-setup, include = F>>=
+new_img_dir <- dirname(newest_data_file)
+
+ann_df <- select(annotated_imgs, base_image, name, num_labels, annot_num, labels, label_type) %>%
+  group_by(base_image, name) %>%
+  arrange(annot_num) %>%
+  mutate(ln = 1:n())
+
+img_df <- tibble(img = list.files(file.path(new_img_dir, c("test", "train", "validation")), full.names = T)) %>%
+  mutate(type = str_extract(img, "(test|train|validation)"),
+         image = basename(img),
+         aug = grepl("^aug", image),
+         name = str_extract(image, "^([a-z\\(\\)RE]*?_?){1,}-\\d{1,}-"),
+         ln = str_extract(name, "-\\d{1,}-$") %>% gsub(pattern = "-", replacement = "") %>% as.numeric(),
+         name = gsub(pattern = "-\\d{1,}-$", "", name),
+         name = gsub(pattern = "aug_", "", name),
+         name = gsub(pattern = "logo|ribbon|logo\\(R\\)|ribbon\\(R\\)", replacement = "other", name),
+         base_image = gsub(image, pattern = "^([a-z\\(\\)RE]*?_?){1,}-\\d{1,}-", replacement = "") %>%
+           gsub(., pattern = "_\\d_\\d{1,}.jpg", replacement = ".jpg")) %>%
+  select(type, base_image, name, ln, aug, img_path = image) %>%
+  mutate(num_labels = str_count(name, "_") + 1,
+         annot_num = 1:n()) %>%
+  mutate(labels = str_remove_all(name, "\\(.{1,2}\\)") %>%
+           str_replace_all(label_fixes) %>%
+           str_split("_")) %>%
+  unnest(labels) %>%
+  mutate(labels = str_replace_all(labels, label_fixes)) %>%
+  mutate(label_type = ifelse(num_labels == 1, "single", "multi")) %>%
+  filter(labels != "" & labels != "hatching" & labels != "exclude" & !is.na(labels))
+@
+
+<<load-keras-model, include = F>>=
+model_dir <- newest_model$path
+load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
 \chapter{DATA AND METHODS}
 
@@ -72,29 +202,57 @@ Thousands of outsole images were web-scraped from Zappos.com, a large online sho
 
 \subsection{Data Characteristics}
 
--Quantities, examples, etc
-\svp{Show histogram of class distribution}
+<<class-characteristic-barchart, fig.width = 6, fig.height = 4, dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively rare.", fig.scap = "Distribution of classes in all labeled images">>=
+annotated_imgs %>%
+  mutate(label_type = str_replace(label_type, "multi", "multiple")) %>%
+  mutate(labels = str_to_title(labels)) %>%
+  mutate(labels = factor(labels, levels = c("Quad", "Line", "Text", "Circle", "Chevron", "Triangle", "Polygon", "Star", "Bowtie", "Other"))) %>%
+  ggplot() +
+  geom_bar(aes(x = labels, fill = label_type), color = "black") +
+  scale_fill_manual("Labels", values = c("single" = "#6ba2b9", "multiple" = "#2e5597")) +
+  coord_flip() +
+  ylab("# Labeled Images") +
+  xlab("")  +
+  ggtitle("Current Class Distribution (All Labeled Images)") +
+  mytheme +
+  theme(legend.position = c(1, 1), legend.justification = c(1.03, 1.03),
+        legend.background = element_rect(fill = "white"))
+@
+
+\svp{Describe \autoref{fig:class-characteristic-barchart} in words. Talk about the fact that the class imbalance means we will have to weight the classes for the model, and that this also affects the utility of accuracy measures. }
 
 % \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
-\mt{Augmentation includes crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
-\svp{Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation\citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features of the image corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above.}
+Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation\citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above; examples of pre- and post- augmentation images are shown in \autoref{fig:augmented}.
 
-Image augmentation is a common technique to both increase the amount of data available for training a model and improve the generalizability of model predictions. Augmenting an image refers to applying a number of visual transformations, including (but not limited to) cropping, zooming, skewing or shearing), rotating, and adjusting color channels.
+\begin{figure}
+\centering
+\includegraphics[width=.1\textwidth]{augmentation/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg}\hfill
+\includegraphics[width=.1\textwidth]{augmentation/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg}\hfill\hfill\hfill
+\includegraphics[width=.1\textwidth]{augmentation/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg}\hfill
+\includegraphics[width=.1\textwidth]{augmentation/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg}\hfill\hfill\hfill
+\includegraphics[width=.1\textwidth]{augmentation/quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426.jpg}\hfill
+\includegraphics[width=.1\textwidth]{augmentation/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg}\hfill\hfill\hfill
+\includegraphics[width=.1\textwidth]{augmentation/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg}\hfill
+\includegraphics[width=.1\textwidth]{augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg}
+\caption[Original and augmented images]{Four sets of original (left) and augmented (right) labeled images.}\label{fig:augmented}
+\end{figure}
 
-\mt{Add image examples here when Bigfoot isn't busy}
+% \mt{Augmentation} \svp{operations include} \mt{crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
+%
+% Image augmentation is a common technique to both increase the amount of data available for training a model and improve the generalizability of model predictions. Augmenting an image refers to applying a number of visual transformations, including (but not limited to) cropping, zooming, skewing or shearing), rotating, and adjusting color channels.
+
+% \mt{Add image examples here when Bigfoot isn't busy}
 
 \section{VGG16}
 
 \subsection{Architecture}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy. \svp{VGG16 is also widely used in transfer learning due to its' structure and broad generalizability. XXX Citations}
-
-% \svp{Contrast VGG16 structure with ResNet - \href{https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624}{one source}, explain VGG16 is simpler, so we can more easily explain it and produce diagnostic images.}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy.
 
 \includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
 
-The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library\citep{raghakotkerasvis} available in R.
 
 \mt{Really want to include bird head images here. When will the KerasVis stuff be ready in R? :)}
 
@@ -109,19 +267,26 @@ newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
 model_wts_file <- file.path(newest_model$path, newest_model$base_file)
 loaded_model <- set_weights(model_wts_file)
 layer_names <- list("block1_conv1")
-visualize_filter(loaded_model,
-                 selected_filters = list(list(1L:8L)),
-                 layer_names = layer_names)
+visualize_activation(loaded_model,
+                 selected_filters = list(1L:63L),
+                 layer_names = layer_names, save_folder = file.path("Images", "chapter2", "vgg16layers"))
 @
 
 
-\subsection{Implementation}
+\subsection{Model Training}
 
-\subsubsection{Computation}
+\paragraph{Computation}
 
-\mt{Model training was conducted using the *keras* package in R, which provides an interface to the neural network API of the same name which is written in Python, with a TensorFlow computational backend. Our model was trained using a 20dB GPU powered by a 4000 kJ hamster wheel and graduate student tears (JK, Susan help?.}
+Model training was conducted using the \texttt{keras} package in R\citep{keras-package}, which provides an interface to the Python keras API. The keras API uses a tensorflow \citep{tensorflow2015-whitepaper} backend. The model was trained using CPUs; the amount of memory required in order to update VGG16 using the GPU was prohibitive.
 
-\subsubsection{Model Training Parameters}
+Initial training utilized the output from the VGG16 convolutional base as input to a new model consisting of a densely connected layer with 50\% dropout, followed by an activation layer with a sigmoid activation function (see \autoref{fig:activation-functions}) and 9 output classes corresponding to the 9 geometric features we have identified. Once the separate model head was fit, we utilized keras' facilities for loading model weights to combine the convolutional base of VGG16 with the model head into a single, unified model object.
+
+Code is provided in \autoref{app:Code}.
+
+%Our model was trained using a 20dB GPU powered by a 4000 kJ hamster wheel and graduate student tears (JK, Susan help?.) % I'm seriously considering leaving that sentence in, but I think as a faculty member/actual adult I'm probably not supposed to condone seeing if your committee actually read the whole thing...
+
+
+\paragraph{Model Training Parameters}
 
 \mt{The available [24,000] multi-label images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion to have equal \mt{XXX strength} during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, 20\% were used for validation, to monitor the training process, and the remaining data were for testing. \mt{Someone} recommends a dropout rate of 50\% to ensure generalizability of model predictions.
 
