@@ -7,7 +7,32 @@
 
 \section{Model Evaluation}\label{ch3:model-eval}
 
+- Goal: process that helps model predict new data given repeated exposure to training data.
+
+-Examples of prediction
+
+
 \subsection{Model Training}
+<<training-accuracy, fig.width = 7.5, fig.height = 5, fig.cap = "Training and validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 89.5\\% around epoch 9. After that point, validation loss remains the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy.", fig.scap = "Training and validation accuracy and loss during each epoch.">>=
+data.frame(history$metrics) %>%
+  mutate(epoch = 1:n()) %>%
+  gather(key = "measure", value = "value", -epoch) %>%
+  mutate(Type = ifelse(str_detect(measure, "val"), "Validation", "Training"),
+         measure = ifelse(str_detect(measure, "acc"), "Accuracy", "Loss")) %>%
+  # bind_rows(tibble(epoch = NA, value =  .6, measure = "Accuracy", Type = "Validation")) %>%
+  # bind_rows(tibble(epoch = NA, value =  .33, measure = "Loss", Type = "Validation")) %>%
+  ggplot(aes(x = epoch, y = value, color = Type)) +
+  geom_point() +
+  geom_smooth(se = F) +
+  facet_grid(measure~., scales = "free_y", switch = "both") +
+  theme_bw() +
+  scale_y_continuous("") +
+  scale_x_continuous("Epoch") +
+  ggtitle("CoNNOR Training Performance") + mytheme +
+  theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
+@
+
+\svp{\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.}
 
 \begin{itemize}
 \item Model training image (Why over-fitting is dangerous and how we've addressed it with number of epochs. Image should show we stop before it occurs)
@@ -15,16 +40,13 @@
 
 \end{itemize}
 
-- Goal: process that helps model predict new data given repeated exposure to training data. 
-
--Examples of prediction
-
--Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
--Interesting case studies
 
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
 
-\mt{Let's get rid of this :) :) :)}
+-Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
+-Interesting case studies
+\mt{Let's get rid of this :) :) :)}\svp{no, we're just moving the bullet point down from the previous section}
+
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
 
