@@ -4,14 +4,14 @@
 \graphicspath{{Images/chapter1/}{figure/chapter1/}}
 
 <<ch1-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
-options(replace.assign=TRUE,width=70,scipen=3)
+options(replace.assign = TRUE, width = 70, scipen = 3)
 require(knitr)
 
 wd <- getwd()
 # Set paths for everything for compiling subdocument
-if(!"Body" %in% list.files()){
+if (!"Body" %in% list.files()) {
   opts_chunk$set(fig.path = 'figure/chapter1/fig-', cache.path = 'cache/',
-                 fig.align ='center', fig.width = 5, fig.height = 5,
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
                  fig.show = 'hold', par = TRUE, cache = TRUE,
                  concordance = TRUE, autodep = TRUE, root.dir = "../",
                  message = F, warning = F, error = F)
