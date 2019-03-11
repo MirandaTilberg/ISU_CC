@@ -173,6 +173,19 @@ In order to transform the neural network node values into output class probabili
 In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
 \subsection{Forward and Backward Propagation}
+\svp{In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.}
+
+\svp{We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}). }
+
+\svp{During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
+\begin{eqnarray}\label{math:forwardprop}
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }\\
+\end{eqnarray}
+need to figure out how to represent max pool layers and fully connected layers here...
+}
+
+
 \svp{All the equations go in here. }
 
 \subsection{Transfer Learning}
