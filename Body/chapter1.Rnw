@@ -43,7 +43,7 @@ According to \citet{grossVariabilitySignificanceClass2013}, the four generally a
 
 Class characteristics are defined as the set of features which allow an object to be placed into a group with other physically similar objects. In the context of footwear, the term refers to the design and physical dimension of the shoe, particularly with regard to the shoe's outsole. While class characteristics are not sufficient for identification, they in many cases enable the exclusion of footwear \citep{bodziak_footwear_2000}.
 
-When \mt{informally?} categorizing a shoe, it is common \mt{(I want to say that it's the first thing that comes to mind, or that's what we do in conversation.)} to use features like brand, size, and general type (e.g., boot, tennis shoe, dress shoe). When defining useful class characteristics for identification or exclusion, however, these features prove quite difficult to use. Size, for example, is far from straightforward, as size standards vary significantly across different manufacturers and scales in different countries, and different shoe styles with same size inside may have different size outsoles, making direct measurement or estimation of foot size difficult \citep{bodziak_footwear_2000}. Identifying the model of shoe is also not easily characterized because manufactuers are constantly developing new models, discontinuing existing models, or reviving discontinued models, and there exist look-alikes for many common models that are difficult to distinguish from the models they emulate. Thus, when defining features to describe any possible shoe outsole that may be found at a crime scene, it is important that any set of descriptors be \mt{is? (am I crazy that "be" sounds weird?)} general enough to describe a large variety of shoes and specific enough to differentiate between shoes that may have similar qualities. One such set of descriptors are geometric shapes, which have been found to be able to differentiate between different \mt{shoes [need qualifier?]} \citep{grossVariabilitySignificanceClass2013}. Matching tread patterns by comparing the spatial distribution of geometric shapes "is of considerable evidential value" \citep{hancockInterpretationShoeprintComparison2012} for class characteristic comparisons.
+When \mt{informally?} categorizing a shoe, it is common \mt{(I want to say that it's the first thing that comes to mind, or that's what we do in conversation.)} to use features like brand, size, and general type (e.g., boot, tennis shoe, dress shoe) \svp{No, it's not informal or conversational, it's actually the way examiners start out - can they classify it as an athletic shoe, dress shoe, etc.}. When defining useful class characteristics for identification or exclusion, however, these features prove quite difficult to use. Size, for example, is far from straightforward, as size standards vary significantly across different manufacturers and scales in different countries, and different shoe styles with same size inside may have different size outsoles, making direct measurement or estimation of foot size difficult \citep{bodziak_footwear_2000}. Identifying the model of shoe is also not easily characterized because manufactuers are constantly developing new models, discontinuing existing models, or reviving discontinued models, and there exist look-alikes for many common models that are difficult to distinguish from the models they emulate. Thus, when defining features to describe any possible shoe outsole that may be found at a crime scene, it is important that any set of descriptors be \mt{is? (am I crazy that "be" sounds weird?)} general enough to describe a large variety of shoes and specific enough to differentiate between shoes that may have similar qualities. One such set of descriptors are geometric shapes, which have been found to be able to differentiate between different \mt{shoes [need qualifier?]} \citep{grossVariabilitySignificanceClass2013}. Matching tread patterns by comparing the spatial distribution of geometric shapes "is of considerable evidential value" \citep{hancockInterpretationShoeprintComparison2012} for class characteristic comparisons.
 
 \section{Computational Image Analysis and Convolutional Neural Networks}
 
@@ -51,7 +51,7 @@ Shoeprint evidence from crime scenes is most commonly collected in the form of a
 
 For novel image classification tasks, Convolutional Neural Networks (CNNs) have become standard.
 \footnote{The Google Trends interest graph shows a massive increase in convolutional neural networks between mid-2014 and 2018 \url{https://trends.google.com/trends/explore?date=2010-01-01\%202019-02-18&q=convolutional\%20neural\%20network,computer\%20vision}}
-\citep{guRecentAdvancesConvolutional2018}. 
+\citep{guRecentAdvancesConvolutional2018}.
 
 \mt{These sentences belong somewhere in here, tbd where: Convolutional neural networks are a tool for supervised deep-learning that have become standard in recent years for automatic image classification. CNNs are a form of artificial neural network, which were inspired by biological processes in the brain \citep{ANNasModelsofNeuralInfoProcessing}.}
 
@@ -116,8 +116,8 @@ Convolutional Neural Networks are named to highlight their use of image convolut
 
 
  \mt{Don't we need to cite these images?}
- 
- 
+
+
 Convolutional layers typically do not hugely decrease the dimensions of the matrix; in many cases, the input image is padded in order to prevent any reduction in dimension. In many neural network structures, dimension reduction is performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.
 
 \paragraph{Max Pooling Layers}
