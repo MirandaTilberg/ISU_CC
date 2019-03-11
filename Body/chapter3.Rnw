@@ -80,8 +80,4 @@ get_confusion_matrix(predictions = preds, classes = classes,
 
 @
 
-\mt{Let's get rid of this :) :) :)}
-\subsection{Model Consistency}\label{ch3:model-consistency}
-\svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
-
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
