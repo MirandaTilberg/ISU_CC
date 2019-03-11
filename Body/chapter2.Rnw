@@ -25,7 +25,7 @@ if(!"Body" %in% list.files()){
 
 \subsection{Geometric Class Characteristics}
 
-Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of characteristics can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in Gross require spatial context which is not preserved during the labeling process (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
+Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of \svp{features} can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in \citet{grossVariabilitySignificanceClass2013} require spatial context which is not preserved during \svp{labeling} (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
 
 \begin{description}
 \item [Bowtie] Bowtie shapes are roughly quadrilateral, with two opposite concave faces. The remaining two faces can be convex or straight, and the concave faces may have straight portions, so long as there is a concave region. Using this definition, shapes such as butterflies are included as bowties.
@@ -57,7 +57,7 @@ Defining categories this way does not remove all ambiguities. The best example l
      Star & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/star_examples.png}} &
      \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/text_examples.png}} & Text  \vspace{1mm}\\
      Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/triangle_examples.png}} &
-      \raisebox{-.5\height}{} & \\
+      \raisebox{-.5\height}{} & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/other_examples.png}} & Other \\
 \end{tabular}
 \caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
@@ -74,11 +74,6 @@ Thousands of outsole images were web-scraped from Zappos.com, a large online sho
 
 -Quantities, examples, etc
 \svp{Show histogram of class distribution}
-\svp{Talk about ``other" - it's necessary to train the model on null data as well} \mt{It's already in the description above. Does it need more discussion?}
-
-
-\mt{Ideally, I'll assemble three "other" examples to add to the class examples above. I'll add it to my to-do list :)}
-
 
 % \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
