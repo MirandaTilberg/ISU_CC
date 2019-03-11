@@ -187,7 +187,7 @@ validation$features <- reshape_features(validation$features)
 test$features <- reshape_features(test$features)
 
 @
-\section*{Training the Model Head}
+\section*{Training the Model Head}\label{app:model-head-training}
 
 <<model-head, echo = T, eval = F>>=
 
