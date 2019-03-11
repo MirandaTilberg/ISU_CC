@@ -208,7 +208,7 @@ Evaluating model accuracy on classification requires addressing both the labels 
  \multirow{2}{*}{True Label} & A & True Positive & False Negative\\\cline{2-4}
  & Not A & False Positive & True Negative \\\hline
 \end{tabular}
-\caption{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
+\caption[Model errors for a two-class binary decision problem.]{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
 \end{table}
 
 \svp{Recall, or sensitivity, which is the true positive rate, is the sum of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the sum of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model. }
@@ -231,7 +231,7 @@ Evaluating model accuracy on classification requires addressing both the labels 
  & \multirow{2}{*}{C} & False Positive (A) & False Positive (B) & \multirow{2}{*}{True Positive (C)} \\
  & & False Negative (C) & False Negative (C) & \\\hline
 \end{tabular}
-\caption{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
+\caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
 \end{table}
 
 \svp{However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, which will be described in more detail in \autoref{ch3:model-accuracy}, a modification of the confusion matrix is possible to better visualize model performance.}
