@@ -17,6 +17,7 @@ if (!"Body" %in% list.files()) {
                  message = F, warning = F, error = F)
   datadir <- "../data/chapter2/"
   imgdir <- "../figure/chapter2/"
+  codedir <- "../code/"
 } else {
   opts_chunk$set(fig.path = 'figure/chapter2/fig-', cache.path = 'cache/',
                  fig.align = 'center', fig.width = 5, fig.height = 5,
@@ -25,6 +26,7 @@ if (!"Body" %in% list.files()) {
                  message = F, warning = F, error = F)
   datadir <- "data/chapter2/"
   imgdir <- "figure/chapter2/"
+  codedir <- "/code/"
 }
 @
 
@@ -259,9 +261,13 @@ The early convolutional layers of VGG16 contain 64 filters that primarily detect
 \mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
 
 <<kerasvis, echo = F, eval = F>>=
+
+### KerasVis DOESN'T WORK ON MIRANDA'S COMPUTER
+
+
 library(KerasVis)
 KerasVis:::import_all_dependendices()
-source("/models/shoe_nn/Generate_Model_Images.R")
+source(file.path(codedir, "Generate_Model_Images.R"))
 model_path <- "/models/shoe_nn/TrainedModels/"
 newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
 model_wts_file <- file.path(newest_model$path, newest_model$base_file)
