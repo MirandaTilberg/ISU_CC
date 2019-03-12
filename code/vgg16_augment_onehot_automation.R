@@ -13,14 +13,18 @@ if (!exists("classes")) {
   )
 }
 
+if (!exists("modeldir")) {
+  modeldir <- here::here("model")
+}
+
 if (!exists("process_dir")) {
-  process_dir <- list.files("./models/RProcessedImages") %>%
+  process_dir <- list.files(file.path(modeldir, "RProcessedImages")) %>%
     as_datetime() %>%
     max(na.rm = T) %>%
     gsub("[^0-9\\ ]", "", .) %>%
     gsub(" ", "-", .)
 } else {
-  process_dir <- file.path("./models/RProcessedImages", process_dir)
+  process_dir <- file.path(modeldir, "RProcessedImages", process_dir)
 }
 
 if (!exists("aug_multiple")) {
@@ -31,11 +35,11 @@ if (!exists("epochs")) {
   epochs <- 30
 }
 
-process_dir <- gsub("[[:punct:]]models[[:punct:]]shoe_nn[[:punct:]]RProcessedImages[[:punct:]]{1,}", "\\1", process_dir)
+process_dir <- gsub("[[:punct:]]models[[:punct:]]RProcessedImages[[:punct:]]{1,}", "\\1", process_dir)
 process_dir <- gsub("^[/\\\\]{1,}", "", process_dir)
 
 
-work_dir <- "./models/TrainedModels"
+work_dir <- file.path(modeldir, "TrainedModels")
 start_date <- Sys.time() %>% gsub(" ", "_", .)
 model_dir <- file.path(work_dir, process_dir)
 dir.create(model_dir)
@@ -56,7 +60,7 @@ name_file <- function(date, ext) {
 }
 
 
-base_dir <- file.path("./models/RProcessedImages", process_dir)
+base_dir <- file.path(modeldir, "RProcessedImages", process_dir)
 train_dir <- file.path(base_dir, "train")
 train_aug_dir <- file.path(base_dir, "train")
 validation_dir <- file.path(base_dir, "validation")
