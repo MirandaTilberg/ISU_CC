@@ -45,15 +45,18 @@ If the number of epochs is too high, the model will be over-fit to the training 
 #TRAINING IMAGE
 @
 
-
-
-
--Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
--Interesting case studies
-
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
 
-<<eval = T, echo = F>>=
+\begin{itemize}
+\item Example of model prediction
+\item TPR, FPR, and EER
+\item Confusion matrix (at EER)
+\item ROC/AUC
+\end{itemize}
+
+\mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
+
+<<eval = F, echo = F>>=
 
 #This works on Miranda's computer, but isn't a long-term solution
 
@@ -76,8 +79,6 @@ get_confusion_matrix(predictions = preds, classes = classes,
         plot.background = element_rect(fill = "transparent", color = NA),
         plot.subtitle = element_blank(), plot.caption = element_blank(), 
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
-
-
 @
 
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
