@@ -23,7 +23,7 @@ default_classes <- c(
 # --- Functions ----------------------------------------------------------------
 
 # Get most recent model
-get_newest <- function(dir = "~/models/shoe_nn/TrainedModels/", pattern = "fullimage.rdata") {
+get_newest <- function(dir = file.path(modeldir, "TrainedModels"), pattern = "fullimage.rdata") {
   dirlist <- list.dirs(path = dir) %>% rev()
   newest_file <- NULL
   startidx <- 1:pmin(length(dirlist) - 1, 10)
@@ -153,7 +153,7 @@ heatmap_overlay <- function(heatmap, geometry = geometry, width = 256, height = 
 }
 
 create_composite <- function(heatmap_data, save_file = F, outdir = ".", td = tempdir(), fixed_labels = T,
-                             fail_file = file.path("/models/shoe_nn/", "poop.jpg")) {
+                             fail_file = file.path("Images", "poop.jpg")) {
 
   # Fix image dimensions
   dim(heatmap_data$img) <- dim(heatmap_data$img)[-1]

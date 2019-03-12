@@ -18,6 +18,7 @@ if (!"Body" %in% list.files()) {
   datadir <- "../data/chapter2/"
   imgdir <- "../figure/chapter2/"
   codedir <- "../code/"
+  modeldir <- "../model/"
 } else {
   opts_chunk$set(fig.path = 'figure/chapter2/fig-', cache.path = 'cache/',
                  fig.align = 'center', fig.width = 5, fig.height = 5,
@@ -26,7 +27,8 @@ if (!"Body" %in% list.files()) {
                  message = F, warning = F, error = F)
   datadir <- "data/chapter2/"
   imgdir <- "figure/chapter2/"
-  codedir <- "/code/"
+  codedir <- "code/"
+  modeldir <- "model/"
 }
 @
 
@@ -44,14 +46,14 @@ mytheme <- theme_bw() #+
 theme_set(mytheme)
 knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, cache = T, dpi = 300, dev = 'png')
 
-source("~/models/shoe_nn/Generate_Model_Images.R")
+source(file.path(codedir, "Generate_Model_Images.R"))
 @
 
 <<labeled-data-setup, include = F>>=
-model_path <- "~/models/shoe_nn/TrainedModels/"
+model_path <- file.path(modeldir, "TrainedModels")
 
 newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
-newest_data_file <- file.path("~/models/shoe_nn/RProcessedImages/",
+newest_data_file <- file.path(modeldir, "RProcessedImages",
                               newest_model$process_dir, "cropped_photos.Rdata")
 
 load(newest_data_file)
