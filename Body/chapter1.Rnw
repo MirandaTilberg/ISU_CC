@@ -175,6 +175,43 @@ In classification problems where there are $n$ classes, but each object can have
 \subsection{Forward and Backward Propagation}
 \svp{All the equations go in here. }
 
+\mt{Taking a stab at how to visualize back-prop, since there are a whole bunch of weights and values floating around.}
+
+<<echo = F>>=
+n <- c(2,3,3)
+
+scripts <- function(n) {
+  n <- rev(n)
+  supers <- rep(1:length(n), n)
+  subs <- sapply(n, function(x){1:x}) %>% unlist
+  return(rev(paste0("a[", subs, "]^(", supers, ")")))
+}
+
+nodes <- make_nodes_df(n)
+nodes$name <- scripts(n)
+edges <- make_edges_df(n)
+
+tbl_graph(nodes = nodes, edges = edges) %>%
+  ggraph(layout = "manual", node.position = layout_keras(., n)) +
+  geom_edge_link0(edge_colour = "grey50", linetype = "solid", 
+                  arrow = arrow(length = unit(1, "mm"))) +
+  geom_node_circle(aes(r = .1), fill = "grey90") +
+  geom_node_text(aes(label = name), parse = T) +
+  coord_fixed() +
+  ylim(-.25, 2.25) + xlim(0.5, 3) +
+  geom_text(aes(x = 2.65, y = 0, label = "Layer 1")) +
+  geom_text(aes(x = 2.65, y = 1, label = "Layer 2")) +
+  geom_text(aes(x = 2.65, y = 2, label = "Layer 3")) +
+  geom_text(aes(x = 2.2, y = 1.72, label = "w[11]^3"), parse = T) +
+  # geom_text(aes(x = 1.95, y = 1.72, label = "w[12]^3"), parse = T) +
+  # geom_text(aes(x = 1.7, y = 1.72, label = "w[13]^3"), parse = T) +
+  # geom_text(aes(x = 1.5, y = 1.72, label = "w[21]^3"), parse = T) +
+  # geom_text(aes(x = 1.3, y = 1.72, label = "w[22]^3"), parse = T) +
+  # geom_text(aes(x = 1.05, y = 1.72, label = "w[23]^3"), parse = T) +
+  coord_flip() +
+  theme_void()
+@
+
 \subsection{Transfer Learning}
 Convolutional layers and max-pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. \svp{Even relatively simple convnets can have many millions of trainable parameters in the model base (the convolutional and pooling layers). Optimizing all of these weights requires an incredible amount of computational power. In addition, the features learned by a neural network trained on one dataset often generalize to different data sets: particularly in the initial layers, the feature maps of a trained neural network typically activate based on color, low-level textures, and other features which are broadly generalizable\citep{yosinskiHowTransferableAre2014}.} \svp{\emph{Transfer learning} is the process of using layers from a CNN (or other classification model) trained on a general image recognition task when fitting a model intended for a more specific purpose. The layers which are deemed to identify broadly generalizable patterns are used with their pre-trained weights; new layers are added to customize the model to the specific task at hand, and typically, only these new weights are updated when the model is fit. Transfer learning allows CNNs to be applied to smaller datasets of several thousand images, with additional gains in the amount of time required to fit the model.}
 
