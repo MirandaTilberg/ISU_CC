@@ -4,20 +4,21 @@
 \graphicspath{{Images/chapter1/}{figure/chapter1/}}
 
 <<ch1-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
-options(replace.assign=TRUE,width=70,scipen=3)
+options(replace.assign = TRUE, width = 70, scipen = 3)
 require(knitr)
 
 wd <- getwd()
 # Set paths for everything for compiling subdocument
-if(!"Body" %in% list.files()){
+if (!"Body" %in% list.files()) {
   opts_chunk$set(fig.path = 'figure/chapter1/fig-', cache.path = 'cache/',
-                 fig.align ='center', fig.width = 5, fig.height = 5,
+                 fig.align = 'center', fig.width = 5, fig.height = 5,
                  fig.show = 'hold', par = TRUE, cache = TRUE,
                  concordance = TRUE, autodep = TRUE, root.dir = "../",
                  message = F, warning = F, error = F)
   datadir <- "../data/chapter1/"
   imgdir <- "../figure/chapter1/"
   codedir <- "../code/"
+  modeldir <- "../model/"
 } else {
   opts_chunk$set(fig.path = 'figure/chapter1/fig-', cache.path = 'cache/',
                  fig.align = 'center', fig.width = 5, fig.height = 5,
@@ -27,6 +28,7 @@ if(!"Body" %in% list.files()){
   datadir <- "data/chapter1/"
   imgdir <- "figure/chapter1/"
   codedir <- "code/"
+  modeldir <- "model/"
 }
 @
 
@@ -52,7 +54,7 @@ Shoeprint evidence from crime scenes is most commonly collected in the form of a
 %which were inspired by biological processes in the brain \citep{ANNasModelsofNeuralInfoProcessing},
 %## Remove above citation from bib?
 
-For novel image classification tasks, Convolutional Neural Networks (CNNs) have become standard. CNNs are a form of artificial neural network, which are a tool for supervised deep-learning. 
+For novel image classification tasks, Convolutional Neural Networks (CNNs) have become standard. CNNs are a form of artificial neural network, which are a tool for supervised deep-learning.
 \footnote{The Google Trends interest graph shows a massive increase in convolutional neural networks between mid-2014 and 2018 \url{https://trends.google.com/trends/explore?date=2010-01-01\%202019-02-18&q=convolutional\%20neural\%20network,computer\%20vision}}
 \citep{guRecentAdvancesConvolutional2018}.
 CNNs have deep architectures that can be trained to identify complex patterns, but they are structurally similar to the human visual architecture and output binary or probabilistic predictions for given labels that are readily interpretable by humans. As CNNs make use of labeled training data, the predictions generated are for features which are similar to those identified by humans, providing greater face validity to the model. Once a CNN is trained, it is relatively fast and easy to apply the model to new images and obtain classifications.
@@ -140,7 +142,7 @@ elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
 softplus <- function(x) log(1 + exp(x))
 
 x <- seq(-3, 3, .005)
-tibble(x = x, Linear = x, Sigmoid = sigmoid(x), 
+tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
        ReLU = relu(x), ELU = elu(x, 1), SoftPlus = softplus(x)) %>%
   gather(key = key, value = value, -x) %>%
   mutate(key = factor(key, levels = c("Linear", "ReLU", "ELU",
@@ -173,6 +175,19 @@ In order to transform the neural network node values into output class probabili
 In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
 \subsection{Forward and Backward Propagation}
+\svp{In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.}
+
+\svp{We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}). }
+
+\svp{During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
+\begin{eqnarray}\label{math:forwardprop}
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }\\
+\end{eqnarray}
+need to figure out how to represent max pool layers and fully connected layers here...
+}
+
+
 \svp{All the equations go in here. }
 
 \mt{Taking a stab at how to visualize back-prop, since there are a whole bunch of weights and values floating around.}
@@ -193,7 +208,7 @@ edges <- make_edges_df(n)
 
 tbl_graph(nodes = nodes, edges = edges) %>%
   ggraph(layout = "manual", node.position = layout_keras(., n)) +
-  geom_edge_link0(edge_colour = "grey50", linetype = "solid", 
+  geom_edge_link0(edge_colour = "grey50", linetype = "solid",
                   arrow = arrow(length = unit(1, "mm"))) +
   geom_node_circle(aes(r = .1), fill = "grey90") +
   geom_node_text(aes(label = name), parse = T) +
@@ -245,7 +260,7 @@ Evaluating model accuracy on classification requires addressing both the labels 
  \multirow{2}{*}{True Label} & A & True Positive & False Negative\\\cline{2-4}
  & Not A & False Positive & True Negative \\\hline
 \end{tabular}
-\caption{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
+\caption[Model errors for a two-class binary decision problem.]{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
 \end{table}
 
 \svp{Recall, or sensitivity, which is the true positive rate, is the sum of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the sum of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model. }
@@ -268,7 +283,7 @@ Evaluating model accuracy on classification requires addressing both the labels 
  & \multirow{2}{*}{C} & False Positive (A) & False Positive (B) & \multirow{2}{*}{True Positive (C)} \\
  & & False Negative (C) & False Negative (C) & \\\hline
 \end{tabular}
-\caption{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
+\caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
 \end{table}
 
 \svp{However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, which will be described in more detail in \autoref{ch3:model-accuracy}, a modification of the confusion matrix is possible to better visualize model performance.}

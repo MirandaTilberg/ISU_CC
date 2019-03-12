@@ -1,44 +1,45 @@
-% Appendix1 file from standard thesis template
-\appendixtitle
-\appendix
-\chapter{COMPUTER CODE}\label{app:code}
-\section*{Setup}
-\svp{Describe /model directory structure}
-<<packages, echo = T, eval = F>>=
 library(magrittr)
 library(lubridate)
 library(stringr)
 library(jpeg)
 library(keras)
+
 use_backend("tensorflow")
 # install_keras()
-@
+if (!exists("classes")) {
+  classes <- c(
+    "bowtie", "chevron", "circle", "line", "polygon",
+    "quad", "star", "text", "triangle"
+  )
+}
 
-<<directory, echo = T, eval = F>>=
+if (!exists("modeldir")) {
+  modeldir <- here::here("model")
+}
 
 if (!exists("process_dir")) {
-  process_dir <- list.files("/models/shoe_nn/RProcessedImages") %>%
+  process_dir <- list.files(file.path(modeldir, "RProcessedImages")) %>%
     as_datetime() %>%
     max(na.rm = T) %>%
     gsub("[^0-9\\ ]", "", .) %>%
     gsub(" ", "-", .)
 } else {
-  process_dir <- file.path("/models/shoe_nn/RProcessedImages", process_dir)
+  process_dir <- file.path(modeldir, "RProcessedImages", process_dir)
 }
 
 if (!exists("aug_multiple")) {
-  aug_multiple <- 3
+  aug_multiple <- 2
 }
 
 if (!exists("epochs")) {
   epochs <- 30
 }
 
-process_dir <- gsub("[[:punct:]]models[[:punct:]]shoe_nn[[:punct:]]RProcessedImages[[:punct:]]{1,}", "\\1", process_dir)
+process_dir <- gsub("[[:punct:]]models[[:punct:]]RProcessedImages[[:punct:]]{1,}", "\\1", process_dir)
 process_dir <- gsub("^[/\\\\]{1,}", "", process_dir)
 
 
-work_dir <- "/models/shoe_nn/TrainedModels"
+work_dir <- file.path(modeldir, "TrainedModels")
 start_date <- Sys.time() %>% gsub(" ", "_", .)
 model_dir <- file.path(work_dir, process_dir)
 dir.create(model_dir)
@@ -59,16 +60,11 @@ name_file <- function(date, ext) {
 }
 
 
-base_dir <- file.path("/models/shoe_nn/RProcessedImages", process_dir)
+base_dir <- file.path(modeldir, "RProcessedImages", process_dir)
 train_dir <- file.path(base_dir, "train")
 train_aug_dir <- file.path(base_dir, "train")
 validation_dir <- file.path(base_dir, "validation")
 test_dir <- file.path(base_dir, "test")
-
-@
-\section*{Image Augmentation}
-
-<<img-augmentation, echo = T, eval = F>>=
 
 n_train <- length(list.files(train_dir))
 n_validation <- length(list.files(validation_dir))
@@ -132,10 +128,6 @@ for (i in list.files(train_dir, "*.jpg", full.names = T)) {
   augment_img(i, times = aug_multiple)
 }
 
-@
-
-This next section of code evaluates each image as processed by the convolutional base, and creates features from the last pooling layer. These features are used to train a new model head.
-<<data-preparation, echo = T, eval = F>>=
 conv_base <- application_vgg16(
   weights = "imagenet",
   include_top = FALSE,
@@ -186,10 +178,6 @@ train$features <- reshape_features(train$features)
 validation$features <- reshape_features(validation$features)
 test$features <- reshape_features(test$features)
 
-@
-\section*{Training the Model Head}\label{app:model-head-training}
-
-<<model-head, echo = T, eval = F>>=
 
 class_quantities <- colSums(train$labels)
 class_proportions <- (1/class_quantities)/sum(1/class_quantities)
@@ -199,7 +187,6 @@ class_weights <- class_proportions %>%
 # class_weights <- (sqrt(1/class_proportions) / sum(sqrt(1/class_proportions))) %>%
 #   as.list() %>%
 #   set_names(as.character(1:length(class_quantities) - 1))
-
 
 model <- keras_model_sequential() %>%
   layer_dense(
@@ -222,14 +209,9 @@ history <- model %>% fit(
   validation_data = list(validation$features, validation$labels),
   class_weight = class_weights
 )
-@
 
-The output of the model training process is then saved in a variety of formats to facilitate different tasks - visualization of layers, predicting classes of new images, and more.
 
-<<save-model, echo = T, eval = F>>=
-
-png(filename = name_file(start_date, ".png"), width = 1000, height = 1000,
-    type = "cairo", pointsize = 16)
+png(filename = name_file(start_date, ".png"), width = 1000, height = 1000, type = "cairo", pointsize = 16)
 plot(history)
 dev.off()
 
@@ -244,10 +226,4 @@ save(classes, preds, test_labs, file = name_file(start_date, ".Rdata"))
 base::save.image(name_file(start_date, "fullimage.rdata"))
 
 save(history, file = name_file(start_date, "-history.Rdata"))
-@
-
-
-\section*{More stuff}
-
-Supplemental material.
 
