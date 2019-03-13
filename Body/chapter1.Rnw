@@ -100,23 +100,21 @@ CNNs are made up of several distinct types of layers which transition from input
 \paragraph{Image Convolution and Convolutional Layers}
 Convolutional Neural Networks make use of convolutional layers, which use image convolution as a primary operation. Defined mathematically, image convolution is an function performed on an image $x$ using a smaller-dimension matrix $\beta$.
 
-Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
+Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is \begin{equation}\label{eqn:convolution}(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)\end{equation}
 
 Convolutional Neural Networks are named to highlight their use of image convolution operations to extract information from an image. As shown in \autoref{fig:image-convolution-setup}, a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image, as shown in \autoref{fig:image-convolution-illustration}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{filter.png}
-\caption{An image (blue) and a convolutional filter (green)}\label{fig:image-convolution-setup}
+\caption[Images and convolutional filters]{An image (blue) and a convolutional filter (green). Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:image-convolution-setup}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=.45\textwidth]{filter1.png}\hfill\includegraphics[width=.45\textwidth]{filter2.png}
-\caption[Image convolution, illustrated]{The convolution operation consists of the smaller filter (green) applied to each region of the larger image (blue); each application results in a single value which is stored in the feature map. }\label{fig:image-convolution-illustration}
+\caption[Image convolution, illustrated]{The convolution operation consists of the smaller filter (green) applied to each region of the larger image (blue); each application results in a single value which is stored in the feature map. Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:image-convolution-illustration}
 \end{figure}
-
-\mt{Images need citation?}
 
 Convolutional layers typically do not hugely decrease the dimensions of the matrix; in many cases, the input image is padded in order to prevent any reduction in dimension. In many neural network structures, dimension reduction is performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.
 
@@ -126,7 +124,7 @@ Max pooling is a technique to reduce the size, and therefore computational load,
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{maxpooling}
-\caption{Max pooling layer illustration}\label{fig:max-pooling}
+\caption{Max pooling layer. Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:max-pooling}
 \end{figure}
 
 Once the dimension of the image has been reduced and features have been identified using a combination of convolutional and pooling layers, local features must be integrated into a more unified whole. This integration is performed using densely connected layers.
@@ -232,7 +230,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{vgg16-base-head}
+\includegraphics[width=.95\textwidth]{vgg16-base-head}
 \caption[Transfer learning using pre-trained neural networks]{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
 \end{figure}
 
@@ -240,7 +238,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{vgg16-layer-size}
+\includegraphics[width=.95\textwidth]{vgg16-layer-size}
 \caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 

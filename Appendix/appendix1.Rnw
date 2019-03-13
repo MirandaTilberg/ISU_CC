@@ -2,7 +2,7 @@
 \appendixtitle
 \appendix
 \chapter{COMPUTER CODE}\label{app:code}
-\section*{Setup}
+% \paragraph{Setup}
 \svp{Describe /model directory structure}
 <<packages, echo = T, eval = F>>=
 library(magrittr)
@@ -15,7 +15,6 @@ use_backend("tensorflow")
 @
 
 <<directory, echo = T, eval = F>>=
-
 if (!exists("process_dir")) {
   process_dir <- list.files("/models/shoe_nn/RProcessedImages") %>%
     as_datetime() %>%
@@ -34,7 +33,9 @@ if (!exists("epochs")) {
   epochs <- 30
 }
 
-process_dir <- gsub("[[:punct:]]models[[:punct:]]shoe_nn[[:punct:]]RProcessedImages[[:punct:]]{1,}", "\\1", process_dir)
+dir_regex <- paste0("[[:punct:]]models[[:punct:]]shoe_nn",
+                    "[[:punct:]]RProcessedImages[[:punct:]]{1,}")
+process_dir <- gsub(dir_regex, "\\1", process_dir)
 process_dir <- gsub("^[/\\\\]{1,}", "", process_dir)
 
 
@@ -66,10 +67,9 @@ validation_dir <- file.path(base_dir, "validation")
 test_dir <- file.path(base_dir, "test")
 
 @
-\section*{Image Augmentation}
+% \paragraph{Image Augmentation}
 
 <<img-augmentation, echo = T, eval = F>>=
-
 n_train <- length(list.files(train_dir))
 n_validation <- length(list.files(validation_dir))
 n_test <- length(list.files(test_dir))
@@ -83,7 +83,8 @@ augment_img <- function(filename, times = 3) {
 
   if (!is.na(rep_num)) {
     file_dir <- dirname(filename)
-    base_file_name <- file.path(file_dir, str_remove(basename(filename), "^\\d{1,}\\+"))
+    fix_file_name <- str_remove(basename(filename), "^\\d{1,}\\+")
+    base_file_name <- file.path(file_dir, fix_file_name)
     file.rename(filename, base_file_name)
     newfilepath <- base_file_name
     newfilename <- basename(base_file_name) %>% str_remove("\\.jpg")
@@ -187,7 +188,7 @@ validation$features <- reshape_features(validation$features)
 test$features <- reshape_features(test$features)
 
 @
-\section*{Training the Model Head}\label{app:model-head-training}
+% \paragraph{Training the Model Head}
 
 <<model-head, echo = T, eval = F>>=
 
@@ -196,10 +197,6 @@ class_proportions <- (1/class_quantities)/sum(1/class_quantities)
 class_weights <- class_proportions %>%
   as.list() %>%
   set_names(as.character(1:length(class_proportions) - 1))
-# class_weights <- (sqrt(1/class_proportions) / sum(sqrt(1/class_proportions))) %>%
-#   as.list() %>%
-#   set_names(as.character(1:length(class_quantities) - 1))
-
 
 model <- keras_model_sequential() %>%
   layer_dense(
@@ -245,9 +242,4 @@ base::save.image(name_file(start_date, "fullimage.rdata"))
 
 save(history, file = name_file(start_date, "-history.Rdata"))
 @
-
-
-\section*{More stuff}
-
-Supplemental material.
 
