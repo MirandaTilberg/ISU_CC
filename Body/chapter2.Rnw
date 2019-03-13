@@ -117,7 +117,7 @@ fix_annotation <- function(annot) {
 #   unnest(miniannot)
 @
 
-<<img-setup, include = F>>=
+<<img-setup, include = F, eval = F>>=
 new_img_dir <- dirname(newest_data_file)
 
 ann_df <- select(annotated_imgs, base_image, name, num_labels, annot_num, labels, label_type) %>%
@@ -148,9 +148,12 @@ img_df <- tibble(img = list.files(file.path(new_img_dir, c("test", "train", "val
   filter(labels != "" & labels != "hatching" & labels != "exclude" & !is.na(labels))
 @
 
-<<load-keras-model, include = F>>=
+<<load-history-tmp>>=
 model_dir <- newest_model$path
-load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(list.files(model_dir, pattern = "-history.Rdata", full.names = T)[1])
+@
+
+<<load-keras-model, include = F, eval = F>>=
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
 \chapter{DATA AND METHODS}
