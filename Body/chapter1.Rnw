@@ -230,7 +230,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{vgg16-base-head}
+\includegraphics[width=.95\textwidth]{vgg16-base-head}
 \caption[Transfer learning using pre-trained neural networks]{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
 \end{figure}
 
@@ -238,7 +238,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{vgg16-layer-size}
+\includegraphics[width=.95\textwidth]{vgg16-layer-size}
 \caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 
