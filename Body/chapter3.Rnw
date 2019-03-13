@@ -134,7 +134,7 @@ ggplot() +
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
-<<model-setup, include = F>>=
+<<model-setup2, include = F>>=
 # Load model
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
@@ -156,9 +156,9 @@ pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nb_logo, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
-nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
-pred_prob_plot(nb_logo, loaded_model)
+<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
+pred_prob_plot(nike, loaded_model)
 @
 
 
