@@ -252,9 +252,7 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \section{VGG16}
 
 \subsection{Architecture}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy.
-
-\includegraphics[width = \linewidth]{vgg16-shoe-nolabel.png}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
 
 The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library\citep{raghakotkerasvis} available in R.
 
