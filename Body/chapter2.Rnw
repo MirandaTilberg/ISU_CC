@@ -182,16 +182,16 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \setlength\tabcolsep{1mm}
 \begin{tabular}{rccl}
-     Bowtie & \raisebox{-.5\height}{\includegraphics[width=.3\linewidth]{class_examples/bowtie_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=.3\linewidth]{class_examples/chevron_examples.png}} & Chevron \vspace{1mm}\\
-     Circle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/circle_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/line_examples.png}} & Line  \vspace{1mm}\\
-     Polygon & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/polygon_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/quad_examples.png}} & Quad  \vspace{1mm}\\
-     Star & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/star_examples.png}} &
-     \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/text_examples.png}} & Text  \vspace{1mm}\\
-     Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/triangle_examples.png}} &
-      \raisebox{-.5\height}{\includegraphics[width=0.3\linewidth]{class_examples/other_examples.png}} & Other \\
+     Bowtie & \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{class_examples/bowtie_examples.png}} &
+     \raisebox{-.5\height}{\includegraphics[width=.3\textwidth]{class_examples/chevron_examples.png}} & Chevron \vspace{1mm}\\
+     Circle & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/circle_examples.png}} &
+     \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/line_examples.png}} & Line  \vspace{1mm}\\
+     Polygon & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/polygon_examples.png}} &
+     \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/quad_examples.png}} & Quad  \vspace{1mm}\\
+     Star & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/star_examples.png}} &
+     \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/text_examples.png}} & Text  \vspace{1mm}\\
+     Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/triangle_examples.png}} &
+      \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/other_examples.png}} & Other \\
 \end{tabular}
 \caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
