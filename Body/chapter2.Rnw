@@ -287,14 +287,14 @@ Model training was conducted using the \texttt{keras} package in R\citep{keras-p
 
 Initial training utilized the output from the VGG16 convolutional base as input to a new model consisting of a densely connected layer with 50\% dropout, followed by an activation layer with a sigmoid activation function (see \autoref{fig:activation-functions}) and 9 output classes corresponding to the 9 geometric features we have identified. Once the separate model head was fit, we utilized keras' facilities for loading model weights to combine the convolutional base of VGG16 with the model head into a single, unified model object.
 
-Code is provided in \autoref{app:Code}.  Using a 48-thread CPU with 128 GB of RAM, the time required to process the LabelMe annotations, generate 256 $\times$ 256 pixel labeled images, augment these images, and train the model is just under 3 hours; the model fitting process itself takes less than one hour.
+Code is provided in \autoref{app:code}.  Using a 48-thread CPU with 128 GB of RAM, the time required to process the LabelMe annotations, generate 256 $\times$ 256 pixel labeled images, augment these images, and train the model is just under 3 hours; the model fitting process itself takes less than one hour.
 }
 %Our model was trained using a 20dB GPU powered by a 4000 kJ hamster wheel and graduate student tears (JK, Susan help?.) % I'm seriously considering leaving that sentence in, but I think as a faculty member/actual adult I'm probably not supposed to condone seeing if your committee actually read the whole thing...
 
 
 \paragraph{Model Training Parameters}
 
-The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, 20\% were used for validation, to monitor the training process, and the remaining data were for testing \svp{the performance of the fitted model.} \svp{Code to calculate the class weights is provided as part of \autoref{app:model-head-training}, but a static example of the weights and image counts is shown in \autoref{tab:model-weight}.}
+The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, 20\% were used for validation, to monitor the training process, and the remaining data were for testing \svp{the performance of the fitted model.} \svp{Code to calculate the class weights is provided as part of \autoref{app:code}, but a static example of the weights and image counts is shown in \autoref{tab:model-weight}.}
 
 <<model-weight-calc, results = 'asis', eval = F>>=
 load(file.path(model_dir, paste0(newest_model$start_date, "_", newest_model$prefix, "fullimage.rdata")))
