@@ -19,6 +19,11 @@
 \usepackage{hyperref}
 
 \usepackage{amsmath,amssymb}
+
+% Footnote references
+\usepackage{cleveref}
+\crefformat{footnote}{#2\footnotemark[#1]#3}
+
 %%% Commenting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[table]{xcolor}
 \newcommand{\mt}[1]{{\color{magenta} #1}}
@@ -93,7 +98,6 @@
 knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage[table]{xcolor}', x, fixed = TRUE)})
 @
 % Single-space code chunk output in knitr
-\usepackage{etoolbox}
 \AtBeginEnvironment{knitrout}{\singlespacing}
 
 \begin{document}
