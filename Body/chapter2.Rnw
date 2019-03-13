@@ -212,27 +212,27 @@ The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for trainin
 load(file.path(model_dir, paste0(newest_model$start_date, "_", newest_model$prefix, "fullimage.rdata")))
 bind_cols(class = classes, count = colSums(train$labels), class_proportion = class_proportions) %>%
   bind_rows(bind_cols(class = "total", count = sum(train$labels), class_proportion = sum(class_proportions))) %>%
-  xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions.")) %>%
-  xtable::print.xtable(include.rownames = F, hline.after = c(-1, 0, 9, 10), digits = c(0, 0, 4))
+  xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions."), digits = c(0, 0, 0, 4)) %>%
+  xtable::print.xtable(include.rownames = F, hline.after = c(-1, 0, 9, 10))
 @
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrr}
- class & count & class\_proportion \\
   \hline
-bowtie & 1102.00 & 0.24 \\
-  chevron & 4372.00 & 0.06 \\
-  circle & 4810.00 & 0.06 \\
-  line & 6490.00 & 0.04 \\
-  polygon & 1364.00 & 0.20 \\
-  quad & 8518.00 & 0.03 \\
-  star & 1294.00 & 0.21 \\
-  text & 6144.00 & 0.04 \\
-  triangle & 2160.00 & 0.12 \\
+class & count & class\_proportion \\
+  \hline
+bowtie & 1102 & 0.2422 \\
+  chevron & 4372 & 0.0610 \\
+  circle & 4810 & 0.0555 \\
+  line & 6490 & 0.0411 \\
+  polygon & 1364 & 0.1956 \\
+  quad & 8518 & 0.0313 \\
+  star & 1294 & 0.2062 \\
+  text & 6144 & 0.0434 \\
+  triangle & 2160 & 0.1235 \\
    \hline
-total & 36254.00 & 1.00 \\
+total & 36254 & 1.0000 \\
    \hline
 \end{tabular}
-\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}\label{tab:model-weight}
+\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}
 \end{table}
-
