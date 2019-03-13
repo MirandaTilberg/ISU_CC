@@ -213,7 +213,7 @@ load(file.path(model_dir, paste0(newest_model$start_date, "_", newest_model$pref
 bind_cols(class = classes, count = colSums(train$labels), class_proportion = class_proportions) %>%
   bind_rows(bind_cols(class = "total", count = sum(train$labels), class_proportion = sum(class_proportions))) %>%
   xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions.")) %>%
-  xtable::print.xtable(include.rownames = F, hline.after = c(0, 9, 10))
+  xtable::print.xtable(include.rownames = F, hline.after = c(-1, 0, 9, 10), digits = c(0, 0, 4))
 @
 \begin{table}[ht]
 \centering

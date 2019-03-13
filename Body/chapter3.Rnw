@@ -80,6 +80,50 @@ If the number of epochs is too high, the model will be over-fit to the training 
 \item Confusion matrix (at EER)
 \item ROC/AUC
 \end{itemize}
+<<roc-code>>=
+library(pROC)
+pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
+test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
+whole_model_roc <- roc(test_labs_df$value, pred_df$value)
+
+whole_model_roc_df <- tibble(tpr = whole_model_roc$sensitivities,
+                             fpr = 1 - whole_model_roc$specificities,
+                             thresholds = whole_model_roc$thresholds,
+                             auc = whole_model_roc$auc[1]) %>%
+  nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
+  mutate(eer = purrr::map(roc_plot, eer))
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(whole_model_roc_df, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = whole_model_roc_df) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(whole_model_roc_df, eer), size = 2) +
+  scale_color_manual("", values = "black") +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance (All Classes)") +
+  coord_fixed() + mytheme +
+  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+
+@
+
+<<auc-code>>=
+aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
+thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
+aucs$data$thresholds <- thresholds
+
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(aucs$data, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = 0, label = sprintf("AUC: %0.2f\nEER: %0.2f", auc, thresholds)), hjust = 1, vjust = -0.02, data = aucs$data) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error\nRate (EER)"), data = unnest(aucs$data, eer), size = 2.5) +
+  scale_color_manual("", values = "black") +
+  facet_wrap(~class) +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance") +
+  facet_wrap(~class, nrow = 2) +
+  coord_fixed() +
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0))
+@
+
 
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
 
