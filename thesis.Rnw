@@ -89,12 +89,19 @@
 % \usepackage{setspace}%Change line spacing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+<<main-setup, echo = F, include = F>>=
+knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage[table]{xcolor}', x, fixed = TRUE)})
+@
+% Single-space code chunk output in knitr
+\usepackage{etoolbox}
+\AtBeginEnvironment{knitrout}{\singlespacing}
+
 \begin{document}
 \DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png}
-%\begin{singlespace}
+% \begin{singlespace}
 \def\@makechapterheada{\vspace*{-2cm}\titlepage} % in order to reduce the space between margin and heading in titlepage
 \include{Preface/titlepage}
-%\end{singlespace}
+% \end{singlespace}
 % Optional thesis dedication
 %\include{Preface/dedication}
 % Table of Contents, List of Tables and List of Figures
