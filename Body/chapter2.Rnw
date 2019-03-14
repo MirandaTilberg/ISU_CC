@@ -57,95 +57,7 @@ newest_data_file <- file.path(modeldir, "RProcessedImages",
                               newest_model$process_dir, "cropped_photos.Rdata")
 
 load(newest_data_file)
-
-label_fixes <- c("triangles" = "triangle",
-                 "trianglee" = "triangle",
-                 "circlemtraignle" = "circle_triangle",
-                 "circle triangle" = "circle_triangle",
-                 "circleline" = "circle_line",
-                 "circle text" = "circle_text",
-                 "circle_elongated" = "circle",
-                 "cricle|cirle" = "circle",
-                 "chrevron" = "chevron",
-                 "lie" = "line",
-                 "texxt" = "text",
-                 "star quad" = "star_quad",
-                 "exc_idd" = "exclude",
-                 "quad?" = "quad",
-                 "qaud|qud" = "quad",
-                 "stars|start" = "star",
-                 "exlude" = "exclude",
-                 "rounded" = "",
-                 "smooth_texture" = "other",
-                 "octagon" = "polygon",
-                 "crepe" = "other",
-                 "hex" = "polygon",
-                 "smooth|hatching" = "other"
-                 )
-
-annotated_imgs <- select(dfunion, image, name) %>%
-  mutate(base_image = basename(image)) %>%
-  mutate(num_labels = str_count(name, "_") + 1,
-         annot_num = 1:n()) %>%
-  mutate(labels = str_remove_all(name, "\\(.{1,2}\\)") %>%
-           str_replace_all(label_fixes) %>%
-           str_split("_")) %>%
-  unnest(labels) %>%
-  mutate(labels = str_replace_all(labels, label_fixes)) %>%
-  mutate(label_type = ifelse(num_labels == 1, "single", "multi")) %>%
-  filter(labels != "") %>%
-  filter(labels != "exclude") %>%
-  filter(labels != "ribbon" & labels != "logo") %>%
-  filter(labels %in% c(default_classes, "other"))
-
-fix_annotation <- function(annot) {
-  useful_vars <- c("name", "deleted", "date", "id", "username")
-  new_vars <- set_names(useful_vars, c("name", "deleted", "date", "objID", "username"))
-
-  get_vars <- new_vars[new_vars %in% names(annot)]
-
-  if (!is.null(annot)) select(annot, !!get_vars) %>% as_tibble() else tibble()
-}
-
-# authors <- df %>%
-#   filter(!is.null(fullannot)) %>%
-#   mutate(base_image = basename(image)) %>%
-#   select(id, base_image, image, fullannot) %>%
-#   filter(!is.null(date)) %>%
-#   mutate(miniannot = map(fullannot, fix_annotation)) %>%
-#   select(-fullannot) %>%
-#   unnest(miniannot)
-@
-
-<<img-setup, include = F>>=
-new_img_dir <- dirname(newest_data_file)
-
-ann_df <- select(annotated_imgs, base_image, name, num_labels, annot_num, labels, label_type) %>%
-  group_by(base_image, name) %>%
-  arrange(annot_num) %>%
-  mutate(ln = 1:n())
-
-img_df <- tibble(img = list.files(file.path(new_img_dir, c("test", "train", "validation")), full.names = T)) %>%
-  mutate(type = str_extract(img, "(test|train|validation)"),
-         image = basename(img),
-         aug = grepl("^aug", image),
-         name = str_extract(image, "^([a-z\\(\\)RE]*?_?){1,}-\\d{1,}-"),
-         ln = str_extract(name, "-\\d{1,}-$") %>% gsub(pattern = "-", replacement = "") %>% as.numeric(),
-         name = gsub(pattern = "-\\d{1,}-$", "", name),
-         name = gsub(pattern = "aug_", "", name),
-         name = gsub(pattern = "logo|ribbon|logo\\(R\\)|ribbon\\(R\\)", replacement = "other", name),
-         base_image = gsub(image, pattern = "^([a-z\\(\\)RE]*?_?){1,}-\\d{1,}-", replacement = "") %>%
-           gsub(., pattern = "_\\d_\\d{1,}.jpg", replacement = ".jpg")) %>%
-  select(type, base_image, name, ln, aug, img_path = image) %>%
-  mutate(num_labels = str_count(name, "_") + 1,
-         annot_num = 1:n()) %>%
-  mutate(labels = str_remove_all(name, "\\(.{1,2}\\)") %>%
-           str_replace_all(label_fixes) %>%
-           str_split("_")) %>%
-  unnest(labels) %>%
-  mutate(labels = str_replace_all(labels, label_fixes)) %>%
-  mutate(label_type = ifelse(num_labels == 1, "single", "multi")) %>%
-  filter(labels != "" & labels != "hatching" & labels != "exclude" & !is.na(labels))
+source(file.path(codedir, "count_images.R"))
 @
 
 <<load-keras-model, include = F>>=
@@ -300,27 +212,27 @@ The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for trainin
 load(file.path(model_dir, paste0(newest_model$start_date, "_", newest_model$prefix, "fullimage.rdata")))
 bind_cols(class = classes, count = colSums(train$labels), class_proportion = class_proportions) %>%
   bind_rows(bind_cols(class = "total", count = sum(train$labels), class_proportion = sum(class_proportions))) %>%
-  xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions.")) %>%
-  xtable::print.xtable(include.rownames = F, hline.after = c(0, 9, 10))
+  xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions."), digits = c(0, 0, 0, 4)) %>%
+  xtable::print.xtable(include.rownames = F, hline.after = c(-1, 0, 9, 10))
 @
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrr}
- class & count & class\_proportion \\
   \hline
-bowtie & 1102.00 & 0.24 \\
-  chevron & 4372.00 & 0.06 \\
-  circle & 4810.00 & 0.06 \\
-  line & 6490.00 & 0.04 \\
-  polygon & 1364.00 & 0.20 \\
-  quad & 8518.00 & 0.03 \\
-  star & 1294.00 & 0.21 \\
-  text & 6144.00 & 0.04 \\
-  triangle & 2160.00 & 0.12 \\
+class & count & class\_proportion \\
+  \hline
+bowtie & 1102 & 0.2422 \\
+  chevron & 4372 & 0.0610 \\
+  circle & 4810 & 0.0555 \\
+  line & 6490 & 0.0411 \\
+  polygon & 1364 & 0.1956 \\
+  quad & 8518 & 0.0313 \\
+  star & 1294 & 0.2062 \\
+  text & 6144 & 0.0434 \\
+  triangle & 2160 & 0.1235 \\
    \hline
-total & 36254.00 & 1.00 \\
+total & 36254 & 1.0000 \\
    \hline
 \end{tabular}
-\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}\label{tab:model-weight}
+\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}
 \end{table}
-

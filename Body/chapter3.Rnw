@@ -80,6 +80,50 @@ If the number of epochs is too high, the model will be over-fit to the training 
 \item Confusion matrix (at EER)
 \item ROC/AUC
 \end{itemize}
+<<roc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
+library(pROC)
+pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
+test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
+whole_model_roc <- roc(test_labs_df$value, pred_df$value)
+
+whole_model_roc_df <- tibble(tpr = whole_model_roc$sensitivities,
+                             fpr = 1 - whole_model_roc$specificities,
+                             thresholds = whole_model_roc$thresholds,
+                             auc = whole_model_roc$auc[1]) %>%
+  nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
+  mutate(eer = purrr::map(roc_plot, eer))
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(whole_model_roc_df, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = whole_model_roc_df) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(whole_model_roc_df, eer), size = 2) +
+  scale_color_manual("", values = "black") +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance (All Classes)") +
+  coord_fixed() + mytheme +
+  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+
+@
+
+<<auc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
+aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
+thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
+aucs$data$thresholds <- thresholds
+
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(aucs$data, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = 0, label = sprintf("AUC: %0.2f\nEER: %0.2f", auc, thresholds)), hjust = 1, vjust = -0.02, data = aucs$data) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error\nRate (EER)"), data = unnest(aucs$data, eer), size = 2.5) +
+  scale_color_manual("", values = "black") +
+  facet_wrap(~class) +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance") +
+  facet_wrap(~class, nrow = 2) +
+  coord_fixed() +
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0))
+@
+
 
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
 
@@ -90,6 +134,59 @@ If the number of epochs is too high, the model will be over-fit to the training 
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
+<<model-setup2, include = F>>=
+# Load model
+model_dir <- newest_model$path
+load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
+model_wts_file <- file.path(newest_model$path, newest_model$base_file)
+loaded_model <- set_weights(model_wts_file)
+
+@
+
+
+\svp{I'm playing around and finding interesting options here. Sorry - probably shouldn't doodle on your thesis, but... :)}
+<<generic-chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
+pred_prob_plot(chevron2, loaded_model)
+@
+
+<<generic-text-line, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
+pred_prob_plot(text_line, loaded_model)
+@
+
+<<generic-triangle, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
+triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-triangle"), full.names = T)
+pred_prob_plot(triangle, loaded_model)
+@
+
+
+
+
+<<uggs, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "UGG logos as found on many different shoes. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
+pred_prob_plot(uggs, loaded_model)
+@
+
+
+<<nb_logo, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
+nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
+pred_prob_plot(nb_logo, loaded_model)
+@
+
+
+<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
+nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
+pred_prob_plot(nike, loaded_model)
+@
+
+<<chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
+chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
+pred_prob_plot(chevron, loaded_model)
+@
+
+\svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 
