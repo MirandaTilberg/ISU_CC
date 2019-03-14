@@ -156,11 +156,17 @@ pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
 nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
 pred_prob_plot(nike, loaded_model)
 @
 
+<<chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
+chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
+pred_prob_plot(chevron, loaded_model)
+@
+
+In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. 
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 
