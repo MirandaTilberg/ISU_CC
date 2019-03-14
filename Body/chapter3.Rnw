@@ -80,7 +80,7 @@ If the number of epochs is too high, the model will be over-fit to the training 
 \item Confusion matrix (at EER)
 \item ROC/AUC
 \end{itemize}
-<<roc-code>>=
+<<roc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
@@ -105,7 +105,7 @@ ggplot() +
 
 @
 
-<<auc-code>>=
+<<auc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
 aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
 thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
 aucs$data$thresholds <- thresholds
