@@ -144,6 +144,26 @@ loaded_model <- set_weights(model_wts_file)
 
 @
 
+
+\svp{I'm playing around and finding interesting options here. Sorry - probably shouldn't doodle on your thesis, but... :)}
+<<generic-chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
+pred_prob_plot(chevron2, loaded_model)
+@
+
+<<generic-text-line, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
+pred_prob_plot(text_line, loaded_model)
+@
+
+<<generic-triangle, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
+triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-triangle"), full.names = T)
+pred_prob_plot(triangle, loaded_model)
+@
+
+
+
+
 <<uggs, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "UGG logos as found on many different shoes. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
 pred_prob_plot(uggs, loaded_model)
@@ -166,7 +186,7 @@ chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pat
 pred_prob_plot(chevron, loaded_model)
 @
 
-In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. 
+\svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 
