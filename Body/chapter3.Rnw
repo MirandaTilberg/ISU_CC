@@ -134,7 +134,7 @@ ggplot() +
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
-<<model-setup, include = F>>=
+<<model-setup2, include = F>>=
 # Load model
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
@@ -143,6 +143,26 @@ model_wts_file <- file.path(newest_model$path, newest_model$base_file)
 loaded_model <- set_weights(model_wts_file)
 
 @
+
+
+\svp{I'm playing around and finding interesting options here. Sorry - probably shouldn't doodle on your thesis, but... :)}
+<<generic-chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
+pred_prob_plot(chevron2, loaded_model)
+@
+
+<<generic-text-line, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
+pred_prob_plot(text_line, loaded_model)
+@
+
+<<generic-triangle, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
+triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-triangle"), full.names = T)
+pred_prob_plot(triangle, loaded_model)
+@
+
+
+
 
 <<uggs, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "UGG logos as found on many different shoes. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
@@ -156,11 +176,17 @@ pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nb_logo, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
-nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
-pred_prob_plot(nb_logo, loaded_model)
+<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
+nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
+pred_prob_plot(nike, loaded_model)
 @
 
+<<chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
+chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
+pred_prob_plot(chevron, loaded_model)
+@
+
+\svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 

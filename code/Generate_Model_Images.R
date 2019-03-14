@@ -103,9 +103,9 @@ pred_prob_plot <- function(img_path, model, classes = default_classes) {
     as.data.frame() %>%
     set_colnames(default_classes) %>%
     set_rownames(purrr::map_chr(img_preds, "path") %>% basename() %>% str_remove("\\.jpg")) %>%
-    mutate(name = rownames(.) %>% str_remove("[Uu]gg-")) %>%
-    arrange(tmp$order) %>%
     mutate(path = purrr::map_chr(img_preds, "path")) %>%
+    # mutate(name = rownames(.)) %>%
+    arrange(tmp$order) %>%
     mutate(idx = row_number())
 
   img_preds_df_long <- img_preds_df %>%
