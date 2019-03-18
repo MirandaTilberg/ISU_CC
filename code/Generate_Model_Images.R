@@ -77,6 +77,58 @@ set_weights <- function(model_wts_file) {
 }
 
 
+# --- # Model predictions # ----------------------------------------------------
+predict_new <- function(img_path, model, classes = default_classes) {
+  purrr::map(img_path, function(x) {
+    img <- jpeg::readJPEG(x)
+    dim(img) <- c(1, dim(img))
+
+    predictions <- model %>%
+      predict(img, verbose = T) %>%
+      as.vector() %>%
+      set_names(classes)
+
+    list(img = img, path = x, pred = predictions)
+  })
+}
+
+pred_prob_plot <- function(img_path, model, classes = default_classes) {
+  img_preds <- predict_new(img_path, model)
+
+  img_preds_mat <- purrr::map_dfc(img_preds, "pred") %>%
+    t()
+
+  tmp <- hclust(dist(img_preds_mat))
+  img_preds_df <- img_preds_mat %>%
+    as.data.frame() %>%
+    set_colnames(default_classes) %>%
+    set_rownames(purrr::map_chr(img_preds, "path") %>% basename() %>% str_remove("\\.jpg")) %>%
+    mutate(path = purrr::map_chr(img_preds, "path")) %>%
+    # mutate(name = rownames(.)) %>%
+    arrange(tmp$order) %>%
+    mutate(idx = row_number())
+
+  img_preds_df_long <- img_preds_df %>%
+    select(idx, 1:length(classes)) %>%
+    gather(key = "class", value = value, -idx)
+
+  features_xraster <- purrr::map2(img_preds_df$path, img_preds_df$idx,
+                                  ~annotation_custom(grid::rasterGrob(readJPEG(.x), interpolate = T),
+                                                     ymin = .y - .5, ymax = .y + .5,
+                                                     xmin = -0.5, xmax = 0.5))
+
+  ggplot() +
+    geom_tile(aes(y = idx, x = as.numeric(factor(class)), fill = value), data = img_preds_df_long, color = "black") +
+    geom_text(aes(x = as.numeric(factor(class)), y = idx, label = sprintf("%0.2f", value)), data = img_preds_df_long, hjust = 0.5, vjust = 0.5) +
+    scale_fill_gradient("Predicted\nProbability", low = "#FFFFFF", high = "cornflowerblue", limits = c(0, 1)) +
+    features_xraster +
+    coord_fixed() +
+    scale_x_continuous(limits = c(-0.5, 9.5), breaks = 1:9, labels = default_classes, expand = c(0,0)) +
+    scale_y_continuous(limits = c(.5, length(img_path) + .5), expand = c(0,0)) +
+    theme(axis.text.y = element_blank(), axis.title = element_blank(), axis.ticks.y = element_blank())
+
+}
+
 # --- # Heatmaps # -------------------------------------------------------------
 calc_heatmap <- function(img_path, model, classes = default_classes, scale_by_prob = F) {
   if (length(img_path) > 1) {
