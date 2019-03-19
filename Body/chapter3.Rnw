@@ -60,16 +60,15 @@ data.frame(history$metrics) %>%
 
 \autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
 
+\FloatBarrier
+
 \subsection{Model Accuracy}\label{ch3:model-accuracy}
 
-\begin{itemize}
-\item Example of model prediction \mt{Lots of these now in the model consistency section.}
-\item TPR, FPR, and EER
-\item Confusion matrix (at EER)
-\item ROC/AUC
-\end{itemize}
+\paragraph{ROC}
 
-<<roc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
+\autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
+
+<<roc-code, fig.width = 7, fig.height = 5, out.width = "\\textwidth">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
@@ -113,11 +112,31 @@ ggplot() +
   theme(legend.position = c(1, 0), legend.justification = c(1, 0))
 @
 
+\FloatBarrier
+
+\paragraph{Confusion Matrix}
 
 
--Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
--Interesting case studies
+<<confusion_matrix, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", dpi = 600>>=
 
+get_confusion_matrix(predictions = preds, classes = classes,
+                     test_labels = test_labs) %>%
+  set_names(str_to_title(classes)) %>%
+  ggcorrplot(., hc.order = F, outline.col = "white", lab = T) +
+  scale_fill_gradient("Classification\nRate", low = "white",
+                      high = "cornflowerblue", limits = c(0, 1)) +
+  scale_x_discrete("Image Label") + scale_y_discrete("Prediction") +
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14, angle = 90, vjust = 1)) +
+  ggtitle("CoNNOR Multi-Class Confusion Matrix: Test Set Performance") +
+  theme_bw() +
+  theme(panel.grid.major = element_line(color = "grey50"),
+        panel.grid.minor = element_line(color = "grey60")) +
+  theme(plot.margin = grid::unit(c(0,0,0,0), "mm"),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        plot.subtitle = element_blank(), plot.caption = element_blank(),
+        panel.spacing = unit(c(0, 0, 0, 0), "mm"))
+@
 
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
@@ -176,27 +195,5 @@ pred_prob_plot(chevron, loaded_model)
 
 \svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
-\mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
-
-<<confusion_matrix, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
-
-get_confusion_matrix(predictions = preds, classes = classes,
-                     test_labels = test_labs) %>%
-  set_names(str_to_title(classes)) %>%
-  ggcorrplot(., hc.order = F, outline.col = "white", lab = T) +
-  scale_fill_gradient("Classification\nRate", low = "white",
-                      high = "cornflowerblue", limits = c(0, 1)) +
-  scale_x_discrete("Image Label") + scale_y_discrete("Prediction") +
-  theme(axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14, angle = 90, vjust = 1)) +
-  ggtitle("CoNNOR Multi-Class Confusion Matrix: Test Set Performance") +
-  theme_bw() +
-  theme(panel.grid.major = element_line(color = "grey50"),
-        panel.grid.minor = element_line(color = "grey60")) +
-  theme(plot.margin = grid::unit(c(0,0,0,0), "mm"),
-        plot.background = element_rect(fill = "transparent", color = NA),
-        plot.subtitle = element_blank(), plot.caption = element_blank(),
-        panel.spacing = unit(c(0, 0, 0, 0), "mm"))
-@
 
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
