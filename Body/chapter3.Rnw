@@ -60,10 +60,10 @@ data.frame(history$metrics) %>%
 
 \autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
 
-\subsection{Model Accuracy}
+\subsection{Model Accuracy}\label{ch3:model-accuracy}
 
 \begin{itemize}
-\item Example of model prediction
+\item Example of model prediction \mt{Lots of these now in the model consistency section.}
 \item TPR, FPR, and EER
 \item Confusion matrix (at EER)
 \item ROC/AUC
@@ -114,12 +114,11 @@ ggplot() +
 @
 
 
-\subsection{Model Accuracy}\label{ch3:model-accuracy}
 
 -Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
 -Interesting case studies
 
-\mt{Let's get rid of this :) :) :)}\svp{no, we're just moving the bullet point down from the previous section}
+
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
@@ -179,11 +178,7 @@ pred_prob_plot(chevron, loaded_model)
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 
-<<eval = F, echo = F>>=
-
-#This works on Miranda's computer, but isn't a long-term solution
-
-source(file.path(codedir, "keras_test.R"))
+<<confusion_matrix, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs) %>%
