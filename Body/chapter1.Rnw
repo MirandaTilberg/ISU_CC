@@ -3,7 +3,7 @@
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter1/}{figure/chapter1/}}
 
-<<ch1-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
+<<ch1-setup, fig.keep='all', cache = F, echo = F, eval = T, include = F>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
 require(knitr)
 
@@ -90,7 +90,7 @@ Convolutional Neural Networks are a widely implemented method for automated imag
 \begin{figure}[htbp]\centering
 \includegraphics[height=.25\linewidth]{labrador-retriever.jpg}
 \hskip 1cm
-\includegraphics[height=.25\linewidth]{carrots.png}
+\includegraphics[height=.25\linewidth]{golden-retriever.jpg}
 \caption[Feature Similarity.]{The features used to distinguish between two similar categories may be subtle, like the features that would differentiate a golden retriever from a labrador retriever.}\label{fig:retrievers}
 \end{figure}
 

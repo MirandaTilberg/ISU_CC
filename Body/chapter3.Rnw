@@ -37,10 +37,6 @@ if (!"Body" %in% list.files()) {
 
 \section{Model Evaluation}\label{ch3:model-eval}
 
-- Goal: process that helps model predict new data given repeated exposure to training data.
-
--Examples of prediction
-
 
 \subsection{Model Training}
 <<training-accuracy, fig.width = 7.5, fig.height = 5, fig.cap = "Training and validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 89.5\\% around epoch 9. After that point, validation loss remains the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy.", fig.scap = "Training and validation accuracy and loss during each epoch.">>=
@@ -62,24 +58,17 @@ data.frame(history$metrics) %>%
   theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
 @
 
-\svp{\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.}
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
 
-The model-training process occurs in a pre-set number of steps, called epochs, in which the model learns the training data via back-propogation and then is tested on the validation data. The model's accuracy is quantified using a loss function. Accuracy of classification of training data will increase with each epoch; however, it is not true that improved training accuracy results in improved classification of new (i.e., test) data. The model's performance on the validation ddata is evaluated for each epoch, but this validation data is never included in the model's learning, so performance on validation classification is the best indicator of how a model will perform on novel data cases.
-
-If the number of epochs is too high, the model will be over-fit to the training data. Thus, it will learn that, for example, a circle can only occur in the ways that circles exist in the training data, so any images of circles in the test data that differ from those in the training data will not be recognized. Thus, the model-training process should be monitored and adjusted by comparing the training accuracy and loss to the validation accuracy and loss for each epoch. Over-fitting occurs when the training performance improves but the validation performance is not improving. As can be seen in (the training image below), our model is trained for 15(?) epochs, and there is not a large discrepancy in the training and validation performance in the later epochs.
-
-<<>>=
-#TRAINING IMAGE
-@
-
-\subsection{Model Accuracy}
+\subsection{Model Accuracy}\label{ch3:model-accuracy}
 
 \begin{itemize}
-\item Example of model prediction
+\item Example of model prediction \mt{Lots of these now in the model consistency section.}
 \item TPR, FPR, and EER
 \item Confusion matrix (at EER)
 \item ROC/AUC
 \end{itemize}
+
 <<roc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
@@ -125,16 +114,15 @@ ggplot() +
 @
 
 
-\subsection{Model Accuracy}\label{ch3:model-accuracy}
 
 -Ways to measure accuracy (TPR, FPR, ROC/AUC) \svp{This is in the introduction, you then use those measures and interpret them} \mt{I think that's what I meant}
 -Interesting case studies
 
-\mt{Let's get rid of this :) :) :)}\svp{no, we're just moving the bullet point down from the previous section}
+
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
-<<model-setup2, include = F>>=
+<<model-setup2, include = T>>=
 # Load model
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
@@ -190,11 +178,7 @@ pred_prob_plot(chevron, loaded_model)
 
 \mt{Want to include interesting prediction cases, like the circle of triangles or whether the model sees a circle in text, or something else that may come up in prediction of test data. I'm guessing those are best saved for heatmaps, since heatmaps let us see why the model gives the prediction it does.}
 
-<<eval = F, echo = F>>=
-
-#This works on Miranda's computer, but isn't a long-term solution
-
-source(file.path(codedir, "keras_test.R"))
+<<confusion_matrix, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs) %>%
