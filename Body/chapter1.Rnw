@@ -3,7 +3,7 @@
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter1/}{figure/chapter1/}}
 
-<<ch1-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
+<<ch1-setup, fig.keep='all', cache = F, echo = F, eval = T, include = F>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
 require(knitr)
 
