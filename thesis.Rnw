@@ -94,6 +94,10 @@
 % \usepackage{setspace}%Change line spacing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% for \FloatBarrier command
+\usepackage{placeins}
+
+
 <<main-setup, echo = F, include = F>>=
 knit_hooks$set(document = function(x) {
   sub('\\usepackage[]{color}', '\\usepackage[table]{xcolor}', x, fixed = TRUE)
