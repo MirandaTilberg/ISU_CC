@@ -174,25 +174,7 @@ The early convolutional layers of VGG16 contain 64 filters that primarily detect
 
 \mt{Really want to include bird head images here. When will the KerasVis stuff be ready in R? :)}
 
-\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
-
-<<kerasvis, echo = F, eval = F>>=
-
-### KerasVis DOESN'T WORK ON MIRANDA'S COMPUTER
-
-
-library(KerasVis)
-KerasVis:::import_all_dependendices()
-source(file.path(codedir, "Generate_Model_Images.R"))
-model_path <- "/models/shoe_nn/TrainedModels/"
-newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
-model_wts_file <- file.path(newest_model$path, newest_model$base_file)
-loaded_model <- set_weights(model_wts_file)
-layer_names <- list("block1_conv1")
-visualize_activation(loaded_model,
-                 selected_filters = list(1L:63L),
-                 layer_names = layer_names, save_folder = file.path("Images", "chapter2", "vgg16layers"))
-@
+\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.
 
 
 \subsection{Model Training}
