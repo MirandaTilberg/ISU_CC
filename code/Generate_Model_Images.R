@@ -92,7 +92,7 @@ predict_new <- function(img_path, model, classes = default_classes) {
   })
 }
 
-pred_prob_plot <- function(img_path, model, classes = default_classes) {
+pred_prob_plot <- function(img_path, model, classes = default_classes, sort = T) {
   img_preds <- predict_new(img_path, model)
 
   img_preds_mat <- purrr::map_dfc(img_preds, "pred") %>%
@@ -103,10 +103,16 @@ pred_prob_plot <- function(img_path, model, classes = default_classes) {
     as.data.frame() %>%
     set_colnames(default_classes) %>%
     set_rownames(purrr::map_chr(img_preds, "path") %>% basename() %>% str_remove("\\.jpg")) %>%
-    mutate(path = purrr::map_chr(img_preds, "path")) %>%
-    # mutate(name = rownames(.)) %>%
+    mutate(path = purrr::map_chr(img_preds, "path"))
+
+  img_preds_df <- if (sort) {
+    img_preds_df %>%
     arrange(tmp$order) %>%
     mutate(idx = row_number())
+  } else {
+    img_preds_df %>%
+      mutate(idx = row_number())
+  }
 
   img_preds_df_long <- img_preds_df %>%
     select(idx, 1:length(classes)) %>%
