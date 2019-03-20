@@ -285,9 +285,11 @@ Evaluating model accuracy on classification requires addressing both the labels 
 Recall, or sensitivity, which is the true positive rate, is the \mt{number} of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the \mt{number} of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
 
 ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
-\svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization}
+\svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization} \mt{I'm realizing now you probably wanted me to use mtcars or something and create a trivial example. I'll update this later!}
 
-<<>>=
+<<example-roc, echo = F>>=
+
+
 x <- (1:100)/100
 y <- log((1:100)+ 1e-5)/log(100)
 df <- data.frame(x,y)
