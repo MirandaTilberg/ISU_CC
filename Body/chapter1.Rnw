@@ -263,13 +263,13 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 \caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 
-\svp{VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.}
+VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
 
 \section{Machine Learning Model Evaluation}\label{sec:model-eval}
 
-Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive \svp{, that is, }an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications \svp{using} probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
+Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive, that is, an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications using probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
-Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. Ideally, an image is labeled perfectly, and a true positive occurs when the model assigns a label which matches that of the image. A false positive in this scenario occurs when the model assigns a label which does not match that of the image. A true negative occurs if the model does not assign a label which does not occur in the image, and a false negative occurs when the model does not assign a label which does occur in the image. \svp{\autoref{tab:error-binary-problem} illustrates these terms for a simple binary classification problem. }
+Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. Ideally, an image is labeled perfectly, and a true positive occurs when the model assigns a label which matches that of the image. A false positive in this scenario occurs when the model assigns a label which does not match that of the image. A true negative occurs if the model does not assign a label which does not occur in the image, and a false negative occurs when the model does not assign a label which does occur in the image. \autoref{tab:error-binary-problem} illustrates these terms for a simple binary classification problem.
 
 \begin{table}
 \centering
@@ -282,10 +282,24 @@ Evaluating model accuracy on classification requires addressing both the labels 
 \caption[Model errors for a two-class binary decision problem.]{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
 \end{table}
 
-\svp{Recall, or sensitivity, which is the true positive rate, is the sum of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the sum of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model. }
+Recall, or sensitivity, which is the true positive rate, is the \mt{number} of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the \mt{number} of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
 
-\svp{ROC curves plot the false positive rate (1 - specificity) against the true positive rate. } Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
+ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
 \svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization}
+
+<<>>=
+x <- (1:100)/100
+y <- log((1:100)+ 1e-5)/log(100)
+df <- data.frame(x,y)
+ggplot() +
+  geom_line(aes(x = x, y = y), data = df, size = 1.25) +
+  scale_color_manual("", values = "black") +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("Example ROC Curve") +
+  coord_fixed() + mytheme +
+  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+@
 
 A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.\svp{XXX - this table and last sentance may not be essential and could probably be cut, but serve as a nice tease for the original work done in this CC.}
 \svp{XXX - Add a confusion matrix from ggplot2 to show as an example visualization}
