@@ -265,7 +265,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 
 \svp{VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.}
 
-\section{Machine Learning Model Evaluation}
+\section{Machine Learning Model Evaluation}\label{sec:model-eval}
 
 Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive \svp{, that is, }an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications \svp{using} probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
