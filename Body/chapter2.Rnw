@@ -171,7 +171,7 @@ The early convolutional layers of VGG16 contain 64 filters that primarily detect
 
 \mt{Really want to include bird head images here. When will the KerasVis stuff be ready in R? :)}
 
-\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.
+\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
 
 
 \subsection{Model Training}

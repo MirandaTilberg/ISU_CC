@@ -76,7 +76,7 @@ data.frame(history$metrics) %>%
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
-<<roc-code, fig.width = 7, fig.height = 5, out.width = "\\textwidth">>=
+<<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "ROC Curve">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
