@@ -73,8 +73,10 @@ Differentiating between two objects is quite easy when features are distinct; ho
 \includegraphics[height=.25\linewidth]{caterpillar.png}
 \hskip 1cm
 \includegraphics[height=.25\linewidth]{carrots.png}
-\caption[\svp{Feature Similarity.}]{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}\label{fig:caterpillar-carrots}
+\caption[Feature Similarity.]{A fuzzy caterpillar and a bunch of carrots have many similar visual features, but our brains easily distinguish between them.}\label{fig:caterpillar-carrots}
 \end{figure}
+
+
 
 \paragraph{Computer Vision Using Neural Networks}
 While our brains are adept at parsing images and classifying the objects within them, the task has proved much more difficult for computers, as evidenced by \autoref{fig:xkcd-img-recognition}. Human visual processing is so complex in part because of the successive aggregation of increasingly complex features; only within the last 10 years have we been able to adequately mimic this process with computer modeling.
@@ -84,7 +86,7 @@ While our brains are adept at parsing images and classifying the objects within 
 \caption[Computer vision is a difficult problem.]{Computer vision was thought to be easy in 1966 when a researcher at MIT believed that teaching a computer to separate picture regions into objects and background regions could be completed as a summer project \citep{papert_summer_1966}. The task proved much more difficult than expected, and has only become tractable with convolutional neural network based approaches.}\label{fig:xkcd-img-recognition}
 \end{figure}
 
-Convolutional Neural Networks are a widely implemented method for automated image recognition; their structure typically emulates the successive aggregation of low-level features into higher-level features that is seen in the human visual cortex. CNNs perform comparably to humans on certain image recognition tasks \citep{geirhosComparingDeepNeural2017}. The ImageNet Large Scale Visual Recognition Competition (ILSVRC) is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}. Various models are tested on about 1.2 million images spanning 1000 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a golden retriever and a labrador retriever. \mt{ImageNet is under maintenance at this moment, I'll snag a pic of a lab from http://imagenet.stanford.edu/synset?wnid=n02099712 when it's back up.}
+Convolutional Neural Networks are a widely implemented method for automated image recognition; their structure typically emulates the successive aggregation of low-level features into higher-level features that is seen in the human visual cortex. CNNs perform comparably to humans on certain image recognition tasks \citep{geirhosComparingDeepNeural2017}. The ImageNet Large Scale Visual Recognition Competition (ILSVRC) is a widely followed contest to produce the best algorithm for image classification; since 2014, it has been dominated by convolutional neural networks \citep{russakovsky_imagenet_2015}. Various models are tested on about 1.2 million images spanning 1000 categories. These categories range from natural and man-made objects (e.g., daisy, chainsaw) to living creatures (e.g., ring-tailed lemur, sea lion, and dingo). There are also many categories which require subtle distinctions, such as differentiating between a golden retriever and a labrador retriever (see \autoref{fig:retrievers}. 
 
 
 \begin{figure}[htbp]\centering
@@ -102,7 +104,7 @@ Convolutional Neural Networks make use of convolutional layers, which use image 
 
 Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is \begin{equation}\label{eqn:convolution}(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)\end{equation}
 
-Convolutional Neural Networks are named to highlight their use of image convolution operations to extract information from an image. As shown in \autoref{fig:image-convolution-setup}, a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image, as shown in \autoref{fig:image-convolution-illustration}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
+Convolutional Neural Networks are named to highlight their use of image convolution operations to extract information from an image. As shown in \autoref{fig:image-convolution-setup}, a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image, as shown in \autoref{fig:image-convolution-illustration}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function \mt{(see \autoref{fig:activation-functions})}. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
 
 \begin{figure}
 \centering
@@ -152,14 +154,33 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
 @
 
 \paragraph{Densely Connected Layers}
-Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". Fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot". Similarly, in densely connected or fully connected layers, each final feature is connected to each label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized in order to minimize errors (measured by a loss function) and thus improve classification accuracy. \mt{Include the node image of caterpillar and carrots here, or back when they are first mentioned?}
+Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". As seen in \autoref{fig:caterpillar-carrot-nodes}, fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot".
+
+<<caterpillar-carrot-nodes, fig.height = 3, fig.width = 3, echo = F>>=
+source(file.path(codedir, "Generate_Model_Images.R"))
+col_vec <- rep("grey50", 32)
+col_vec[seq(1, 29, by = 4)] <- rep(c("blue", "orange"), 4)
+
+lty <- rep("solid", 32)
+lty[c(21,25)] <- "dashed"
+
+plot <- plot_deepviz2(c(4,2), edge_col = col_vec, line_type = lty)
+
+df <- data.frame(x = plot$data$x, 
+                 y = plot$data$y,
+                 labs = c("Orange", "Long", "Fuzzy", "Pointy", 
+                          "Caterpillar", "Carrot"))
+
+plot + geom_label(aes(x = x, y = y, label = labs), data = df)
+@
+
+Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation in order to minimize errors (measured by a loss function) and thus improve classification accuracy.
 
 <<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes and 4 output nodes.">>=
-source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz2(c(12, 4), r = .005)
 @
 
-When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where in any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model.
+When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model.
 
 <<dense-layer2, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
@@ -173,9 +194,9 @@ In order to transform the neural network node values into output class probabili
 In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
 \subsection{Forward and Backward Propagation}
-\svp{In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.}
+In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.
 
-\svp{We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}). }
+We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}).
 
 \svp{During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
 \begin{eqnarray}\label{math:forwardprop}
@@ -226,7 +247,7 @@ tbl_graph(nodes = nodes, edges = edges) %>%
 @
 
 \subsection{Transfer Learning}
-Convolutional layers and max-pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. \svp{Even relatively simple convnets can have many millions of trainable parameters in the model base (the convolutional and pooling layers). Optimizing all of these weights requires an incredible amount of computational power. In addition, the features learned by a neural network trained on one dataset often generalize to different data sets: particularly in the initial layers, the feature maps of a trained neural network typically activate based on color, low-level textures, and other features which are broadly generalizable\citep{yosinskiHowTransferableAre2014}.} \svp{\emph{Transfer learning} is the process of using layers from a CNN (or other classification model) trained on a general image recognition task when fitting a model intended for a more specific purpose. The layers which are deemed to identify broadly generalizable patterns are used with their pre-trained weights; new layers are added to customize the model to the specific task at hand, and typically, only these new weights are updated when the model is fit. Transfer learning allows CNNs to be applied to smaller datasets of several thousand images, with additional gains in the amount of time required to fit the model.}
+Convolutional layers and max pooling layers in a CNN are analogous to the human visual perception process, and densely connected layers behave like the human brain. In short, the approach to classifying an image is to detect the features in the image (like our eyes) and then assign labels to combinations of those features (brain). This analogy is also appropriate because it reflects the difficulty of the task: it takes many years and a significant amount of effort for humans to learn how to distinguish a large variety of features and also to connect those features to labels that are often complex, hierarchical, and subtle. Similarly, training a CNN is no small task. Even relatively simple CNNs can have many millions of trainable parameters in the model base (the convolutional and pooling layers). Optimizing all of these weights requires an incredible amount of computational power. In addition, the features learned by a neural network trained on one dataset often generalize to different data sets: particularly in the initial layers, the feature maps of a trained neural network typically activate based on color, low-level textures, and other features which are broadly generalizable\citep{yosinskiHowTransferableAre2014}. \emph{Transfer learning} is the process of using layers from a CNN (or other classification model) trained on a general image recognition task when fitting a model intended for a more specific purpose. The layers which are deemed to identify broadly generalizable patterns are used with their pre-trained weights; new layers are added to customize the model to the specific task at hand, and typically, only these new weights are updated when the model is fit. Transfer learning allows CNNs to be applied to smaller datasets of several thousand images, with additional gains in the amount of time required to fit the model.
 
 \begin{figure}
 \centering
@@ -234,7 +255,7 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 \caption[Transfer learning using pre-trained neural networks]{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
 \end{figure}
 
-\svp{Transfer learning leverages the modularity of neural networks - the pretrained base of the model can be separated from the full model and a new model head can be trained to connect that base to the output classes, as shown in \autoref{fig:transfer-learning-diagram}. One of the simpler pre-trained convolutional networks available, VGG16, has a structure which is ideal for our purposes - it consists of several blocks of convolutional layers, with a fully connected head, as shown in \autoref{fig:vgg16-structure}. The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.}
+Transfer learning leverages the modularity of neural networks - the pretrained base of the model can be separated from the full model and a new model head can be trained to connect that base to the output classes, as shown in \autoref{fig:transfer-learning-diagram}. One of the simpler pre-trained convolutional networks available, VGG16, has a structure which is ideal for our purposes - it consists of several blocks of convolutional layers, with a fully connected head, as shown in \autoref{fig:vgg16-structure}. The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.
 
 \begin{figure}
 \centering
@@ -242,13 +263,13 @@ Convolutional layers and max-pooling layers in a CNN are analogous to the human 
 \caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 
-\svp{VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.}
+VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
 
-\section{Machine Learning Model Evaluation}
+\section{Machine Learning Model Evaluation}\label{sec:model-eval}
 
-Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive \svp{, that is, }an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications \svp{using} probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
+Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive, that is, an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications using probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
-Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. Ideally, an image is labeled perfectly, and a true positive occurs when the model assigns a label which matches that of the image. A false positive in this scenario occurs when the model assigns a label which does not match that of the image. A true negative occurs if the model does not assign a label which does not occur in the image, and a false negative occurs when the model does not assign a label which does occur in the image. \svp{\autoref{tab:error-binary-problem} illustrates these terms for a simple binary classification problem. }
+Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. Ideally, an image is labeled perfectly, and a true positive occurs when the model assigns a label which matches that of the image. A false positive in this scenario occurs when the model assigns a label which does not match that of the image. A true negative occurs if the model does not assign a label which does not occur in the image, and a false negative occurs when the model does not assign a label which does occur in the image. \autoref{tab:error-binary-problem} illustrates these terms for a simple binary classification problem.
 
 \begin{table}
 \centering
@@ -261,12 +282,28 @@ Evaluating model accuracy on classification requires addressing both the labels 
 \caption[Model errors for a two-class binary decision problem.]{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
 \end{table}
 
-\svp{Recall, or sensitivity, which is the true positive rate, is the sum of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the sum of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model. }
+Recall, or sensitivity, which is the true positive rate, is the \mt{number} of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the \mt{number} of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
 
-\svp{ROC curves plot the false positive rate (1 - specificity) against the true positive rate. } Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
-\svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization}
+ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
+\svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization} \mt{I'm realizing now you probably wanted me to use mtcars or something and create a trivial example. I'll update this later!}
 
-\svp{A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.}\svp{XXX - this table and last sentance may not be essential and could probably be cut, but serve as a nice tease for the original work done in this CC.}
+<<example-roc, echo = F>>=
+
+
+x <- (1:100)/100
+y <- log((1:100)+ 1e-5)/log(100)
+df <- data.frame(x,y)
+ggplot() +
+  geom_line(aes(x = x, y = y), data = df, size = 1.25) +
+  scale_color_manual("", values = "black") +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("Example ROC Curve") +
+  coord_fixed() + theme_bw() +
+  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+@
+
+A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.\svp{XXX - this table and last sentance may not be essential and could probably be cut, but serve as a nice tease for the original work done in this CC.}
 \svp{XXX - Add a confusion matrix from ggplot2 to show as an example visualization}
 
 \begin{table}
@@ -284,4 +321,4 @@ Evaluating model accuracy on classification requires addressing both the labels 
 \caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
 \end{table}
 
-\svp{However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, which will be described in more detail in \autoref{ch3:model-accuracy}, a modification of the confusion matrix is possible to better visualize model performance.}
+However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, which will be described in more detail in \autoref{ch3:model-accuracy}, a modification of the confusion matrix is possible to better visualize model performance.
