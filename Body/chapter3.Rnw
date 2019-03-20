@@ -37,9 +37,17 @@ if (!"Body" %in% list.files()) {
 
 \section{Model Evaluation}\label{ch3:model-eval}
 
+<<model-setup2, include = T, cache = F>>=
+# Load model
+model_dir <- newest_model$path
+load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
+model_wts_file <- file.path(newest_model$path, newest_model$base_file)
+loaded_model <- set_weights(model_wts_file)
+@
 
 \subsection{Model Training}
-<<training-accuracy, fig.width = 7.5, fig.height = 5, fig.cap = "Training and validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 89.5\\% around epoch 9. After that point, validation loss remains the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy.", fig.scap = "Training and validation accuracy and loss during each epoch.">>=
+<<training-accuracy, fig.width = 7.5, fig.height = 5, out.width = ".75\\textwidth", fig.cap = "Training and validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 89.5\\% around epoch 9. After that point, validation loss remains the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy.", fig.scap = "Training and validation accuracy and loss during each epoch.", fig.pos = 'h'>>=
 data.frame(history$metrics) %>%
   mutate(epoch = 1:n()) %>%
   gather(key = "measure", value = "value", -epoch) %>%
@@ -120,8 +128,7 @@ As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation 
 To our knowledge, confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent. The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. This is calculated by removing any observation that falls into both categories being represented by the value before calculating the proportion of false positives.
 
 
-<<confusion_matrix, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", dpi = 600>>=
-
+<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "", dpi = 600>>=
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs) %>%
   set_names(str_to_title(classes)) %>%
@@ -145,54 +152,44 @@ get_confusion_matrix(predictions = preds, classes = classes,
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
-<<model-setup2, include = T>>=
-# Load model
-model_dir <- newest_model$path
-load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
-load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
-model_wts_file <- file.path(newest_model$path, newest_model$base_file)
-loaded_model <- set_weights(model_wts_file)
-
-@
 
 
 \svp{I'm playing around and finding interesting options here. Sorry - probably shouldn't doodle on your thesis, but... :)}
-<<generic-chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
 pred_prob_plot(chevron2, loaded_model)
 @
 
-<<generic-text-line, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+<<generic-text-line, fig.width = 11, fig.height = 6, out.width = "\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
 text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
 pred_prob_plot(text_line, loaded_model)
 @
 
-<<generic-triangle, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
+<<generic-triangle, fig.width = 11, fig.height = 7, out.width = "\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
 triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-triangle"), full.names = T)
 pred_prob_plot(triangle, loaded_model)
 @
 
 
-
-
 <<uggs, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "UGG logos as found on many different shoes. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
-pred_prob_plot(uggs, loaded_model)
+pred_prob_plot(uggs, loaded_model) +
+  theme(text = element_text(size = 24))
 @
 
 
-<<nb_logo, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
+<<nb_logo, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
 nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
 pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nike, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
+<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
 nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
 pred_prob_plot(nike, loaded_model)
 @
 
-<<chevron, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
+<<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
 pred_prob_plot(chevron, loaded_model)
 @
