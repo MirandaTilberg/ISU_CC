@@ -49,7 +49,7 @@ knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, cache = T, dpi = 3
 source(file.path(codedir, "Generate_Model_Images.R"))
 @
 
-<<labeled-data-setup, include = T>>=
+<<labeled-data-setup, include = F>>=
 model_path <- file.path(modeldir, "TrainedModels")
 
 newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
@@ -60,13 +60,9 @@ load(newest_data_file)
 source(file.path(codedir, "count_images.R"))
 @
 
-<<load-history-tmp>>=
+<<load-keras-model, include = F>>=
 model_dir <- newest_model$path
-load(list.files(model_dir, pattern = "-history.Rdata", full.names = T)[1])
-@
-
-<<load-keras-model, include = T, eval = T>>=
-get_newest()
+load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
 \chapter{DATA AND METHODS}
