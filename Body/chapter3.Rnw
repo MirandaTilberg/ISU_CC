@@ -184,9 +184,12 @@ pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
+<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles. The bottom figure, which is of a black sole and has very little contrast, is poorly recognized by the model. The image immediately above it is an automatically color-adjusted version of the same image, which has much better performance for recognition of a circular shape. ", dpi = 600>>=
+# Leaving myself a note here -
+# Fred's Imagemagick scripts - autotone
+#  autotone -w -G a-black-2.jpg a-black-autotone.jpg (turn off white balance and gamma correction)
 nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
-pred_prob_plot(nike, loaded_model)
+pred_prob_plot(nike, loaded_model, sort = F)
 @
 
 <<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
