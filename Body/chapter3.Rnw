@@ -186,7 +186,7 @@ pred_prob_plot(nb_logo, loaded_model)
 
 <<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles.", dpi = 600>>=
 nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-triangle"), full.names = T)
-pred_prob_plot(nike, loaded_model)
+pred_prob_plot(nike, loaded_model, sort = F)
 @
 
 <<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
