@@ -148,8 +148,6 @@ get_confusion_matrix(predictions = preds, classes = classes,
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
 
-\FloatBarrier
-
 \subsection{Model Consistency}\label{ch3:model-consistency}
 \svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
 
@@ -196,5 +194,8 @@ pred_prob_plot(chevron, loaded_model)
 
 \svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
+\FloatBarrier
 
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
+
+
