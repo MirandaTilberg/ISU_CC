@@ -156,7 +156,7 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
 \paragraph{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". As seen in \autoref{fig:caterpillar-carrot-nodes}, fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot".
 
-<<caterpillar-carrot-nodes, fig.height = 3, fig.width = 3, echo = F>>=
+<<caterpillar-carrot-nodes, fig.height = 3, fig.width = 3, echo = F, fig.cap = 'A representation of how different features are connected to labels for classification. Note that "fuzzy" is connected to caterpillar but not to carrot.' , fig.scap = "A representation of the connections between features and classification labels">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
 col_vec <- rep("grey50", 32)
 col_vec[seq(1, 29, by = 4)] <- rep(c("blue", "orange"), 4)
@@ -263,11 +263,11 @@ Transfer learning leverages the modularity of neural networks - the pretrained b
 \caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
 \end{figure}
 
-VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception\citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
+VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception \citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
 
 \section{Machine Learning Model Evaluation}\label{sec:model-eval}
 
-Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there are a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive, that is, an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications using probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
+Classification tasks are considered single-class when there is a only one binary decision of whether an item belongs to a single class of interest, and multi-class when there is a larger number of classes that an object may belong to. Multi-label classification is the special case of multi-class classification where categories are not mutually exclusive, that is, an item may fall into a combination of categories simultaneously. While the true classification is a binary decision, it is common for models to predict these classifications using probability, thus reporting a value between 0 and 1 reflecting how certainly the item can be attributed to a given class.
 
 Evaluating model accuracy on classification requires addressing both the labels that are assigned and the labels that are not. Ideally, an image is labeled perfectly, and a true positive occurs when the model assigns a label which matches that of the image. A false positive in this scenario occurs when the model assigns a label which does not match that of the image. A true negative occurs if the model does not assign a label which does not occur in the image, and a false negative occurs when the model does not assign a label which does occur in the image. \autoref{tab:error-binary-problem} illustrates these terms for a simple binary classification problem.
 
@@ -282,23 +282,34 @@ Evaluating model accuracy on classification requires addressing both the labels 
 \caption[Model errors for a two-class binary decision problem.]{Model errors for a two-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells.}\label{tab:error-binary-problem}
 \end{table}
 
-Recall, or sensitivity, which is the true positive rate, is the \mt{number} of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the \mt{number} of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
+Recall, or sensitivity, which is the true positive rate, is the number of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the number of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
 
-ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance.
-\svp{XXX - Add a sample ROC curve from ggplot2 to show as an example visualization} \mt{I'm realizing now you probably wanted me to use mtcars or something and create a trivial example. I'll update this later!}
+ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance. An example of an ROC curve for single-label prediction is shown in \autoref{fig:example-roc}.
 
-<<example-roc, echo = F>>=
+\mt{After putting in an unrelated example, I think it seems strange to have an example using a totally different dataset...?}
 
+<<example-roc, echo = F, fig.cap = "An example of an ROC curve: displaying the relationship between true positive and false positive classifications for the species Versicolor from Fisher's Iris Data">>=
+versicolor <- iris$Species == "versicolor"
+mod <- glm(versicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+           data = iris, family = binomial())
 
-x <- (1:100)/100
-y <- log((1:100)+ 1e-5)/log(100)
-df <- data.frame(x,y)
+roc_list <- roc(versicolor, mod$fitted.values)
+roc_df <- tibble(tpr = roc_list$sensitivities,
+                 fpr = 1 - roc_list$specificities,
+                 thresholds = roc_list$thresholds,
+                 auc = roc_list$auc[1]) %>%
+  nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
+  mutate(eer = purrr::map(roc_plot, eer))
+ 
+
 ggplot() +
-  geom_line(aes(x = x, y = y), data = df, size = 1.25) +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = roc_df) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 2) +
   scale_color_manual("", values = "black") +
   scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
   scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
-  ggtitle("Example ROC Curve") +
+  ggtitle("ROC for predicting Iris Species Versicolor") +
   coord_fixed() + theme_bw() +
   theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
 @
