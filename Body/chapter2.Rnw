@@ -60,11 +60,12 @@ load(newest_data_file)
 source(file.path(codedir, "count_images.R"))
 @
 
-<<load-keras-model, include = F>>=
+<<load-keras-model, include = F, eval = T, echo = F>>=
 model_dir <- newest_model$path
-load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(list.files(model_dir, pattern = "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
+
 \chapter{DATA AND METHODS}
 
 \section{Data}
@@ -140,7 +141,7 @@ annotated_imgs %>%
 % \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
 \subsection{Augmentation}
-Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation\citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above; examples of pre- and post- augmentation images are shown in \autoref{fig:augmented}.
+Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation \citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above; examples of pre- and post- augmentation images are shown in \autoref{fig:augmented}.
 
 \begin{figure}
 \centering
@@ -166,36 +167,18 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \subsection{Architecture}
 Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
 
-The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library\citep{raghakotkerasvis} available in R.
+The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
 \mt{Really want to include bird head images here. When will the KerasVis stuff be ready in R? :)}
 
-\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
-
-<<kerasvis, echo = F, eval = F>>=
-
-### KerasVis DOESN'T WORK ON MIRANDA'S COMPUTER
-
-
-library(KerasVis)
-KerasVis:::import_all_dependendices()
-source(file.path(codedir, "Generate_Model_Images.R"))
-model_path <- "/models/shoe_nn/TrainedModels/"
-newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
-model_wts_file <- file.path(newest_model$path, newest_model$base_file)
-loaded_model <- set_weights(model_wts_file)
-layer_names <- list("block1_conv1")
-visualize_activation(loaded_model,
-                 selected_filters = list(1L:63L),
-                 layer_names = layer_names, save_folder = file.path("Images", "chapter2", "vgg16layers"))
-@
+\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.
 
 
 \subsection{Model Training}
 
 \paragraph{Computation}
 
-Model training was conducted using the \texttt{keras} package in R\citep{keras-package}, which provides an interface to the Python keras API. \svp{The keras API uses a tensorflow \citep{tensorflow2015-whitepaper} backend. The model was trained using CPUs; the amount of memory required in order to train the model using the GPU was prohibitive.
+Model training was conducted using the \texttt{keras} package in R \citep{keras-package}, which provides an interface to the Python keras API. \svp{The keras API uses a tensorflow \citep{tensorflow2015-whitepaper} backend. The model was trained using CPUs; the amount of memory required in order to train the model using the GPU was prohibitive.
 
 Initial training utilized the output from the VGG16 convolutional base as input to a new model consisting of a densely connected layer with 50\% dropout, followed by an activation layer with a sigmoid activation function (see \autoref{fig:activation-functions}) and 9 output classes corresponding to the 9 geometric features we have identified. Once the separate model head was fit, we utilized keras' facilities for loading model weights to combine the convolutional base of VGG16 with the model head into a single, unified model object.
 
