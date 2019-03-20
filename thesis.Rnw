@@ -102,6 +102,7 @@
 knit_hooks$set(document = function(x) {
   sub('\\usepackage[]{color}', '\\usepackage[table]{xcolor}', x, fixed = TRUE)
   })
+opts_chunk$set(echo = F)
 @
 % Single-space code chunk output in knitr
 \AtBeginEnvironment{knitrout}{\singlespacing}
