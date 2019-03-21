@@ -30,6 +30,7 @@ if (!"Body" %in% list.files()) {
   codedir <- "code/"
   modeldir <- "model/"
 }
+library(tidyverse)
 @
 
 \chapter{INTRODUCTION}
@@ -123,6 +124,13 @@ Convolutional layers typically do not hugely decrease the dimensions of the matr
 \paragraph{Max Pooling Layers}
 Max pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max pooling layers apply a maximum function over adjacent regions of a feature map (i.e., a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. Max pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
 
+In most cases, the stride, or offset between subsequent pieces, is the same as the window size; for this case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
+\begin{equation}
+x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right)
+\end{equation}
+
+Max pooling layers, then, take the maximum of all values within the two-dimensional window.
+
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{maxpooling}
@@ -135,7 +143,6 @@ Once the dimension of the image has been reduced and features have been identifi
 The convolution and max pooling operations discussed above rely on activation functions, which operate on each feature map value. Different activation functions are used to produce different network effects - in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
 
 <<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks.", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
-library(tidyverse)
 sigmoid <- function(x) 1/(1 + exp(-x))
 relu <- function(x) pmax(x, 0)
 elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
@@ -176,14 +183,12 @@ plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 
 Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation in order to minimize errors (measured by a loss function) and thus improve classification accuracy.
 
-<<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes and 4 output nodes.">>=
-plot_deepviz2(c(12, 4), r = .005)
-@
+When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
-When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model.
-
-<<dense-layer2, echo = F, fig.width = 5, fig.height = 3, out.width = ".5\\textwidth", fig.cap = "A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.">>=
+<<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".45\\textwidth", fig.cap = "(Left) A densely-connected layer with 12 input nodes and 4 output nodes. (Right) A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.", fig.scap = "Densely connected layers with and without dropout.", fig.show =  'hold'>>=
 source(file.path(codedir, "Generate_Model_Images.R"))
+plot_deepviz2(c(12, 4), r = .005)
+
 plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
   theme(legend.position = c(1, 0), legend.justification = c(1, 0))
 @
@@ -300,7 +305,7 @@ roc_df <- tibble(tpr = roc_list$sensitivities,
                  auc = roc_list$auc[1]) %>%
   nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
   mutate(eer = purrr::map(roc_plot, eer))
- 
+
 
 ggplot() +
   geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot), size = 1.25) +

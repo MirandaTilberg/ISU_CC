@@ -37,8 +37,6 @@ library(magrittr)
 library(tidyverse)
 library(ggplot2)
 library(keras)
-library(furrr)
-plan(multicore)
 mytheme <- theme_bw() #+
   # theme(panel.grid.major = element_line(color = "grey50"),
   #       panel.grid.minor = element_line(color = "grey60"))

@@ -39,6 +39,12 @@ if (!"Body" %in% list.files()) {
 
 <<model-setup2, include = T, cache = F>>=
 # Load model
+model_path <- file.path(modeldir, "TrainedModels")
+
+newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
+newest_data_file <- file.path(modeldir, "RProcessedImages",
+                              newest_model$process_dir, "cropped_photos.Rdata")
+
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
@@ -76,7 +82,7 @@ data.frame(history$metrics) %>%
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
-<<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "ROC Curve">>=
+<<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "Whole model ROC Curve">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
@@ -101,7 +107,7 @@ ggplot() +
 
 @
 
-<<auc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth">>=
+<<auc-code, fig.width = 8, fig.height = 6, out.width = "\\textwidth", fig.cap = "Class-by-class ROC curves. AUC is area under the curve, a measure of overall model performance. Equal error rates are marked, indicating the position at which there is equal probability of a false positive or false negative error.", fig.scap = "Class-by-class ROC curves.">>=
 aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
 thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
 aucs$data$thresholds <- thresholds
@@ -128,7 +134,7 @@ As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation 
 To our knowledge, confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent. The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. This is calculated by removing any observation that falls into both categories being represented by the value before calculating the proportion of false positives.
 
 
-<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "", dpi = 600>>=
+<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculations.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs) %>%
   set_names(str_to_title(classes)) %>%
@@ -149,25 +155,27 @@ get_confusion_matrix(predictions = preds, classes = classes,
 @
 
 \subsection{Model Consistency}\label{ch3:model-consistency}
-\svp{Look at how model predictions for the same feature of different color options for a shoe change. Should be a fun case study - does CoNNOR actually have the robustness we claim it should?}
+\svp{In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.}
 
-
-\svp{I'm playing around and finding interesting options here. Sorry - probably shouldn't doodle on your thesis, but... :)}
-<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+\subsubsection{General shape recognition}
+\svp{Talk about Connor's ability to recognize different shapes successfully. Elaborate on image contrast issues - the pictures VGG16 was trained on were photos, and so are the images CoNNOR was trained on, but these are artifical photos where any color variation is due to the shoe, so it's definitely transferring to a different domain, and not always successfully.}
+<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled `chevron'", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
 pred_prob_plot(chevron2, loaded_model)
 @
 
-<<generic-text-line, fig.width = 11, fig.height = 6, out.width = "\\textwidth", fig.cap = "This one is interesting, but not *that* bad all things considered...", fig.scap = "", dpi = 600>>=
+<<generic-text-line, fig.width = 11, fig.height = 6, out.width = "\\textwidth", fig.cap = "A selection of images containing text and/or lines. Most images are correctly identified as containing text, though again there is some indication that low-contrast images are poorly recognized. In addition, text which occurs towards the boundaries of the labeled region may n ot be successfully identified by the model.", fig.scap = "Features detected in  images with `text' and/or `line' labels.", dpi = 600>>=
 text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
 pred_prob_plot(text_line, loaded_model)
 @
 
-<<generic-triangle, fig.width = 11, fig.height = 7, out.width = "\\textwidth", fig.cap = "Wow, this one sucks.", fig.scap = "", dpi = 600>>=
+<<generic-triangle, fig.width = 11, fig.height = 7, out.width = "\\textwidth", fig.cap = "A selection of images with triangles, including text logos. Many of the triangles are correctly detected, but there are again problems with low-contrast images and with recognition of the triangles in the top image.", fig.scap = "Features detected in  images containing triangles.", dpi = 600>>=
 triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-triangle"), full.names = T)
 pred_prob_plot(triangle, loaded_model)
 @
 
+\subsubsection{Recognition across colors}
+\svp{In order to more fully  understand CoNNOR's strengths and weaknesses, we have identified several shapes which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases allow for us to control the geometric patterns while varying the color patterns in a real context - we could vary the colors artificially, but this could induce additional artifacts due to the image manipulation process. }
 
 <<uggs, fig.width = 12, fig.height = 23, out.width = ".6\\textwidth", fig.cap = "UGG logos as found on many different shoes. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
@@ -176,13 +184,13 @@ pred_prob_plot(uggs, loaded_model) +
 @
 
 
-<<nb_logo, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
+<<nb_logo, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "New Balance logos found on several different shoes; note that the model can sometimes detect the logo even with color/texture changes, but when the color pattern is of higher contrast than the logo, the model can no longer recognize the logo successfully.", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
 nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
 pred_prob_plot(nb_logo, loaded_model)
 @
 
 
-<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a rounded triangle across different color soles. The bottom figure, which is of a black sole and has very little contrast, is poorly recognized by the model. The image immediately above it is an automatically color-adjusted version of the same image, which has much better performance for recognition of a circular shape. ", dpi = 600>>=
+<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "A selection of images from the same shoe model across different colors. The bottom figure, which is of a black sole and has very little contrast, is poorly recognized by the model. The image immediately above it is an automatically color-adjusted version of the same image, which is classified consistent with the other images.", fig.scap = "Features detected in a rounded triangle across different color soles. ", dpi = 600>>=
 # Leaving myself a note here -
 # Fred's Imagemagick scripts - autotone
 #  autotone -w -G a-black-2.jpg a-black-autotone.jpg (turn off white balance and gamma correction)
@@ -190,12 +198,19 @@ nike <- list.files(here::here("Images", "chapter3", "test-imgs", "nike-rounded-t
 pred_prob_plot(nike, loaded_model, sort = F)
 @
 
-<<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
+<<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "A selection of images containing a specific chevron pattern from Adidas shoes, in a variety of colors. In the more homogeneous contrast situations presented here, features are detected across color patterns. ", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
-pred_prob_plot(chevron, loaded_model)
+pred_prob_plot(chevron, loaded_model, sort = F)
 @
 
 \svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
+
+\subsubsection{Contrast Adjustment}
+\svp{In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing our ability to notice details (and presumably, the model's ability to identify details as well). }
+<<auto-color-balance, fig.width = 11, fig.height = 8, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
+lowcontrast <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
+pred_prob_plot(lowcontrast, loaded_model, sort = F)
+@
 
 \FloatBarrier
 
