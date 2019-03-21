@@ -123,6 +123,13 @@ Convolutional layers typically do not hugely decrease the dimensions of the matr
 \paragraph{Max Pooling Layers}
 Max pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max pooling layers apply a maximum function over adjacent regions of a feature map (i.e., a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. Max pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
 
+In most cases, the stride, or offset between subsequent pieces, is the same as the window size; for this case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
+\begin{equation}
+x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right)
+\end{equation}
+
+Max pooling layers, then, take the maximum of all values within the two-dimensional window. 
+
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{maxpooling}
