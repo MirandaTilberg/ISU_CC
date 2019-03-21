@@ -314,8 +314,28 @@ ggplot() +
   theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
 @
 
-A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.\svp{XXX - this table and last sentance may not be essential and could probably be cut, but serve as a nice tease for the original work done in this CC.}
+A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.
 \svp{XXX - Add a confusion matrix from ggplot2 to show as an example visualization}
+
+<<example-conf-mat>>=
+mod <- randomForest::randomForest(iris[,1:4], iris[,5])
+
+classes <- unique(iris$Species) %>% as.character()
+p <- mod$predicted %>% as.character()
+
+pred <- cbind(p == classes[1],
+              p == classes[2],
+              p == classes[3])
+names(pred) <- classes
+
+lab <- cbind(iris$Species == classes[1],
+              iris$Species == classes[2],
+              iris$Species == classes[3])
+
+get_confusion_matrix(predictions = pred,
+                     test_labels = labs,
+                     classes = classes)
+@
 
 \begin{table}
 \centering
