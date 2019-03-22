@@ -9,13 +9,9 @@
 
 \section{Summary of Results}
 
-The goal of this research was to develop a method to automatically identify geometric class characteristics of shoe outsoles. Such a method takes the "impossible" problem of quantifying outsole features in a given population and lays the groundwork for a tractable solution. A set of geometric class characteristics was defined to both broadly classify a large variety of shoes and to narrow down similarity into a manageable number and type of features for further use in a shoe print analysis. The convolutional base of the CNN VGG16 was then used to identify features for training new model head for the task.
+The goal of this research was to develop a method to automatically identify geometric class characteristics of shoe outsoles. Such a method takes the "impossible" problem of quantifying outsole features in a given population and lays the groundwork for a tractable solution. A set of geometric class characteristics was defined to both broadly classify a large variety of shoes and to narrow down similarity into a manageable number and type of features for further use in a shoe print analysis. The final set of features used in this research achieves both goals quite well, \mt{XXX but nothing can truly prepare you for that one weird shoe that simply doesn't fit}.
 
-\mt{\paragraph{The model works well}}The final CNN/model performs well on the data provided. In general, the model identifies the well-defined geometric shapes in the images.
-
-\mt{\paragraph{The geometric feature set is able to classify many common tread elements}}
-
-\svp{Write this part last... :) But, we can conclude that CoNNOR works well for identifying features within outsole images, that the geometric feature set is able to classify many common tread elements (and we can compute statistics for how many shoes have recognizable features...)}
+CoNNOR was developed using the convolutional base of VGG16 and a newly trained classifier/head to identify the defined set of geometric features. After training, CoNNOR performs well on the data provided. In general, the model is able to identify many well-defined geometric shapes in the images both consistently and accurately. The prediction accuracy of this model gives us the ability to compute statistics for the frequency of given features in a well-defined population. 
 
 \section{Future Work}
 
