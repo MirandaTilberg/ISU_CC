@@ -38,6 +38,19 @@ if (!"Body" %in% list.files()) {
 \section{Model Evaluation}\label{ch3:model-eval}
 
 <<model-setup2, include = T, cache = F>>=
+library(magrittr)
+library(tidyverse)
+library(ggplot2)
+library(keras)
+mytheme <- theme_bw() #+
+  # theme(panel.grid.major = element_line(color = "grey50"),
+  #       panel.grid.minor = element_line(color = "grey60"))
+
+theme_set(mytheme)
+knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, cache = T, dpi = 300, dev = 'png')
+
+source(file.path(codedir, "Generate_Model_Images.R"))
+
 # Load model
 model_path <- file.path(modeldir, "TrainedModels")
 
@@ -216,4 +229,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \subsection{Heatmaps - Model Diagnostics} \svp{Add the fun stuff in here!}
 
-
+<<try-heatmap>>=
+imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
+calc_heatmap(imgs[1], loaded_model) %>% create_composite()
+@
