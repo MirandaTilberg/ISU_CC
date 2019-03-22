@@ -230,7 +230,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 \subsection{Heatmaps - Model Diagnostics}
 
 
-<<try-heatmap>>=
+<<try-heatmap, eval = F>>=
 imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
 calc_heatmap(imgs[1], loaded_model) %>% create_composite()
 @
