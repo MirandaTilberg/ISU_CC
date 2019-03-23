@@ -4,7 +4,6 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 library(jpeg)
-library(keras)
 library(imager)
 library(tidyr)
 library(magick)
@@ -13,6 +12,7 @@ library(ggcorrplot)
 library(deepviz)
 library(tidygraph)
 library(ggraph)
+library(keras)
 
 # --- Variables ----------------------------------------------------------------
 default_classes <- c(
@@ -168,7 +168,11 @@ calc_heatmap <- function(img_path, model, classes = default_classes, scale_by_pr
     pooled_grads <- k_mean(grads, axis = c(1, 2, 3))
     iterate <- k_function(list(model$input),
                           list(pooled_grads, last_conv_layer$output[1,,,]))
-    c(pooled_grads_value, conv_layer_output_value) %<-% iterate(list(img))
+    tmp <- iterate(list(img))
+    pooled_grads_value <- tmp[[1]]
+    conv_layer_output_value <- tmp[[2]]
+    
+    # c(pooled_grads_value, conv_layer_output_value) %<-% iterate(list(img))
     for (i in 1:512) {
       conv_layer_output_value[,,i] <-
         conv_layer_output_value[,,i] * pooled_grads_value[[i]]
