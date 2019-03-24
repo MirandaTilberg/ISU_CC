@@ -148,6 +148,8 @@ theme_set(mytheme)
 \cleardoublepage \phantomsection
 \include{Preface/abstract}
 \newpage
+\include{todo} % temporary
+\newpage
 \pagenumbering{arabic}
 
 <<ch1, child='Body/chapter1.Rnw'>>=
