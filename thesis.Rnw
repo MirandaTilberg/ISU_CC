@@ -40,7 +40,7 @@
 % for at least N lines on the current page
 \usepackage{needspace}
 \newcommand\chaptocbreak{
-	%\addtocontents{toc}{\protect\needspace{4\baselineskip}}
+	\addtocontents{toc}{\protect\needspace{4\baselineskip}}
 	\addtocontents{lof}{\protect\needspace{2\baselineskip}}
 	\addtocontents{lot}{\protect\needspace{2\baselineskip}}
 }
