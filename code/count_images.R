@@ -2,7 +2,6 @@ library(magrittr)
 library(tidyverse)
 library(ggplot2)
 library(keras)
-library(furrr)
 
 label_fixes <- c("triangles" = "triangle",
                  "trianglee" = "triangle",
