@@ -40,7 +40,7 @@
 % for at least N lines on the current page
 \usepackage{needspace}
 \newcommand\chaptocbreak{
-	\addtocontents{toc}{\protect\needspace{4\baselineskip}}
+	%\addtocontents{toc}{\protect\needspace{4\baselineskip}}
 	\addtocontents{lof}{\protect\needspace{2\baselineskip}}
 	\addtocontents{lot}{\protect\needspace{2\baselineskip}}
 }
@@ -161,14 +161,8 @@ theme_set(mytheme)
 \chaptocbreak
 <<ch4, child='Body/chapter4.Rnw'>>=
 @
-\chaptocbreak
-%<<ch5, child='Body/chapter5.Rnw'>>=
-%@
 \include{Reference/bibtex}
 <<appendix1, child='Appendix/appendix1.Rnw'>>=
-@
-\chaptocbreak
-<<appendix2, child='Appendix/appendix2.Rnw'>>=
 @
 
 \end{document}
