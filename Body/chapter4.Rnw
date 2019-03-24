@@ -1,10 +1,9 @@
-% Chapter 4 from the standard thesis template
-%   that contains an adv. example table and figure.
+% Chapter 4: Conclusion
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter4/}}
 
- \addtocontents{toc}{\protect\newpage}
+% \addtocontents{toc}{\protect\newpage}
 \chapter{CONCLUSION}
 
 \section{Summary of Results}
