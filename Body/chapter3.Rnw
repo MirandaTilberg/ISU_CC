@@ -232,10 +232,10 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\subsection{Heatmaps - Model Diagnostics}
+\section{Visualizing Model with Heatmaps}
 
 
-<<try-heatmap, eval = F>>=
+<<try-heatmap, eval = T>>=
 imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
 calc_heatmap(imgs[1], loaded_model) %>% create_composite()
 @
