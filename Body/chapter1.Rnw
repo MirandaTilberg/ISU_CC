@@ -241,7 +241,8 @@ tbl_graph(nodes = nodes, edges = edges) %>%
   geom_text(aes(x = 2.65, y = 0, label = "Layer 1")) +
   geom_text(aes(x = 2.65, y = 1, label = "Layer 2")) +
   geom_text(aes(x = 2.65, y = 2, label = "Layer 3")) +
-  geom_text(aes(x = 2.2, y = 1.72, label = "w[11]^3"), parse = T) +
+  geom_text(aes(x = 2.25, y = 1.55, label = "italic(w[11]^3)"), 
+            color = "grey30", parse = T) +
   # geom_text(aes(x = 1.95, y = 1.72, label = "w[12]^3"), parse = T) +
   # geom_text(aes(x = 1.7, y = 1.72, label = "w[13]^3"), parse = T) +
   # geom_text(aes(x = 1.5, y = 1.72, label = "w[21]^3"), parse = T) +
