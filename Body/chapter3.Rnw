@@ -83,14 +83,14 @@ data.frame(history$metrics) %>%
   theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. \fix{Should probably address underfitting as well} Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
 
 \FloatBarrier
 
 \section{Model Accuracy}\label{ch3:model-accuracy}
-%\mt{Is ch3: right? Maybe sec: ?}
+%\mt{Is ch3: right? Maybe sec: ?}\svp{It's whatever you call it - just be consistent. The ch3:model-accuracy is the entire label, you could use \label{fred} if you wanted.}
 
-\paragraph{ROC} %\mt{remove paragraph titles?}
+\paragraph{ROC} %\mt{remove paragraph titles?}\svp{If you want to :) Again, it's whether it's organized the way you want it!}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
