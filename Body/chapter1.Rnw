@@ -204,10 +204,10 @@ In order to evaluate an input image, it is necessary to move from the image repr
 We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}).
 
 \svp{During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
-\begin{eqnarray}\label{math:forwardprop}
+\begin{align}\label{math:forwardprop}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
-x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }\\
-\end{eqnarray}
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }
+\end{align}
 need to figure out how to represent max pool layers and fully connected layers here...
 }
 
@@ -220,7 +220,7 @@ In essence, the goal is to use gradient descent to adjust the parameters of the 
 
 \mt{Susan's beautiful, elegant solution}
 
-$$\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) = \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}$$
+\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}&=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}
 
 
 \mt{Miranda's shite show}
@@ -229,7 +229,7 @@ $$\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) = \underbra
 Consider a simple network of densely connected layers with $L$ layers and $C$ output categories. (In fig., L = 3 and C = 2)
 
 
-Let $\mathbf{a^{(l)}} = (a_1^{(l)}, a_2^{(l)}, ..., a_{m_l}^{(l)})^{'}$ be the activations/input at layer $l$, $l = 1, ..., L$, where $m_l$ is the number of nodes in layer $l$ and $m_L = C$. 
+Let $\mathbf{a^{(l)}} = (a_1^{(l)}, a_2^{(l)}, ..., a_{m_l}^{(l)})^{'}$ be the activations/input at layer $l$, $l = 1, ..., L$, where $m_l$ is the number of nodes in layer $l$ and $m_L = C$.
 
 (From here on, $l$ applies to all layers except #1. To fix, redefine input so that it's clearly not a "layer".)
 
