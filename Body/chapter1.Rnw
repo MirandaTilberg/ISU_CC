@@ -204,23 +204,20 @@ In order to evaluate an input image, it is necessary to move from the image repr
 We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}).
 
 \svp{During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
-\begin{eqnarray}\label{math:forwardprop}
+\begin{align}\label{math:forwardprop}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
-x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }\\
-\end{eqnarray}
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ }
+\end{align}
 need to figure out how to represent max pool layers and fully connected layers here...
 }
 
 
-Backpropogation, short for "the backward propagation of errors", is the name of the \mt{algorithm/process} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers. 
-%\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation} 
-In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule. 
+Backpropogation, short for "the backward propagation of errors", is the name of the \mt{algorithm/process} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers.
+%\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation}
+In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
 
 
-
-\mt{Susan's beautiful, elegant solution}
-
-$$\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) = \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}$$
+\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}&=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}
 
 
 \subsection{Transfer Learning}
@@ -266,6 +263,7 @@ ROC curves plot the false positive rate (1 - specificity) against the true posit
 \mt{After putting in an unrelated example, I think it seems strange to have an example using a totally different dataset...?}
 
 <<example-roc, echo = F, fig.cap = "An example of an ROC curve: displaying the relationship between true positive and false positive classifications for the species Versicolor from Fisher's Iris Data">>=
+library(pROC)
 versicolor <- iris$Species == "versicolor"
 mod <- glm(versicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
            data = iris, family = binomial())
@@ -280,9 +278,9 @@ roc_df <- tibble(tpr = roc_list$sensitivities,
 
 
 ggplot() +
-  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot), size = 1.25) +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>% arrange(fpr, tpr), size = 1.25) +
   geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = roc_df) +
-  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 2) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 4) +
   scale_color_manual("", values = "black") +
   scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
   scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
