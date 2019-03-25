@@ -212,11 +212,34 @@ need to figure out how to represent max pool layers and fully connected layers h
 }
 
 
-\svp{All the equations go in here. }
+Backpropogation, short for "the backward propagation of errors", is the name of the \mt{algorithm/process} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers. 
+%\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation} 
+In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule. 
 
-\mt{Taking a stab at how to visualize back-prop, since there are a whole bunch of weights and values floating around.}
 
-<<echo = F>>=
+
+\mt{Susan's beautiful, elegant solution}
+
+$$\begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) = \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}$$
+
+
+\mt{Miranda's shite show}
+
+
+Consider a simple network of densely connected layers with $L$ layers and $C$ output categories. (In fig., L = 3 and C = 2)
+
+
+Let $\mathbf{a^{(l)}} = (a_1^{(l)}, a_2^{(l)}, ..., a_{m_l}^{(l)})^{'}$ be the activations/input at layer $l$, $l = 1, ..., L$, where $m_l$ is the number of nodes in layer $l$ and $m_L = C$. 
+
+(From here on, $l$ applies to all layers except #1. To fix, redefine input so that it's clearly not a "layer".)
+
+Let $\mathbf{W^{(l)}} = \left[w_{kj}^{(l)}\right]$ be the $m_l \times m_{l-1}$ matrix of weights associated with layer $l$, $l = 2, ..., L$, where $w_{kj}^{(l)}$ is the weight that connects $a_j^{(l-1)}$ to $a_k^{(l)}$. Additionally, let $\mathbf{b^{(l)}} = (b_1^{(l)}, b_2^{(l)}, ..., b_{m_l}^{(l)})^{'}$ be the vector of bias values for layer $l$, $l = 2, ..., L$.
+
+Then $\mathbf{z^{(l)}} = \mathbf{W^{(l)}a^{(l-1)} + b^{(l)}}$ is the linear combination of activations, weights, and biases associated with layer $l-1$, such that $\mathbf{a^{(l)}} = \sigma^{(l)}\left( \mathbf{z^{(l)}}\right) = \sigma^{(l)}\left(\mathbf{W^{(l)}a^{(l-1)} + b^{(l)}}\right)$, where $\sigma^{(l)}(.)$ is the non-linear activation function associated with layer $l$, $\sigma^{(l)}:\mathbb{R}\rightarrow(0,1)$. As stated above in SECTION, for multi-label classification, $\sigma^{(L)}(x) = \dfrac{1}{1 + e^{-x}}$.
+
+shown in \autoref{fig:hidden-layers-ex}
+
+<<hidden-layers-ex, echo = F, fig.cap = 'This is a figure'>>=
 n <- c(2,3,3)
 
 scripts <- function(n) {
