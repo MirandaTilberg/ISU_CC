@@ -86,7 +86,13 @@ Class characteristics, as defined in \autoref{sec:class-chars-desc}, are charact
 \end{description}
 
 
-Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter "v" can easily be considered a chevron, and the letter "o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process.
+Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \svp{\autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".}
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
+\caption[Classification rule weaknesses]{\svp{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}}\label{fig:classification-is-hard}
+\end{figure}
 
 \begin{table}
 \centering
@@ -109,7 +115,7 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 \subsection{Data Collection}
 
-Thousands of outsole images were web-scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \mt{(cite)}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, about [2,200] shoes have been labeled, yielding about [24,000] multi-label images.
+Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(img_df)} multi-label images.
 
 \svp{After annotation using the LabelMe software package, images are processed by an R script, which identifies the minimum bounding rectangle of the region, crops the image to that region, and scales the cropped area to a 256 x 256 pixel image suitable for analysis by the convolutional neural network. During this process, aspect ratio is not preserved, though efforts are made to label images which are relatively square to minimize the effect of this distortion.}
 %\mt{Once images are labeled in LabelMe, they are processed in R by a script that employs the imager and spatial packages to chop the labeled image into a 256x256 square pixel region. This script employs a number of strategies to deal with abnormally-shaped labels. For example, while there have been efforts to apply labels to the raw images in relatively square regions, this is not always possible. Regions are thus appropriately rotated and scaled down, but aspect ratio is not necessarily preserved.} % Slight rephrasing for a bit tidier flow of thought.
@@ -134,7 +140,7 @@ annotated_imgs %>%
         legend.background = element_rect(fill = "white"))
 @
 
-\svp{Describe \autoref{fig:class-characteristic-barchart} in words. Talk about the fact that the class imbalance means we will have to weight the classes for the model, and that this also affects the utility of accuracy measures. }
+\fix{Describe \autoref{fig:class-characteristic-barchart} in words. Talk about the fact that the class imbalance means we will have to weight the classes for the model, and that this also affects the utility of accuracy measures. }
 
 % \svp{One thing I need to examine is what happens if we use histogram equalization to modify the images before augmentation. I did a bit of that for presentation images and it changed the output probabilities a lot... which suggests it may help with images that don't have even color balance.}
 
@@ -163,7 +169,7 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \section{VGG16}
 
 \subsection{Architecture}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 "functional" (i.e., convolutional and densely connected) layers and 5 "structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
 
 The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
@@ -187,7 +193,7 @@ Code is provided in \autoref{app:code}.  Using a 48-thread CPU with 128 GB of RA
 
 \paragraph{Model Training Parameters}
 
-The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, 20\% were used for validation, to monitor the training process, and the remaining data were for testing \svp{the performance of the fitted model.} \svp{Code to calculate the class weights is provided as part of \autoref{app:code}, but a static example of the weights and image counts is shown in \autoref{tab:model-weight}.}
+The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, \svp{half} were used for validation, to monitor the training process, and the remaining data were for testing \svp{the performance of the fitted model.} \svp{Code to calculate the class weights is provided as part of \autoref{app:code}, but a static example of the weights and image counts is shown in \autoref{tab:model-weight}.}
 
 <<model-weight-calc, results = 'asis', eval = F>>=
 load(file.path(model_dir, paste0(newest_model$start_date, "_", newest_model$prefix, "fullimage.rdata")))
@@ -196,6 +202,7 @@ bind_cols(class = classes, count = colSums(train$labels), class_proportion = cla
   xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions."), digits = c(0, 0, 0, 4)) %>%
   xtable::print.xtable(include.rownames = F, hline.after = c(-1, 0, 9, 10))
 @
+
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrr}
@@ -215,5 +222,7 @@ bowtie & 1102 & 0.2422 \\
 total & 36254 & 1.0000 \\
    \hline
 \end{tabular}
-\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}
+\caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}\label{tab:model-weight}
 \end{table}
+
+\fix{Need a transition paragraph}
