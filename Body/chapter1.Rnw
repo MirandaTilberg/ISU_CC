@@ -115,17 +115,21 @@ Convolutional Neural Networks are named to highlight their use of image convolut
 \caption[Image convolution, illustrated]{The convolution operation consists of the smaller filter (green) applied to each region of the larger image (blue); each application results in a single value which is stored in the feature map. Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:image-convolution-illustration}
 \end{figure}
 
-Convolutional layers typically do not hugely decrease the dimensions of the matrix; in many cases, the input image is padded in order to prevent any reduction in dimension. In many neural network structures, dimension reduction is performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.
+Convolutional layers typically do not decrease the dimensions of the matrix \svp{by a significant amount, as the filter $\beta$ is typically small: $3\times 3$ or $5\times 5$}. \svp{Many models pad the input image} in order to prevent any reduction in dimension. In \svp{these} neural network\svp{s}, dimension reduction is \svp{generally} performed by pooling layers, which identify the strongest local features in each filter layer of the convolutional output.
 
-\paragraph{Max Pooling Layers}
-Max pooling is a technique to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Max pooling layers apply a maximum function over adjacent regions of a feature map (i.e., a sliding window) to encode the important information of how strongly a feature was activated in a given region of the image while simultaneously reducing redundant or unneccessary information about smaller activations. For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. Max pooling is also beneficial in that it allows CNN "vision" to be relatively translation invariant, because it emphasizes the relative position of a feature rather than its absolute position.
+\paragraph{Pooling Layers}
+\svp{Pooling layers are added to} reduce the size, and therefore computational load, of feature maps through structured down-sampling. \svp{Most commonly, pooling layers apply the maximum function (max pooling)} over adjacent regions of a feature map (using a sliding window). \svp{This encodes the maximum strength of a feature in a region of an image, while reducing } redundant or unneccessary information about \svp{less prominent} activations.
 
-In most cases, the stride, or offset between subsequent pieces, is the same as the window size; for this case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
-\begin{equation}
-x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right)
-\end{equation}
+In most cases, the stride, or offset between subsequent pieces, is the same as the window size \svp{(non-overlapping pooling)}; for this \svp{simplified} case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
+\begin{align}\label{eqn:element-pooling}
+x^\ell_{ij} &= f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right)
+\end{align}
 
-Max pooling layers, then, take the maximum of all values within the two-dimensional window.
+\svp{As a general matrix notation for pooling is difficult to specify intuitively, we instead will define a pooling operator, $p$, which applies \autoref{eqn:element-pooling} element-wise, resulting in an output matrix.}
+$$p\left(x, f, w, s\right) :=\text{matrix-wise pooling on matrix} x \text{ with function } f, \text{ window } w, \text{ and stride } s$$
+
+For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. \svp{\citet{krizhevskyImageNetClassificationDeep2012} suggests pooling layers reduce overfitting on certain datasets and increase translation invariance, but using too large of a pooling window can be destructive and limits the total number of convolutional layers which can be combined in a single network\citep{CS231nConvolutionalNeural}. In some CNNs, pooling layers are removed, producing fully convolutional neural networks; dimension reduction is instead performed by increasing the stride and window size of the convolutional layers \citep{springenbergStrivingSimplicityAll2014}.}
+
 
 \begin{figure}
 \centering
@@ -136,7 +140,7 @@ Max pooling layers, then, take the maximum of all values within the two-dimensio
 Once the dimension of the image has been reduced and features have been identified using a combination of convolutional and pooling layers, local features must be integrated into a more unified whole. This integration is performed using densely connected layers.
 
 \paragraph{Activation Functions}
-The convolution and max pooling operations discussed above rely on activation functions, which operate on each feature map value. Different activation functions are used to produce different network effects - in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
+\svp{The convolution operation discussed above relies on nonlinear activation functions}, which operate on each feature map value. Different activation functions are used to produce different network effects - in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
 
 <<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks.", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
 sigmoid <- function(x) 1/(1 + exp(-x))
@@ -156,8 +160,10 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
   coord_fixed()
 @
 
+\svp{Activation functions are also used in densely connected layers, which are discussed in the next section. Frequently, the same activation function is used throughout a CNN, though it is (mathematically) possible to use a different activation function for each layer.}
+
 \paragraph{Densely Connected Layers}
-Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. These layers act like the human brain: just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". As seen in \autoref{fig:caterpillar-carrot-nodes}, fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot".
+Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max-pooling layers) and the corresponding labels associated with the image. Just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". As seen in \autoref{fig:caterpillar-carrot-nodes}, fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot".
 
 <<caterpillar-carrot-nodes, fig.height = 3, fig.width = 3, echo = F, fig.cap = 'A representation of how different features are connected to labels for classification. Note that the feature ``fuzzy" is connected to the notion of caterpillar but not to carrot, and ``pointy" is only related to carrots.' , fig.scap = "A representation of the connections between features and classification labels">>=
 source(file.path(codedir, "Generate_Model_Images.R"))
@@ -177,7 +183,7 @@ df <- data.frame(x = plot$data$x,
 plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 @
 
-Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation in order to minimize errors (measured by a loss function) and thus improve classification accuracy.
+Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation \svp{(discussed in \autoref{sec:prop})} in order to minimize errors (measured by a loss function) and thus improve classification accuracy.
 
 When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
@@ -190,11 +196,9 @@ plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
 @
 
 \paragraph{Output Classification Layer}
-In order to transform the neural network node values into output class probabilities, the final layer of the model head uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}$. The softmax activation function produces class probabilities which sum to 1.
+In order to transform the neural network node values into output class probabilities, the final layer of the model uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $$S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}.$$ The softmax activation function produces class probabilities which sum to 1. In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels \svp{(e.g. a multi-class, multi-label problem)}, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
-In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
-
-\subsection{Forward and Backward Propagation}
+\subsection{Forward and Backward Propagation}\label{sec:prop}
 In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.
 
 We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}). Finally, we define $W^\ell$ to be a weight matrix used in fully connected layer $\ell$; $W$'s dimensions are chosen such that the output dimension is equal to the pre-specified number of output classes.
@@ -202,7 +206,8 @@ We first define some notation. Let $x^{(0)}$ be an input image, represented as a
 During forward propagation, the calculation of the $\ell$th layer uses the $\ell-1$th layer in an interative process:
 \begin{align}\label{math:forwardprop}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
-x^{(\ell)}_k &= \max\left(x_{s\times s, k}^{(\ell-1)}\right) \text{ for max pooling layers with stride and window } s\nonumber\\
+x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling layers w/ stride and window } s\nonumber\\
+& \text{\footnotesize where $(i-1)s + 1 \leq i^\ast \leq is$, $(j-1)s + 1 \leq j^\ast \leq js$}\nonumber\\
 x^{(\ell)}_k &= \sigma^\ell\left(Wx\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
