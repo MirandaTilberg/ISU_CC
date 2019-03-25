@@ -35,8 +35,6 @@ if (!"Body" %in% list.files()) {
 
 \chapter{RESULTS}
 
-\section{Model Evaluation}\label{ch3:model-eval}
-
 <<model-setup2, include = T, cache = F>>=
 library(magrittr)
 library(tidyverse)
@@ -65,7 +63,7 @@ model_wts_file <- file.path(newest_model$path, newest_model$base_file)
 loaded_model <- set_weights(model_wts_file)
 @
 
-\subsection{Model Training}
+\section{Model Training}
 <<training-accuracy, fig.width = 7.5, fig.height = 5, out.width = ".75\\textwidth", fig.cap = "Training and validation accuracy and loss for each epoch of the fitting process. Training and validation accuracy reach 89.5\\% around epoch 9. After that point, validation loss remains the same and training loss decreases slightly, while validation accuracy increases more slowly than training accuracy.", fig.scap = "Training and validation accuracy and loss during each epoch.", fig.pos = 'h'>>=
 data.frame(history$metrics) %>%
   mutate(epoch = 1:n()) %>%
@@ -89,9 +87,10 @@ data.frame(history$metrics) %>%
 
 \FloatBarrier
 
-\subsection{Model Accuracy}\label{ch3:model-accuracy}
+\section{Model Accuracy}\label{ch3:model-accuracy}
+%\mt{Is ch3: right? Maybe sec: ?}
 
-\paragraph{ROC}
+\paragraph{ROC} %\mt{remove paragraph titles?}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
@@ -167,10 +166,10 @@ get_confusion_matrix(predictions = preds, classes = classes,
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
 
-\subsection{Model Consistency}\label{ch3:model-consistency}
+\section{Model Consistency}\label{ch3:model-consistency}
 \svp{In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.}
 
-\subsubsection{General shape recognition}
+\subsection{General shape recognition}
 \svp{Talk about Connor's ability to recognize different shapes successfully. Elaborate on image contrast issues - the pictures VGG16 was trained on were photos, and so are the images CoNNOR was trained on, but these are artifical photos where any color variation is due to the shoe, so it's definitely transferring to a different domain, and not always successfully.}
 <<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled `chevron'", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
@@ -187,7 +186,7 @@ triangle <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-tr
 pred_prob_plot(triangle, loaded_model)
 @
 
-\subsubsection{Recognition across colors}
+\subsection{Recognition across colors}
 \svp{In order to more fully  understand CoNNOR's strengths and weaknesses, we have identified several shapes which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases allow for us to control the geometric patterns while varying the color patterns in a real context - we could vary the colors artificially, but this could induce additional artifacts due to the image manipulation process. }
 
 <<uggs, fig.width = 11, fig.height = 14, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
@@ -222,7 +221,7 @@ pred_prob_plot(chevron, loaded_model, sort = F)
 
 \svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
 
-\subsubsection{Contrast Adjustment}
+\subsection{Contrast Adjustment}
 \svp{In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing our ability to notice details (and presumably, the model's ability to identify details as well). }
 <<auto-color-balance, fig.width = 11, fig.height = 8, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
 lowcontrast <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
@@ -231,7 +230,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Visualizing Model with Heatmaps}
+\section{Model Diagnostics - Heatmaps}
 
 
 <<try-heatmap, eval = T>>=

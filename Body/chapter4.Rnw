@@ -3,7 +3,6 @@
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter4/}}
 
-% \addtocontents{toc}{\protect\newpage}
 \chapter{CONCLUSION}
 
 \section{Summary of Results}

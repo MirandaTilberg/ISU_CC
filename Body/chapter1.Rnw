@@ -269,58 +269,45 @@ Evaluating model accuracy on classification requires addressing both the labels 
 
 Recall, or sensitivity, which is the true positive rate, is the number of all true positives divided by the number of positive cases in the data. Specificity, which is the true negative rate, is the number of all true negatives divided by the number of negative cases in the data. Precision is the sum of all true positives divided by the number of positive predictions made by the model.
 
-ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance. An example of an ROC curve for single-label prediction is shown in \autoref{fig:example-roc}. \svp{ROC curves are used for binary classification problems and have been extended to multi-class problems, but in most multi-class extension methods\citep{handSimpleGeneralisationArea2001}, it is not easy to see how the model performs for each class; this issue is exacerbated when classes are unbalanced.}
+ROC curves plot the false positive rate (1 - specificity) against the true positive rate. Ideally, we want a high true positive rate and a low false positive rate, so a perfect ROC curve would hug the top-left corner of the graph and a straight line between corners would indicate that the prediction is no better than random chance. The Area Under the Curve (AUC) quantifies the shape of the ROC curve, with an AUC of 1 corresponding to perfect prediction and 0.5 indicating random chance. Examples of ROC curves are shown in \autoref{fig:example-roc} for a random forest model to predict species for Fisher's Iris Data from sepal length; note that ROC curves are only applicable for single-label classification, so a separate curve is required for each species.  \svp{ROC curves are used for binary classification problems and have been extended to multi-class problems, but in most multi-class extension methods\citep{handSimpleGeneralisationArea2001}, it is not easy to see how the model performs for each class; this issue is exacerbated when classes are unbalanced.}
 
-\mt{After putting in an unrelated example, I think it seems strange to have an example using a totally different dataset...?}
+<<example-roc, echo = F, fig.scap = "ROC curves, showing the performance of a random forest to predict iris species from sepal length from Fisher's Iris Data.", fig.cap = "ROC curves, showing the performance of a random forest to predict iris species from sepal length from Fisher's Iris Data. Note that prediction is very accurate for species Setosa, but is not much better than random chance for species Versicolor.">>=
 
-<<example-roc, echo = F, fig.cap = "An example of an ROC curve: displaying the relationship between true positive and false positive classifications for the species Versicolor from Fisher's Iris Data">>=
 library(pROC)
-versicolor <- iris$Species == "versicolor"
-mod <- glm(versicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
-           data = iris, family = binomial())
+mod <- randomForest::randomForest(y = iris$Species,
+                                  x = iris[,"Sepal.Length", drop = F])
+spec <- unique(iris$Species)
 
-roc_list <- roc(versicolor, mod$fitted.values)
-roc_df <- tibble(tpr = roc_list$sensitivities,
-                 fpr = 1 - roc_list$specificities,
-                 thresholds = roc_list$thresholds,
-                 auc = roc_list$auc[1]) %>%
-  nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
-  mutate(eer = purrr::map(roc_plot, eer))
+p <- list()
+for (i in 1:3){
+  roc_list <- roc(iris$Species == spec[i], mod$votes[,i])
+  roc_df <- tibble(tpr = roc_list$sensitivities,
+                   fpr = 1 - roc_list$specificities,
+                   thresholds = roc_list$thresholds,
+                   auc = roc_list$auc[1]) %>%
+    nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
+    mutate(eer = purrr::map(roc_plot, eer))
 
-
-ggplot() +
+  p[[i]] <- ggplot() +
   geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>% arrange(fpr, tpr), size = 1.25) +
   geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = roc_df) +
   geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 4) +
   scale_color_manual("", values = "black") +
   scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
   scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
-  ggtitle("ROC for predicting Iris Species Versicolor") +
+  ggtitle(as.character(spec[i]) %>% stringr::str_to_title()) +
   coord_fixed() + theme_bw() +
   theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+}
+
+gridExtra::grid.arrange(grobs = p, nrow = 1)
 @
 
 A confusion matrix is a cross-tabulation between the observed and the predicted classes of the data. A confusion matrix can help identify which classes are being correctly predicted and which classes are commonly mixed-up with others. Confusion matrices are typically used with binary classification problems; an aggregate version of \autoref{tab:error-binary-problem} would be a confusion matrix, where totals for each decision would be shown in the matrix cells. Confusion matrices do not extend easily to multi-class problems because any single miscategorization produces both a false negative decision and a false positive decision; it is not clear which should be shown in each cell, as shown in \autoref{tab:error-3class-problem}.
 \svp{XXX - Add a confusion matrix from ggplot2 to show as an example visualization}
 
 <<example-conf-mat, eval = F>>=
-mod <- randomForest::randomForest(iris[,1:4], iris[,5])
 
-classes <- unique(iris$Species) %>% as.character()
-p <- mod$predicted %>% as.character()
-
-pred <- cbind(p == classes[1],
-              p == classes[2],
-              p == classes[3])
-names(pred) <- classes
-
-lab <- cbind(iris$Species == classes[1],
-              iris$Species == classes[2],
-              iris$Species == classes[3])
-
-# get_confusion_matrix(predictions = pred,
-#                      test_labels = labs,
-#                      classes = classes)
 @
 
 \begin{table}
