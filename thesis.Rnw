@@ -27,7 +27,8 @@
 %%% Commenting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[table]{xcolor}
 \newcommand{\mt}[1]{{\color{magenta} #1}}
-\newcommand{\svp}[1]{{\color{blue} #1}}
+\newcommand{\svp}[1]{{\color{teal} #1}}
+\newcommand{\fix}[1]{{\color{orange} #1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
