@@ -86,7 +86,13 @@ Class characteristics, as defined in \autoref{sec:class-chars-desc}, are charact
 \end{description}
 
 
-Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter "v" can easily be considered a chevron, and the letter "o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process.
+Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \svp{\autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".}
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
+\caption[Classification rule weaknesses]{\svp{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}}\label{fig:classification-is-hard}
+\end{figure}
 
 \begin{table}
 \centering
