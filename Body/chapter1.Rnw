@@ -64,7 +64,7 @@ Visual classification (i.e., assigning a label to an object based on visual inpu
 \paragraph{Human Vision}
 The visual perception process begins with the transfer of information from the visual world to the brain via rods and cones in the retina. Chemical signals travel along the optic nerve from the retina into the brain, where the signals are processed by a series of biological modules which aggregate information across multiple cells and provide meaning and order on otherwise chaotic chemical and electrical signaling. As information is aggregated, spatial relationships between objects in the physical world are maintained in the brain. Specialized feature detector cells respond preferentially to specific stimuli (e.g. cells which respond to lines oriented horizontally, vertically, or at specific angles), and these feature detectors are aggregated to identify more complex stimuli \citep[Ch. 4]{goldsteinSensationPerception2016}. In addition to the successive compilation of increasingly complex features, there are also specific modules for particularly important tasks, such as facial recognition; information from these regions is also integrated into the overall hierarchy of recognized objects from the visual input.
 
-The problem of general object recognition is quite difficult - a three-dimensional object has infinitely many projections into two-dimensional space, and in real scenes objects are often at least partially obscured. In addition, a two-dimensional image can map back to many different three-dimensional objects, because of the ambiguity introduced by the projection onto a flat sufrace. Several psychological theories exist as to how object recognition occurs within the brain (gestalt heuristics, recognition-by-components, and inferential contexts all have experimental support), but in general the process seems to require both spatial integration and learned associations \citep[Ch. 5]{goldsteinSensationPerception2016}.
+The problem of general object recognition is quite difficult---a three-dimensional object has infinitely many projections into two-dimensional space, and in real scenes objects are often at least partially obscured. In addition, a two-dimensional image can map back to many different three-dimensional objects, because of the ambiguity introduced by the projection onto a flat sufrace. Several psychological theories exist as to how object recognition occurs within the brain (gestalt heuristics, recognition-by-components, and inferential contexts all have experimental support), but in general the process seems to require both spatial integration and learned associations \citep[Ch. 5]{goldsteinSensationPerception2016}.
 
 Differentiating between two objects is quite easy when features are distinct; however, there are many cases when differentiating features are rather subtle. For example, as shown in \autoref{fig:caterpillar-carrots}, an orange caterpillar and a carrot may be of similar color, shape, and size, but one is more fuzzy than the other; remarkably, the distinction between the two categories is very strong even with all of the features that are shared. Thus, our brains have learned that when faced with a small, cylindrical orange object, texture is a critically important feature when assigning a label to that object (which keeps us from accidentally ingesting caterpillars).
 
@@ -142,7 +142,7 @@ For example, taking 2x2 pieces of a feature map and keeping only the largest of 
 Once the dimension of the image has been reduced and features have been identified using a combination of convolutional and pooling layers, local features must be integrated into a more unified whole. This integration is performed using densely connected layers.
 
 \paragraph{Activation Functions}
-\svp{The convolution operation discussed above relies on nonlinear activation functions}, which operate on each feature map value. Different activation functions are used to produce different network effects - in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
+\svp{The convolution operation discussed above relies on nonlinear activation functions}, which operate on each feature map value. Different activation functions are used to produce different network effects---in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
 
 <<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks.", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
 sigmoid <- function(x) 1/(1 + exp(-x))
@@ -240,7 +240,7 @@ Convolutional layers and max pooling layers in a CNN are analogous to the human 
 \caption[Transfer learning using pre-trained neural networks]{This diagram is for a pre-trained convolutional neural network. The model base consists of 5 convolutional blocks; the model head consists of several fully connected layers capped with an activation layer which transforms the aggregate visual input to output class probabilities. During transfer learning, the model base weights are fixed to the values derived from the initial input material used to train the original model; only the weights in the model head are retrained to accommodate the input training data.} \label{fig:transfer-learning-diagram}
 \end{figure}
 
-Transfer learning leverages the modularity of neural networks - the pretrained base of the model can be separated from the full model and a new model head can be trained to connect that base to the output classes, as shown in \autoref{fig:transfer-learning-diagram}. One of the simpler pre-trained convolutional networks available, VGG16, has a structure which is ideal for our purposes - it consists of several blocks of convolutional layers, with a fully connected head, as shown in \autoref{fig:vgg16-structure}. The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.
+Transfer learning leverages the modularity of neural networks---the pretrained base of the model can be separated from the full model and a new model head can be trained to connect that base to the output classes, as shown in \autoref{fig:transfer-learning-diagram}. One of the simpler pre-trained convolutional networks available, VGG16, has a structure which is ideal for our purposes---it consists of several blocks of convolutional layers, with a fully connected head, as shown in \autoref{fig:vgg16-structure}. The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.
 
 \begin{figure}
 \centering
@@ -259,7 +259,7 @@ Evaluating model accuracy on classification requires addressing both the labels 
 \begin{table}
 \centering
 \begin{tabular}{cccc}
- & & \multicolumn{2}{c}{Model - Assigned Label} \\\cline{3-4}
+ & & \multicolumn{2}{c}{Model---Assigned Label} \\\cline{3-4}
  & & A & Not A \\\hline
  \multirow{2}{*}{True Label} & A & True Positive & False Negative\\\cline{2-4}
  & Not A & False Positive & True Negative \\\hline
@@ -342,7 +342,7 @@ mod$confusion[,1:3] %>%
 \begin{table}
 \centering
 \begin{tabular}{ccccc}
- & & \multicolumn{3}{c}{Model - Assigned Label} \\\cline{3-5}
+ & & \multicolumn{3}{c}{Model---Assigned Label} \\\cline{3-5}
  & & A & B & C \\\hline
  \multirow{6}{*}{True Label} & \multirow{2}{*}{A} & \multirow{2}{*}{True Positive (A)} & False Positive (B) & False Positive (C) \\
  & & & False Negative (A) & False Negative (A)\\\cline{2-5}
@@ -351,7 +351,7 @@ mod$confusion[,1:3] %>%
  & \multirow{2}{*}{C} & False Positive (A) & False Positive (B) & \multirow{2}{*}{True Positive (C)} \\
  & & False Negative (C) & False Negative (C) & \\\hline
 \end{tabular}
-\caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made - the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
+\caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made---the ommission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
 \end{table}
 
 However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, which will be described in more detail in \autoref{ch3:model-accuracy}, a modification of the confusion matrix is possible to better visualize model performance.
