@@ -33,7 +33,7 @@ if (!"Body" %in% list.files()) {
 @
 
 
-\chapter{RESULTS}
+\chapter{RESULTS}\label{ch:results}
 
 <<model-setup2, include = T, cache = F>>=
 library(magrittr)
