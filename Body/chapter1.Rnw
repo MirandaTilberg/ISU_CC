@@ -279,15 +279,27 @@ for (i in 1:3){
     mutate(eer = purrr::map(roc_plot, eer))
   
   p[[i]] <- ggplot() +
-  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>% arrange(fpr, tpr), size = 1.25) +
-  geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = roc_df) +
-  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 4) +
-  scale_color_manual("", values = "black") +
-  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
-  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
-  ggtitle(as.character(spec[i]) %>% stringr::str_to_title()) +
-  coord_fixed() + theme_bw() +
-  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+    geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>% 
+                arrange(fpr, tpr), size = 1.25) +
+    geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), 
+               hjust = 1, vjust = -0.2, data = roc_df) +
+    geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), 
+               data = unnest(roc_df, eer), size = 4) +
+    scale_color_manual("", values = "black") +
+    scale_x_continuous("False Positive Rate", 
+                       breaks = c(0, .25, .5, .75, 1), 
+                       labels = c("0.0", "", "0.5", "", "1.0")) +
+    scale_y_continuous("True Positive Rate", 
+                       breaks = c(0, .25, .5, .75, 1), 
+                       labels = c("0.0", "", "0.5", "", "1.0")) +
+    ggtitle(as.character(spec[i]) %>% 
+              stringr::str_to_title()) +
+    coord_fixed() + 
+    theme_bw() +
+    theme(legend.position = c(1, 0), 
+          legend.justification = c(1.01, -0.01), 
+          legend.title = element_blank(), 
+          legend.background = element_rect(fill = "white"))
 }
 
 gridExtra::grid.arrange(grobs = p, nrow = 1)
