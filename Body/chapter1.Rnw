@@ -201,6 +201,7 @@ plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
 In order to transform the neural network node values into output class probabilities, the final layer of the model uses an activation function selected to conform to the problem specifications. For instance, if the goal is to perform binary classification, the sigmoid activation function shown in \autoref{fig:activation-functions} will map any real valued number to a value between 0 and 1 (that is, to a class probability). In a multinomial classification problem, an extension of the sigmoid activation function, the \emph{softmax} activation function, is used: For inputs $y_i$, $\displaystyle S(y_i) = \frac{e^{y_i}}{\sum_j e^{y_j}}.$ The softmax activation function produces class probabilities which sum to 1. In classification problems where there are $n$ classes, but each object can have between 0 and $n$ assigned labels \svp{(e.g. a multi-class, multi-label problem)}, the sigmoid activation function can be used for each class label separately, producing a $n$-dimensional vector of probabilities between 0 and 1.
 
 \subsection{Forward and Backward Propagation}\label{sec:prop}
+\paragraph{Forward Propagation}
 In order to evaluate an input image, it is necessary to move from the image representation through each of the layers in the network, with a final result of a set of $n$ output class probabilities.
 
 We first define some notation. Let $x^{(0)}$ be an input image, represented as a numerical matrix with two dimensions of length and height, and additionally a third dimension representing the color channels, if the input image is in color. Let $x^\ell$ be the layers in the network, that is, $x^1$ is the first (convolutional) layer, $x^2$ is the second, and so on. Convolutional layers are assembled from a set of filters, $\beta^\ell_k$, where there are a set of $p^\ell$ $m\times m$ filters convolved with $x^{\ell-1}$ to create layer $x^\ell$. Each convolutional layer also has a bias matrix $\gamma^\ell$ which is used in the calculation of all filters in the $\ell$-th layer. We additionally define $\sigma^\ell(\cdot)$ as the nonlinear activation function used in layer $\ell$ (some common nonlinear activation functions are shown in \autoref{fig:activation-functions}). Finally, we define $W^\ell$ to be a weight matrix used in fully connected layer $\ell$; $W$'s dimensions are chosen such that the output dimension is equal to the pre-specified number of output classes.
@@ -212,19 +213,27 @@ x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling la
 x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
+\paragraph{Loss and Cost Function}
 
-Backpropogation, short for ``the backward propagation of errors", is the name of the \svp{optimization algorithm} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers; \svp{weights are updated in order to reduce the errors for the next iteration of the algorithm}.
+In a multi-label classification task, the standard loss fucntion is Binary Cross-Entropy Loss. For a single input image $x^{(0)}$ with true labels $\mathbf{y} \in \left{0,1\right}^C$ and prediction $\mathbf{\hat{p}} \in (0,1)^C$, where $C$ is the pre-specified number of output classes,
+
+$$L(\mathbf{y}, \mathbf{\hat{p}}) = \sum_{i=1}^C {-\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]}$$
+
+The cost function is defined as the average of the loss function over all test images.
+
+\paragraph{Backpropogation}
+Backpropogation, short for ``the backward propagation of errors", is the name of the optimization algorithm that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers; weights are updated in order to reduce the errors for the next iteration of the algorithm}
 %\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation}
-In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
+In essence, the goal of backpropogation is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
 
-\svp{For convolutional layers, backpropagation works using the recurrence relationship in \autoref{eqn:backprop-conv}.}
+For convolutional layers, backpropagation works using the recurrence relationship in \autoref{eqn:backprop-conv}.
 
 \begin{align}\label{eqn:backprop-conv}
 \left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\
 \frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)} &= \frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right]\nonumber
 \end{align}
 
-\svp{There is no backpropagation through pooling layers because there are no weights to optimize, so these layers are just pass-through layers. Backpropagation through fully connected layers takes place similar to \autoref{eqn:backprop-conv}, shown in \autoref{eqn:backprop-fc}.}
+There is no backpropagation through pooling layers because there are no weights to optimize, so these layers are just pass-through layers. Backpropagation through fully connected layers takes place similar to \autoref{eqn:backprop-conv}, shown in \autoref{eqn:backprop-fc}.
 \begin{align}\label{eqn:backprop-fc}
 \left(\frac{\partial L}{\partial W^\ell}\right) &= \underbrace{\frac{\partial L}{\partial \left(W^\ell x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\
 \frac{\partial L}{\partial \left(W^\ell x^{\ell - 1}\right)} &= \frac{\partial L}{\partial x^\ell} \left[\sigma'\left(W^\ell x^{\ell - 1}\right)\right]\nonumber
