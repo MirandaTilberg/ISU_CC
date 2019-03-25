@@ -212,9 +212,9 @@ need to figure out how to represent max pool layers and fully connected layers h
 }
 
 
-Backpropogation, short for "the backward propagation of errors", is the name of the \mt{algorithm/process} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers. 
-%\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation} 
-In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule. 
+Backpropogation, short for "the backward propagation of errors", is the name of the \mt{algorithm/process} that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers.
+%\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation}
+In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
 
 
 
@@ -264,7 +264,7 @@ tbl_graph(nodes = nodes, edges = edges) %>%
   geom_text(aes(x = 2.65, y = 0, label = "Layer 1")) +
   geom_text(aes(x = 2.65, y = 1, label = "Layer 2")) +
   geom_text(aes(x = 2.65, y = 2, label = "Layer 3")) +
-  geom_text(aes(x = 2.25, y = 1.55, label = "italic(w[11]^3)"), 
+  geom_text(aes(x = 2.25, y = 1.55, label = "italic(w[11]^3)"),
             color = "grey30", parse = T) +
   # geom_text(aes(x = 1.95, y = 1.72, label = "w[12]^3"), parse = T) +
   # geom_text(aes(x = 1.7, y = 1.72, label = "w[13]^3"), parse = T) +
@@ -318,6 +318,7 @@ ROC curves plot the false positive rate (1 - specificity) against the true posit
 \mt{After putting in an unrelated example, I think it seems strange to have an example using a totally different dataset...?}
 
 <<example-roc, echo = F, fig.cap = "An example of an ROC curve: displaying the relationship between true positive and false positive classifications for the species Versicolor from Fisher's Iris Data">>=
+library(pROC)
 versicolor <- iris$Species == "versicolor"
 mod <- glm(versicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
            data = iris, family = binomial())
@@ -332,9 +333,9 @@ roc_df <- tibble(tpr = roc_list$sensitivities,
 
 
 ggplot() +
-  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot), size = 1.25) +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>% arrange(fpr, tpr), size = 1.25) +
   geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = roc_df) +
-  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 2) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(roc_df, eer), size = 4) +
   scale_color_manual("", values = "black") +
   scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
   scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
