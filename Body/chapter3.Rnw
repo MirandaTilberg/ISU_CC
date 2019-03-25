@@ -33,7 +33,7 @@ if (!"Body" %in% list.files()) {
 @
 
 
-\chapter{RESULTS}
+\chapter{RESULTS}\label{ch:results}
 
 <<model-setup2, include = T, cache = F>>=
 library(magrittr)
@@ -83,14 +83,14 @@ data.frame(history$metrics) %>%
   theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. \fix{Should probably address underfitting as well} Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
 
 \FloatBarrier
 
 \section{Model Accuracy}\label{ch3:model-accuracy}
-%\mt{Is ch3: right? Maybe sec: ?}
+%\mt{Is ch3: right? Maybe sec: ?}\svp{It's whatever you call it - just be consistent. The ch3:model-accuracy is the entire label, you could use \label{fred} if you wanted.}
 
-\paragraph{ROC} %\mt{remove paragraph titles?}
+\paragraph{ROC} %\mt{remove paragraph titles?}\svp{If you want to :) Again, it's whether it's organized the way you want it!}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
@@ -143,7 +143,7 @@ ggplot() +
 \paragraph{Confusion Matrix}
 As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
 
-To our knowledge, confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent. The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
+To our knowledge, confusion matrices have not previously been applied to multi-label classification problems\svp{; some efforts to generalize confusion matrices to multi-class problems do exist in the literature\citep{landgrebeEfficientMulticlassROC2008}}. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent \svp{(see \autoref{tab:error-3class-problem})}. The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
 
 
 <<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculations.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
@@ -165,6 +165,10 @@ get_confusion_matrix(predictions = preds, classes = classes,
         plot.subtitle = element_blank(), plot.caption = element_blank(),
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
+
+\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix-1}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
+
+\svp{\autoref{fig:confusion_matrix-1} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
 
 \section{Model Consistency}\label{ch3:model-consistency}
 \svp{In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.}
@@ -230,7 +234,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Model Diagnostics - Heatmaps}
+\section{Model Diagnostics - Heatmaps}\label{ch3:heatmaps}
 
 
 <<try-heatmap, eval = T>>=
