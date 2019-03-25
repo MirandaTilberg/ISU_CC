@@ -190,15 +190,14 @@ pred_prob_plot(triangle, loaded_model)
 \subsubsection{Recognition across colors}
 \svp{In order to more fully  understand CoNNOR's strengths and weaknesses, we have identified several shapes which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases allow for us to control the geometric patterns while varying the color patterns in a real context - we could vary the colors artificially, but this could induce additional artifacts due to the image manipulation process. }
 
-<<uggs, fig.width = 11, fig.height = 14, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<uggs, fig.width = 11, fig.height = 12, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
-pred_prob_plot(uggs, loaded_model) +  theme(text = element_text(size = 24))
+pred_prob_plot(uggs, loaded_model)
 @
 
 <<uggs-with-circle, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, with a defined circle outline. Again, the model predictions are relatively consistent, but now detection of the triangle and star elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs_circle <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-circle-star-logo"), full.names = T)
-pred_prob_plot(uggs_circle, loaded_model) +
-  theme(text = element_text(size = 24))
+pred_prob_plot(uggs_circle, loaded_model)
 @
 
 
