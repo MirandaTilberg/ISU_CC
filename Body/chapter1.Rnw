@@ -217,6 +217,7 @@ Backpropogation, short for "the backward propagation of errors", is the name of 
 In essence, the goal is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
 
 
+
 \begin{align}\left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}&=\frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right] \end{align}
 
 
