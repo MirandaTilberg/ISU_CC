@@ -149,7 +149,7 @@ To our knowledge, confusion matrices have not previously been applied to multi-l
 
 <<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculations.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
 get_confusion_matrix(predictions = preds, classes = classes,
-                     test_labels = test_labs) %>%
+                     test_labels = test_labs, threshold = thresholds) %>%
   set_names(str_to_title(classes)) %>%
   ggcorrplot(., hc.order = F, outline.col = "white", lab = T) +
   scale_fill_gradient("Classification\nRate", low = "white",
