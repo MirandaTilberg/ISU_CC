@@ -161,31 +161,52 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \caption[Original and augmented images]{Four sets of original (left) and augmented (right) labeled images.}\label{fig:augmented}
 \end{figure}
 
-% \mt{Augmentation} \svp{operations include} \mt{crop, zoom, skew, rotate, and color. Images are augmented once. Helps increase amount of data and improves model generalizability.}
-%
-% Image augmentation is a common technique to both increase the amount of data available for training a model and improve the generalizability of model predictions. Augmenting an image refers to applying a number of visual transformations, including (but not limited to) cropping, zooming, skewing or shearing), rotating, and adjusting color channels.
-
-% \mt{Add image examples here when Bigfoot isn't busy}
-
 \section{VGG16}
 
 \subsection{Architecture}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max-pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
+\mt{This isn't really an architecture section if the image is in ch1... Would it make sense to move that here?}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
 
-The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. Later convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
+The model base of VGG16 is structured by alternating convolutional blocks (i.e., groups of two or three convolutional layers) and single max pooling layers. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
-\mt{XXX VGG16 follows groups of 2 or 3 convolutional layers with a max-pooling layer, which summarizes the information in the feature maps and scales information down by a factor of 4.}
+\FloatBarrier 
 
-<<b1, fig.width = 11, fig.height = 4, eval = F>>=
-library(magick)
-b1_imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b1"), full.names = T)
-c1 <- image_read(b1_imgs[1:4]) %>% image_append()
-c2 <- image_read(b1_imgs[5:8]) %>% image_append()
-b1 <- image_append(c(c1, c2), stack = T)
-b1
-image_display(b1)
+<<b1, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 1 of VGG16. Block 1 contains two convolutional layers, each with 64 filters.", fig.scap = "A selection of filters from block 1 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b1"), full.names = T)
+pngs <- lapply(imgs, png::readPNG)
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 2)
 @
 
+<<b2, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 2 of VGG16. Block 2 contains two convolutional layers, each with 128 filters.", fig.scap = "A selection of filters from block 2 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b2"), full.names = T)
+pngs <- lapply(imgs, png::readPNG)
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 2)
+@
+
+<<b3, fig.width = 7.5, fig.height = 4.5, fig.cap = "A selection of filters from block 3 of VGG16. Block 3 contains three convolutional layers, each with 256 filters.", fig.scap = "A selection of filters from block 3 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b3"), full.names = T)
+pngs <- lapply(imgs, png::readPNG)
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 3)
+@
+
+<<b4, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 4 of VGG16. Block 4 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 4 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
+pngs <- lapply(imgs, png::readPNG)
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, ncol = 4)
+@
+
+<<b5, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 5 of VGG16. Block 5 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 5 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
+pngs <- lapply(imgs, png::readPNG)
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, ncol = 4)
+@
+%\mt{Need to actually choose B5 images, currently recycling B4}
+\FloatBarrier
 
 \subsection{Model Training}
 
