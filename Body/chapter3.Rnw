@@ -232,7 +232,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Model Diagnostics - Heatmaps}\label{ch3:heatmaps}
+\section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
 
 
 <<try-heatmap, eval = T>>=
