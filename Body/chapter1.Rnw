@@ -213,16 +213,16 @@ x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling la
 x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
-\paragraph{Loss and Cost Function}
+\paragraph{Loss and Cost Functions}
 
 In a multi-label classification task, the standard loss fucntion is Binary Cross-Entropy Loss. For a single input image $x^{(0)}$ with true labels $\mathbf{y} \in \left{0,1\right}^C$ and prediction $\mathbf{\hat{p}} \in (0,1)^C$, where $C$ is the pre-specified number of output classes,
 
 $$L(\mathbf{y}, \mathbf{\hat{p}}) = \sum_{i=1}^C {-\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]}$$
 
-The cost function is defined as the average of the loss function over all test images.
+The cost function is defined as the average of the loss function over all training images.
 
 \paragraph{Backpropogation}
-Backpropogation, short for ``the backward propagation of errors", is the name of the optimization algorithm that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers; weights are updated in order to reduce the errors for the next iteration of the algorithm}
+Backpropogation, short for ``the backward propagation of errors", is the name of the optimization algorithm that is used to train deep neural networks. In the process, the error of each output is calculated and then distributed backwards through the network's layers; weights are updated in order to reduce the errors for the next iteration of the algorithm.
 %\mt{cite https://deepai.org/machine-learning-glossary-and-terms/backpropagation}
 In essence, the goal of backpropogation is to use gradient descent to adjust the parameters of the network to achieve a local minimum of the cost function, where the gradient is computed through repeated application of the chain rule.
 
