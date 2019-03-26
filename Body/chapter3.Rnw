@@ -193,7 +193,7 @@ pred_prob_plot(triangle, loaded_model)
 \subsection{Recognition across colors}
 In order to more fully  understand CoNNOR's strengths and weaknesses, we have identified several shapes which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases allow for us to control the geometric patterns while varying the color patterns in a real context---we could vary the colors artificially, but this could induce additional artifacts due to the image manipulation process.
 
-<<uggs, fig.width = 11, fig.height = 14, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<uggs, fig.width = 11, fig.height = 12, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
 pred_prob_plot(uggs, loaded_model)
 @
@@ -235,7 +235,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 \section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
 
 
-<<try-heatmap, eval = T>>=
+<<try-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
 imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
 calc_heatmap(imgs[1], loaded_model) %>% create_composite()
 @

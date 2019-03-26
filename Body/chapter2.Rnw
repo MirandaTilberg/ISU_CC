@@ -70,7 +70,7 @@ load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 
 \subsection{Geometric Class Characteristics}
 
-Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of features can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in \citet{grossVariabilitySignificanceClass2013} require spatial context which is not preserved during labeling (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
+Class characteristics, as defined in Chapter~\ref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of features can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in \citet{grossVariabilitySignificanceClass2013} require spatial context which is not preserved during labeling (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
 
 \begin{description}
 \item [Bowtie] Bowtie shapes are roughly quadrilateral, with two opposite concave faces. The remaining two faces can be convex or straight, and the concave faces may have straight portions, so long as there is a concave region. Using this definition, shapes such as butterflies are included as bowties.
@@ -84,15 +84,6 @@ Class characteristics, as defined in \autoref{sec:class-chars-desc}, are charact
 \item [Triangle] Triangles are any three-sided figure. Like quadrilaterals, they can have rounded corners. In some cases, it is difficult to distinguish between a trapezoidal shape and a triangle when rounded corners are involved.
 \item [Other] Other features which were marked include logos, various textures (including crepe, stippling, etc.), and smooth regions with no discernible features. These regions are grouped and provide additional information - that none of the previous nine categories are present.
 \end{description}
-
-
-Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".
-
-\begin{figure}
-\centering
-\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
-\caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
-\end{figure}
 
 \begin{table}
 \centering
@@ -113,6 +104,15 @@ Defining categories this way does not remove all ambiguities. The best example l
 \caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
 
+
+Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
+\caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
+\end{figure}
+\FloatBarrier
 \subsection{Data Collection}
 
 Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(dfunion)} multi-label images.
