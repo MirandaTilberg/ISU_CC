@@ -120,29 +120,29 @@ Convolutional layers typically do not decrease the dimensions of the matrix by a
 \paragraph{Pooling Layers}
 Pooling layers are added to reduce the size, and therefore computational load, of feature maps through structured down-sampling. Most commonly, pooling layers apply the maximum function (max pooling) over adjacent regions of a feature map (using a sliding window). This encodes the maximum strength of a feature in a region of an image, while reducing redundant or unneccessary information about less prominent activations.
 
-In most cases, the stride, or offset between subsequent pieces, is the same as the window size \svp{(non-overlapping pooling)}; for this \svp{simplified} case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
+In most cases, the stride, or offset between subsequent pieces, is the same as the window size (non-overlapping pooling); for this simplified case, the pooling layer values can be calculated using the following relationship, for pooling function $f$, window size $s$, layer $\ell-1$, and output layer $\ell$:
 \begin{align}\label{eqn:element-pooling}
 x^\ell_{ij} &= f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right)
 \end{align}
 
-\svp{As a general matrix notation for pooling is difficult to specify intuitively, we will define a pooling operator, $p$, which applies \autoref{eqn:element-pooling} element-wise.}
+As a general matrix notation for pooling is difficult to specify intuitively, we will define a pooling operator, $p$, which applies \autoref{eqn:element-pooling} element-wise.
 \begin{align}
 p\left(x, f, w, s\right) :=&\text{matrix-wise pooling on matrix } x \text{ with function } f, \\& \text{ with window } w, \text{ and stride } s\nonumber
 \end{align}
 
-For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. \svp{\citet{krizhevskyImageNetClassificationDeep2012} suggests pooling layers reduce overfitting on certain datasets and increase translation invariance. Using too large of a pooling window can be destructive and limits the total number of convolutional layers which can be combined in a single network\citep{CS231nConvolutionalNeural}. Pooling layers do disrupt the model optimization process; as an alternative, some fully convolutional networks eliminate pooling layers and use convolutional layers with increased stride and window size to reduce layer dimensions \citep{springenbergStrivingSimplicityAll2014}.}
+For example, taking 2x2 pieces of a feature map and keeping only the largest of the four values reduces the size of the feature map by a factor of 4, as shown in \autoref{fig:max-pooling}. \citet{krizhevskyImageNetClassificationDeep2012} suggests pooling layers reduce overfitting on certain datasets and increase translation invariance. Using too large of a pooling window can be destructive and limits the total number of convolutional layers which can be combined in a single network\citep{CS231nConvolutionalNeural}. Pooling layers do disrupt the model optimization process; as an alternative, some fully convolutional networks eliminate pooling layers and use convolutional layers with increased stride and window size to reduce layer dimensions \citep{springenbergStrivingSimplicityAll2014}.
 
 
 \begin{figure}
 \centering
 \includegraphics[width=.5\textwidth]{maxpooling}
-\caption[Max  pooling layer]{Max pooling layer. Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:max-pooling}
+\caption[Max pooling layer]{Max pooling layer. Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:max-pooling}
 \end{figure}
 
 Once the dimension of the image has been reduced and features have been identified using a combination of convolutional and pooling layers, local features must be integrated into a more unified whole. This integration is performed using densely connected layers.
 
 \paragraph{Activation Functions}
-\svp{The convolution operation discussed above relies on nonlinear activation functions}, which operate on each feature map value. Different activation functions are used to produce different network effects---in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
+The convolution operation discussed above relies on nonlinear activation functions, which operate on each feature map value. Different activation functions are used to produce different network effects---in the convolutional layers, the desire is often to minimize the computational complexity, so very simple activation functions are used, such as the Rectified Linear Unit (ReLU), Exponential Linear Unit (ELU), or a differentiable analog, SoftPlus. The output layer must map features onto binary predictions or probabilities, so the sigmoid activation function is commonly used for this purpose. \autoref{fig:activation-functions} shows several common nonlinear activation functions.
 
 <<activation-functions, echo = F, fig.scap = "Common nonlinear activation functions used in neural networks.", fig.cap = "Activation functions commonly used in neural networks.", out.width = "\\textwidth", fig.width = 6, fig.height = 2>>=
 sigmoid <- function(x) 1/(1 + exp(-x))
@@ -162,7 +162,7 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
   coord_fixed()
 @
 
-\svp{Activation functions are also used in densely connected layers, which are discussed in the next section. Frequently, the same activation function is used throughout a CNN, though it is (mathematically) possible to use a different activation function for each layer.}
+Activation functions are also used in densely connected layers, which are discussed in the next section. Frequently, the same activation function is used throughout a CNN, though it is (mathematically) possible to use a different activation function for each layer.
 
 \paragraph{Densely Connected Layers}
 Densely connected layers are typically the final layers in a CNN, making up what is known as the model head. These layers form the meaningful connection between the features of an image (detected by convolutional and max pooling layers) and the corresponding labels associated with the image. Just as humans learn which combinations of features should be associated with a given label, densely connected layers use real-valued weights to represent these associations. For example, an item which is orange, small, and fuzzy is commonly associated with the word ``caterpillar". As seen in \autoref{fig:caterpillar-carrot-nodes}, fuzzy is not a feature typically associated with the word carrot, so there is little connection between the feature ``fuzzy" and the label ``carrot".
@@ -185,7 +185,7 @@ df <- data.frame(x = plot$data$x,
 plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 @
 
-Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation \svp{(discussed in \autoref{sec:prop})} in order to minimize errors (measured by a cost function) and thus improve classification accuracy.
+Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropogation (discussed in \autoref{sec:prop}) in order to minimize errors (measured by a cost function) and thus improve classification accuracy.
 
 When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
