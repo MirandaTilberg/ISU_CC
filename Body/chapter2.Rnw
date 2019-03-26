@@ -64,13 +64,13 @@ load(list.files(model_dir, pattern = "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
 
-\chapter{DATA AND METHODS}
+\chapter{DATA AND METHODS}\label{ch2}
 
 \section{Data}
 
 \subsection{Geometric Class Characteristics}
 
-Class characteristics, as defined in \autoref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of features can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in \citet{grossVariabilitySignificanceClass2013} require spatial context which is not preserved during labeling (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
+Class characteristics, as defined in Chapter~\ref{sec:class-chars-desc}, are characteristics which can be used to exclude shoes from a match at a crime scene, but cannot be  used for individualized matching because they are shared by many shoes. A sufficiently well-defined set of features can separate shoes into make and model categories \citep{grossVariabilitySignificanceClass2013}. \citet{grossVariabilitySignificanceClass2013} define geometric features such as circle/oval, crepe, herringbone, hexagon, parallel lines, logo/lettering/numbering, perimeter lugs, star, and other. Working from these categories, we assembled a set of categories which were more suited to recognition by convolutional neural networks, as some of the definitions used in \citet{grossVariabilitySignificanceClass2013} require spatial context which is not preserved during labeling (for example, lugs are required to be on the perimeter of the shoe). \autoref{tab:class-char-examples} shows three examples of each class.
 
 \begin{description}
 \item [Bowtie] Bowtie shapes are roughly quadrilateral, with two opposite concave faces. The remaining two faces can be convex or straight, and the concave faces may have straight portions, so long as there is a concave region. Using this definition, shapes such as butterflies are included as bowties.
@@ -84,15 +84,6 @@ Class characteristics, as defined in \autoref{sec:class-chars-desc}, are charact
 \item [Triangle] Triangles are any three-sided figure. Like quadrilaterals, they can have rounded corners. In some cases, it is difficult to distinguish between a trapezoidal shape and a triangle when rounded corners are involved.
 \item [Other] Other features which were marked include logos, various textures (including crepe, stippling, etc.), and smooth regions with no discernible features. These regions are grouped and provide additional information - that none of the previous nine categories are present.
 \end{description}
-
-
-Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".
-
-\begin{figure}
-\centering
-\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
-\caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
-\end{figure}
 
 \begin{table}
 \centering
@@ -113,9 +104,18 @@ Defining categories this way does not remove all ambiguities. The best example l
 \caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
 
+
+Defining categories this way does not remove all ambiguities. The best example lies in considering text. The letter ``v" can easily be considered a chevron, and the letter ``o" is clearly a circle. However, text is also an important category to encompass the variety of ways text appears on footwear outsoles, and it is not necessarily helpful (or possible) to try to categorize every shape in text into another category. Many of the ambiguities that arise can be solved by applying multiple labels to an image, but some shapes also do not fit into any categories. Applying comprehensive and consistent labels to difficult or ambiguous shapes is the most difficult part of this process. \autoref{fig:classification-is-hard} shows one shoe that has a tread pattern which does not easily fit into the predefined categories. Generally, the majority of this shoe is labeled ``other".
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
+\caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
+\end{figure}
+\FloatBarrier
 \subsection{Data Collection}
 
-Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(img_df)} multi-label images.
+Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(dfunion)} multi-label images.
 
 After annotation using the LabelMe software package, images are processed by an R script that identifies the minimum bounding rectangle of the region, crops the image to that region, and scales the cropped area to a 256 x 256 pixel image suitable for analysis by the convolutional neural network. During this process, aspect ratio is not preserved, though efforts are made to label images which are relatively square to minimize the effect of this distortion.
 
@@ -131,14 +131,14 @@ annotated_imgs %>%
                                             "Star", "Bowtie", "Other"))) %>%
   ggplot() +
   geom_bar(aes(x = labels, fill = label_type), color = "black") +
-  scale_fill_manual("Labels", values = c("single" = "#6ba2b9", 
+  scale_fill_manual("Labels", values = c("single" = "#6ba2b9",
                                          "multiple" = "#2e5597")) +
   coord_flip() +
   ylab("# Labeled Images") +
   xlab("")  +
   ggtitle("Current Class Distribution (All Labeled Images)") +
   mytheme +
-  theme(legend.position = c(1, 1), 
+  theme(legend.position = c(1, 1),
         legend.justification = c(1.03, 1.03),
         legend.background = element_rect(fill = "white"))
 @
@@ -164,44 +164,54 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \section{VGG16}
 
 \subsection{Architecture}
-\mt{This isn't really an architecture section if the image is in ch1... Would it make sense to move that here?}
-Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max pooling layers. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}).
+%\mt{This isn't really an architecture section if the image is in ch1... Would it make sense to move that here?}
+Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max pooling layers, as shown in \autoref{fig:vgg16-structure}. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}). The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.
 
-The model base of VGG16 is structured by alternating convolutional blocks (i.e., groups of two or three convolutional layers) and single max pooling layers. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads. The images shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
+VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception \citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
 
-\FloatBarrier 
+\begin{figure}
+\centering
+\includegraphics[width=.95\textwidth]{vgg16-layer-size}
+\caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
+\end{figure}
+
+\svp{In order to visualize the layers in a convolutional neural network, backpropagation can be used to generate an image which maximally activates a particular filter. This process generates so-called ``activation maps", which provide a visual reference for the features identified by a particular layer. The activation maps} shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
+
+The model base of VGG16 is structured by alternating convolutional blocks (i.e., groups of two or three convolutional layers) and single max pooling layers. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns\svp{, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose.} The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+
+\FloatBarrier
 
 <<b1, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 1 of VGG16. Block 1 contains two convolutional layers, each with 64 filters.", fig.scap = "A selection of filters from block 1 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b1"), full.names = T)
-pngs <- lapply(imgs, png::readPNG)
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 2)
 @
 
 <<b2, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 2 of VGG16. Block 2 contains two convolutional layers, each with 128 filters.", fig.scap = "A selection of filters from block 2 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b2"), full.names = T)
-pngs <- lapply(imgs, png::readPNG)
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 2)
 @
 
 <<b3, fig.width = 7.5, fig.height = 4.5, fig.cap = "A selection of filters from block 3 of VGG16. Block 3 contains three convolutional layers, each with 256 filters.", fig.scap = "A selection of filters from block 3 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b3"), full.names = T)
-pngs <- lapply(imgs, png::readPNG)
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 @
 
 <<b4, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 4 of VGG16. Block 4 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 4 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
-pngs <- lapply(imgs, png::readPNG)
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, ncol = 4)
 @
 
 <<b5, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 5 of VGG16. Block 5 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 5 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
-pngs <- lapply(imgs, png::readPNG)
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, ncol = 4)
 @
@@ -227,13 +237,13 @@ Code is provided in \autoref{app:code}.  Using a 48-thread CPU with 128 GB of RA
 The \Sexpr{nrow(dfunion)} images were split such that 60\% were used for training. Since the categories do not exist in equal proportion in the labeled data, the training data were weighted by proportion during the training process to prevent the loss function from being overwhelmed by more frequent categories. Of the remaining 40\% of data, half were used for validation, to monitor the training process, and the remaining data were for testing the performance of the fitted model. Code to calculate the class weights is provided as part of \autoref{app:code}, but a static example of the weights and image counts is shown in \autoref{tab:model-weight}.
 
 <<model-weight-calc, results = 'asis', eval = F>>=
-load(file.path(model_dir, paste0(newest_model$start_date, "_", 
+load(file.path(model_dir, paste0(newest_model$start_date, "_",
                                  newest_model$prefix, "fullimage.rdata")))
-bind_cols(class = classes, 
-          count = colSums(train$labels), 
+bind_cols(class = classes,
+          count = colSums(train$labels),
           class_proportion = class_proportions) %>%
-  bind_rows(bind_cols(class = "total", 
-                      count = sum(train$labels), 
+  bind_rows(bind_cols(class = "total",
+                      count = sum(train$labels),
                       class_proportion = sum(class_proportions))) %>%
   xtable::xtable(caption = c("Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.", "Class counts and proportions."),
                  digits = c(0, 0, 0, 4)) %>%

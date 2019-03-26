@@ -166,9 +166,9 @@ get_confusion_matrix(predictions = preds, classes = classes,
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
 
-\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix-1}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
+\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
 
-\svp{\autoref{fig:confusion_matrix-1} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
+\svp{\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
 
 \section{Model Consistency}\label{ch3:model-consistency}
 In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.
@@ -193,7 +193,7 @@ pred_prob_plot(triangle, loaded_model)
 \subsection{Recognition across colors}
 In order to more fully  understand CoNNOR's strengths and weaknesses, we have identified several shapes which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases allow for us to control the geometric patterns while varying the color patterns in a real context---we could vary the colors artificially, but this could induce additional artifacts due to the image manipulation process.
 
-<<uggs, fig.width = 11, fig.height = 14, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<uggs, fig.width = 11, fig.height = 12, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
 pred_prob_plot(uggs, loaded_model)
 @
@@ -232,10 +232,10 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Model Diagnostics - Heatmaps}\label{ch3:heatmaps}
+\section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
 
 
-<<try-heatmap, eval = T>>=
+<<try-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
 imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
 calc_heatmap(imgs[1], loaded_model) %>% create_composite()
 @
