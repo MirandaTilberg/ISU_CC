@@ -299,7 +299,7 @@ ggplot() +
   facet_grid(.~species) +
     geom_line(aes(x = fpr, y = tpr), data = unnest(roc_df, roc_plot) %>%
                 arrange(fpr, tpr), size = 1.25) +
-    geom_text(aes(x = 1, y = .125, label = sprintf("AUC: %0.2f", auc)),
+    geom_text(aes(x = 1, y = .15, label = sprintf("AUC: %0.2f", auc)),
                hjust = 1, vjust = -0.2, data = roc_df) +
     geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"),
                data = unnest(roc_df, eer), size = 4) +
@@ -316,7 +316,7 @@ ggplot() +
     theme(legend.position = c(1, 0),
           legend.justification = c(1.01, -0.02),
           legend.title = element_blank(),
-          legend.background = element_rect(fill = "white"),
+          legend.background = element_rect(fill = "transparent"),
           axis.text.y = element_text(angle = 90, hjust = 0.5))
 @
 
