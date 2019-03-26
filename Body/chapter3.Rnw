@@ -166,9 +166,9 @@ get_confusion_matrix(predictions = preds, classes = classes,
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
 
-\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix-1}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
+\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
 
-\svp{\autoref{fig:confusion_matrix-1} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
+\svp{\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
 
 \section{Model Consistency}\label{ch3:model-consistency}
 In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.
