@@ -90,7 +90,7 @@ Convolutional Neural Networks are a widely implemented method for automated imag
 \includegraphics[height=.25\linewidth]{labrador-retriever.jpg}
 \hskip 1cm
 \includegraphics[height=.25\linewidth]{golden-retriever.jpg}
-\caption[Feature Similarity.]{The features used to distinguish between two similar categories may be subtle, like the features that would differentiate a golden retriever from a labrador retriever.\citep[Images from ][]{deng2009imagenet}}\label{fig:retrievers}
+\caption[Feature Similarity.]{The features used to distinguish between two similar categories may be subtle, like the features that would differentiate a golden retriever from a labrador retriever \citep[Images from ][]{deng2009imagenet}.}\label{fig:retrievers}
 \end{figure}
 
 \subsection{Building Blocks of a Convolutional Neural Network}
