@@ -164,7 +164,7 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \section{VGG16}
 
 \subsection{Architecture}
-%\mt{This isn't really an architecture section if the image is in ch1... Would it make sense to move that here?}
+
 Developed by Oxford's Visual Graphics Group, VGG16 is a CNN with 16 ``functional" (i.e., convolutional and densely connected) layers and 5 ``structural" max pooling layers, as shown in \autoref{fig:vgg16-structure}. In contrast to other popular networks, like ResNet, VGG has a relatively simple structure that provides easier training and interpretability with very little sacrificed accuracy (the structure is shown in \autoref{fig:vgg16-structure}). The simplicity of this structure provides the ability to peer into the inner workings of the network for diagnostic purposes, providing a distinct advantage over more complicated network structures with slightly higher accuracy ratings.
 
 VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have since been outcompeted by networks with more complicated structures, such as GoogLeNet/Inception \citep{szegedyGoingDeeperConvolutions2015} and ResNet \citep{heDeepResidualLearning2015}. VGG-style networks are still commonly used as building blocks for other types of convolutional networks; their streamlined structure allows for easy extension to other tasks, such as texture detection and style transfer \citep{gatysImageStyleTransfer2016}.
@@ -172,12 +172,15 @@ VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have sinc
 \begin{figure}
 \centering
 \includegraphics[width=.95\textwidth]{vgg16-layer-size}
-\caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. Each convolutional block operates on a different image matrix size; max pooling layers are used to transition between convolutional blocks. There are 5 convolutional blocks in the VGG16 model, which are then connected to output classes using several fully connected layers. } \label{fig:vgg16-structure}
+\caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. There are 5 convolutional blocks in the VGG16 model base. Each block is followed by a max pooling layer, which reduces the size of the input to the next block by a factor of 4. The output of the final pooled block is then connected to output classes using several fully connected layers.} \label{fig:vgg16-structure}
 \end{figure}
 
-\svp{In order to visualize the layers in a convolutional neural network, backpropagation can be used to generate an image which maximally activates a particular filter. This process generates so-called ``activation maps", which provide a visual reference for the features identified by a particular layer. The activation maps} shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
-The model base of VGG16 is structured by alternating convolutional blocks (i.e., groups of two or three convolutional layers) and single max pooling layers. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns\svp{, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose.} The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+\subsection{Convolutional Filters}
+
+Much like how the human visual system contains specialized feature detector cells for detecting specific angles, colors, and shapes, convolutional filters are designed to detect a wide array of features. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+
+In order to visualize the layers in a convolutional neural network, backpropagation can be used to generate an image which maximally activates a particular filter. This process generates so-called ``activation maps", which provide a visual reference for the features identified by a particular layer. The activation maps shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
 \FloatBarrier
 
