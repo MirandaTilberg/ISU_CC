@@ -83,7 +83,7 @@ data.frame(history$metrics) %>%
   theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. \fix{Should probably address underfitting as well} Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. This point has not yet occurred, indicating that we have halted the model optimization process at an appropriate epoch.
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum; underfitting, on the other hand, may be suspected when the validation accuracy is still increasing toward the end of the fitting process. Neither of these outcomes appears in \autoref{fig:training-accuracy}, indicating that we have halted the model optimization process at an appropriate epoch.
 
 \FloatBarrier
 
