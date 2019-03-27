@@ -2,6 +2,7 @@
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
 \graphicspath{{Images/chapter3/}}
+\graphicspath{{figure/chapter3/}}
 
 <<ch3-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
@@ -233,10 +234,43 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 \FloatBarrier
 
 \section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
+<<setup-heatmap>>=
+imgs <- list.files(here::here("Images", "chapter3", "heatmaps"), full.names = T)
+@
+
+<<generate-heatmaps, include = F>>=
+calc_heatmap(imgs[which(grepl("chevron-circle", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+calc_heatmap(imgs[which(grepl("corks", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+calc_heatmap(imgs[which(grepl("quad-triangle-polygon", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+calc_heatmap(imgs[which(grepl("star-quad", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+calc_heatmap(imgs[which(grepl("text", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+calc_heatmap(imgs[which(grepl("bowtie-star", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
+heatmaps <- list.files(imgdir, pattern = "^heatmap")
+@
+
+<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
+@
+
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
+@
+
+<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
+@
+
+<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
+@
 
 
-<<try-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
-imgs <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
-calc_heatmap(imgs[1], loaded_model) %>% create_composite()
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
+@
+
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6>>=
+knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
 
