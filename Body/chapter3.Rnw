@@ -89,9 +89,8 @@ data.frame(history$metrics) %>%
 \FloatBarrier
 
 \section{Model Accuracy}\label{ch3:model-accuracy}
-%\mt{Is ch3: right? Maybe sec: ?}\svp{It's whatever you call it - just be consistent. The ch3:model-accuracy is the entire label, you could use \label{fred} if you wanted.}
 
-\paragraph{ROC} %\mt{remove paragraph titles?}\svp{If you want to :) Again, it's whether it's organized the way you want it!}
+\paragraph{ROC}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
 
@@ -169,7 +168,7 @@ get_confusion_matrix(predictions = preds, classes = classes,
 
 \svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
 
-\svp{\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.}
+\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.
 
 \section{Model Consistency}\label{ch3:model-consistency}
 In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, we will explore several case studies in this section, probing the model's strengths and weaknesses.
@@ -209,7 +208,7 @@ nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), 
 pred_prob_plot(nb_logo, loaded_model)
 @
 
-<<nike, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "A selection of images from the same shoe model across different colors. The bottom figure, which is of a black sole and has very little contrast, is poorly recognized by the model. The image immediately above it is an automatically color-adjusted version of the same image, which is classified consistent with the other images.", fig.scap = "Features detected in a rounded triangle across different color soles. ", dpi = 600>>=
+<<nike, fig.width = 11, fig.height = 8, out.width = "\\textwidth", fig.cap = "A selection of images from the same shoe model across different colors. The bottom figure, which is of a black sole and has very little contrast, is poorly recognized by the model. The image immediately above it is an automatically color-adjusted version of the same image, which is classified consistent with the other images.", fig.scap = "Features detected in a rounded triangle across different color soles. ", dpi = 600>>=
 # Leaving myself a note here -
 # Fred's Imagemagick scripts - autotone
 #  autotone -w -G a-black-2.jpg a-black-autotone.jpg (turn off white balance and gamma correction)
@@ -222,11 +221,11 @@ chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pat
 pred_prob_plot(chevron, loaded_model, sort = F)
 @
 
-\svp{In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. }
+In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities - the darkest image has only slightly lower probability than the lightest images. 
 
 \subsection{Contrast Adjustment}
-\svp{In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing our ability to notice details (and presumably, the model's ability to identify details as well). }
-<<auto-color-balance, fig.width = 11, fig.height = 8, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
+In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing our ability to notice details (and presumably, the model's ability to identify details as well).
+<<auto-color-balance, fig.width = 11, fig.height = 10, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
 lowcontrast <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
 pred_prob_plot(lowcontrast, loaded_model, sort = F)
 @
@@ -240,10 +239,15 @@ imgs <- list.files(here::here("Images", "chapter3", "heatmaps"), full.names = T)
 
 <<generate-heatmaps, include = F>>=
 calc_heatmap(imgs[which(grepl("chevron-circle", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
 calc_heatmap(imgs[which(grepl("corks", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
 calc_heatmap(imgs[which(grepl("quad-triangle-polygon", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
 calc_heatmap(imgs[which(grepl("star-quad", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
 calc_heatmap(imgs[which(grepl("text", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
+
 calc_heatmap(imgs[which(grepl("bowtie-star", imgs))], loaded_model) %>% create_composite(save_file = T, outdir = imgdir)
 
 heatmaps <- list.files(imgdir, pattern = "^heatmap")
