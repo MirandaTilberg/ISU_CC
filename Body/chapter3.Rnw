@@ -180,7 +180,7 @@ CoNNOR generally performs well when predicting well-defined shapes. \autoref{fig
 
 The images in \autoref{fig:generic-text-line} are primarily all identified as containing text. The two exceptions are both images with low contrast; the darkest image is only identified as containing lines, and the lightest image is predicted with moderate probabilities into nearly every class. Contrast is also an issue in \autored{fig:generic-triangle}, where an all white image is correctly labeled as containing text but the triangle is not identified. The darkest images with triangles are correctly identified with moderate probabilities, but the model also assigns similar probabilities to the class of quadrilateral, which is incorrect for these images. Thus, CoNNOR often has difficulty predicting images with low contrast, either by failing to assign correct labels to an image or by hedging its bets and assigning many incorrect labels. 
 
-The impact of contrast is likely a result of the artificial shoe images being used for classification. VGG16 was trained to recognize images of subjects that are more naturally-occuring and are photographs taken in real settings, such as in \autoref{fig:retrievers}. The outsole images used in this research, on the other hand, are much more artificial images, and any color variation in the image is part of the shoe design. Thus, the "color knowledge", so to speak, of VGG16 is not perfectly generalizable to the domain of classifying outsole images. 
+The impact of contrast is likely a result of the artificial shoe images being used for classification. VGG16 was trained to recognize images of subjects that are more naturally-occurring and are photographs taken in real settings, such as in \autoref{fig:retrievers}. The outsole images used in this research, on the other hand, are much more artificial images, and any color variation in the image is part of the shoe design. Thus, the "color knowledge", so to speak, of VGG16 is not perfectly generalizable to the domain of classifying outsole images. 
 
 <<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled `chevron'", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
@@ -200,7 +200,7 @@ pred_prob_plot(triangle, loaded_model)
 \subsection{Recognition across colors}
 In order to more fully  understand CoNNOR's strengths and weaknesses, several shapes were identified which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases explore model performance when the geometric patterns are controlled and color patterns are varied in real context---while colors could be varied artificially, additional artifacts may be introduced in the image manipulation process.
 
-In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities---the darkest image has only slightly lower probability than the lightest images. On the other hand, \autoref{fig:uggs}, \autoref{fig:uggs-with-circle}, \autoref{fig:nb-logo}, and \autoref{fig:nike} show cases where CoNNOR is able to identify shapes when contrast is moderate, but has greater difficulty when contrast is very low. \autoref{ch3:contrast-adjustment} explores the effect of contrast adjustment on CoNNOR's predictions.
+In the more homogeneous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities---the darkest image has only slightly lower probability than the lightest images. On the other hand, \autoref{fig:uggs}, \autoref{fig:uggs-with-circle}, \autoref{fig:nb-logo}, and \autoref{fig:nike} show cases where CoNNOR is able to identify shapes when contrast is moderate, but has greater difficulty when contrast is very low. \autoref{ch3:contrast-adjustment} explores the effect of contrast adjustment on CoNNOR's predictions.
 
 <<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "A selection of images containing a specific chevron pattern from Adidas shoes, in a variety of colors. In the more homogeneous contrast situations presented here, features are detected across color patterns. ", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
@@ -240,7 +240,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
+\section{Model Diagnostics---Heatmaps}\label{ch3:heatmap}
 
 <<setup-heatmap>>=
 imgs <- list.files(here::here("Images", "chapter3", "heatmaps"), full.names = T)
