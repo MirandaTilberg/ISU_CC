@@ -1,8 +1,7 @@
 % Chapter 3: Results
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
-\graphicspath{{Images/chapter3/}}
-\graphicspath{{figure/chapter3/}}
+\graphicspath{{Images/chapter3/}{figure/chapter3/}}
 
 <<ch3-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
@@ -81,8 +80,8 @@ data.frame(history$metrics) %>%
   scale_y_continuous("") +
   scale_x_continuous("Epoch") +
   ggtitle("CoNNOR Training Performance") + mytheme +
-  theme(axis.title.y = element_blank(), legend.position = c(1, .5), 
-        legend.justification = c(1.03, -0.05), 
+  theme(axis.title.y = element_blank(), legend.position = c(1, .5),
+        legend.justification = c(1.03, -0.05),
         legend.background = element_rect(fill = "white"))
 @
 
@@ -197,7 +196,7 @@ pred_prob_plot(triangle, loaded_model)
 @
 
 \subsection{Recognition across colors}
-In order to more fully  understand CoNNOR's strengths and weaknesses, several shapes were identified which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases explore model performance when the geometric patterns are controlled and color patterns are varied in real context---while colors could be varied artificially, additional artifacts may be introduced in the image manipulation process. 
+In order to more fully  understand CoNNOR's strengths and weaknesses, several shapes were identified which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases explore model performance when the geometric patterns are controlled and color patterns are varied in real context---while colors could be varied artificially, additional artifacts may be introduced in the image manipulation process.
 
 In the more homogenous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities---the darkest image has only slightly lower probability than the lightest images. On the other hand, \autoref{fig:uggs}, \autoref{fig:uggs-with-circle}, \autoref{fig:nb-logo}, and \autoref{fig:nike} show cases where CoNNOR is able to identify shapes when contrast is moderate, but has greater difficulty when contrast is very low.
 
@@ -257,11 +256,11 @@ calc_heatmap(imgs[which(grepl("corks", imgs))], loaded_model) %>%
 calc_heatmap(imgs[which(grepl("quad-triangle-polygon", imgs))], loaded_model) %>% prune_heatmap(c("quad", "triangle", "polygon")) %>%
   create_composite(save_file = T, outdir = imgdir)
 
-calc_heatmap(imgs[which(grepl("star-quad", imgs))], loaded_model) %>% 
+calc_heatmap(imgs[which(grepl("star-quad", imgs))], loaded_model) %>%
   prune_heatmap(c("star", "quad", "triangle")) %>%
   create_composite(save_file = T, outdir = imgdir)
 
-calc_heatmap(imgs[which(grepl("text", imgs))], loaded_model) %>% 
+calc_heatmap(imgs[which(grepl("text", imgs))], loaded_model) %>%
   prune_heatmap(c("text", "circle", "line")) %>%
   create_composite(save_file = T, outdir = imgdir)
 

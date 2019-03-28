@@ -1,8 +1,7 @@
 % Chapter 1: Motivation and Background
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
-\graphicspath{{Images/chapter1/}}
-\graphicspath{{figure/chapter1/}}
+\graphicspath{{Images/chapter1/}{figure/chapter1/}}
 
 <<ch1-setup, fig.keep='all', cache = F, echo = F, eval = T, include = F>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
