@@ -145,7 +145,7 @@ annotated_imgs %>%
 
 \fix{Describe \autoref{fig:class-characteristic-barchart} in words. Talk about the fact that the class imbalance means we will have to weight the classes for the model, and that this also affects the utility of accuracy measures. }
 
-\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. All relevant model diagnostics were also adjusted to account for class imbalance, particularly by breaking out measures for each class rather than relying on summary metrics. \mt{Idk if that's what you meant by unbalanced classes "affecting utility of accuracy measures"... If I missed something, pls halp}
+\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes at the expense of the rarer classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. All relevant model diagnostics were also adjusted to account for class imbalance, particularly by breaking out measures for each class rather than relying on summary metrics that could obfuscate large errors in predicting small classes.
 
 
 \subsection{Augmentation}
@@ -179,7 +179,7 @@ VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have sinc
 \end{figure}
 
 
-\subsection{Convolutional Filters}
+\subsection{Convolutional Filters}\label{subsec:vgg16-filters}
 
 Much like how the human visual system contains specialized feature detector cells for detecting specific angles, colors, and shapes, as described in \autoref{sec:general-approach}, convolutional filters are designed to detect a wide array of features. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
 
@@ -187,41 +187,41 @@ In order to visualize the layers in a convolutional neural network, backpropagat
 
 \FloatBarrier
 
-<<b1, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 1 of VGG16. Block 1 contains two convolutional layers, each with 64 filters.", fig.scap = "A selection of filters from block 1 of VGG16.">>=
+<<b1, fig.width = 7, fig.height = 2.3, fig.cap = "A selection of filters from block 1 of VGG16. Block 1 contains two convolutional layers, each with 64 filters.", fig.scap = "A selection of filters from block 1 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b1"), full.names = T)
 pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 2)
 @
 
-<<b2, fig.width = 7.5, fig.height = 3, fig.cap = "A selection of filters from block 2 of VGG16. Block 2 contains two convolutional layers, each with 128 filters.", fig.scap = "A selection of filters from block 2 of VGG16.">>=
+<<b2, fig.width = 7, fig.height = 2.3, fig.cap = "A selection of filters from block 2 of VGG16. Block 2 contains two convolutional layers, each with 128 filters.", fig.scap = "A selection of filters from block 2 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b2"), full.names = T)
 pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 2)
 @
 
-<<b3, fig.width = 7.5, fig.height = 4.5, fig.cap = "A selection of filters from block 3 of VGG16. Block 3 contains three convolutional layers, each with 256 filters.", fig.scap = "A selection of filters from block 3 of VGG16.">>=
+<<b3, fig.width = 7, fig.height = 3.5, fig.cap = "A selection of filters from block 3 of VGG16. Block 3 contains three convolutional layers, each with 256 filters.", fig.scap = "A selection of filters from block 3 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b3"), full.names = T)
 pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
 gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 @
 
-<<b4, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 4 of VGG16. Block 4 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 4 of VGG16.">>=
+<<b4, fig.width = 7, fig.height = 3.5, fig.cap = "A selection of filters from block 4 of VGG16. Block 4 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 4 of VGG16.">>=
 imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
 pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
-gridExtra::grid.arrange(grobs = grobs, ncol = 4)
+gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 @
 
-<<b5, fig.width = 8, fig.height = 6, fig.cap = "A selection of filters from block 5 of VGG16. Block 5 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 5 of VGG16.">>=
-imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b4"), full.names = T)
+<<b5, fig.width = 7, fig.height = 3.5, fig.cap = "A selection of filters from block 5 of VGG16. Block 5 contains three convolutional layers, each with 512 filters.", fig.scap = "A selection of filters from block 5 of VGG16.">>=
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b5"), full.names = T)
 pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
 grobs <- lapply(pngs, grid::rasterGrob)
-gridExtra::grid.arrange(grobs = grobs, ncol = 4)
+gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 @
-%\mt{Need to actually choose B5 images, currently recycling B4}
+
 \FloatBarrier
 
 \subsection{Model Training}
