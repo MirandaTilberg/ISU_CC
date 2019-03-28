@@ -214,6 +214,16 @@ heatmap_overlay <- function(heatmap, geometry = geometry, width = 256, height = 
     image_resize(geometry, filter = "quadratic")
 }
 
+prune_heatmap <- function(full_heatmap, keep_classes) {
+  tmp <- full_heatmap
+  idx <- which(tmp$classes %in% keep_classes)
+  tmp$heatmap <- tmp$heatmap[idx, , ]
+  tmp$predictions <- tmp$predictions[idx]
+  tmp$truth <- tmp$truth[idx]
+  tmp$classes <- tmp$classes[idx]
+  return(tmp)
+}
+
 create_composite <- function(heatmap_data, save_file = F, outdir = ".", td = tempdir(), fixed_labels = T,
                              fail_file = file.path("Images", "poop.jpg")) {
 
