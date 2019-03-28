@@ -64,6 +64,7 @@ load(list.files(model_dir, pattern = "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 @
 
+
 \chapter{DATA AND METHODS}\label{ch2}
 
 \section{Data}
@@ -113,6 +114,8 @@ Defining categories this way does not remove all ambiguities. The best example l
 \caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet our definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
 \end{figure}
 \FloatBarrier
+
+
 \subsection{Data Collection}
 
 Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(dfunion)} multi-label images.
@@ -143,12 +146,11 @@ annotated_imgs %>%
         legend.background = element_rect(fill = "white"))
 @
 
-\fix{Describe \autoref{fig:class-characteristic-barchart} in words. Talk about the fact that the class imbalance means we will have to weight the classes for the model, and that this also affects the utility of accuracy measures. }
-
-\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes at the expense of the rarer classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. All relevant model diagnostics were also adjusted to account for class imbalance, particularly by breaking out measures for each class rather than relying on summary metrics that could obfuscate large errors in predicting small classes.
+\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes at the expense of the rarer classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. Relevant model diagnostics (e.g., ROC curves) were also adjusted to account for class imbalance, particularly by breaking out measures for each class rather than relying on summary metrics that could obfuscate large errors in predicting small classes.
 
 
 \subsection{Augmentation}
+
 Labeled images are scarce relative to the amount of data necessary to train a neural network. One solution to this scarcity is to artificially enlarge the data set using a process called image augmentation \citep{krizhevskyImageNetClassificationDeep2012}. Augmentation is the transformation of original input data using image operations such as cropping, zoom, skew, rotation, and color balance modification in order to distort or alter the image while maintaining the essential features corresponding to the label. This process reduces the potential for overfitting the model to the specific set of image data used during the training process, and also increases the amount of data available for training. During the model fitting process, images are augmented once using a subset of the augmentation operations discussed above; examples of pre- and post- augmentation images are shown in \autoref{fig:augmented}.
 
 \begin{figure}
@@ -163,6 +165,7 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \includegraphics[width=.1\textwidth]{augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg}
 \caption[Original and augmented images]{Four sets of original (left) and augmented (right) labeled images.}\label{fig:augmented}
 \end{figure}
+
 
 \section{VGG16}
 
@@ -223,6 +226,7 @@ gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 @
 
 \FloatBarrier
+
 
 \subsection{Model Training}
 
