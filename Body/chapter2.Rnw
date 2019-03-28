@@ -1,7 +1,7 @@
 % Chapter 2: Data and Methods
 
 \Sexpr{knitr::set_parent('../thesis.Rnw')}
-\graphicspath{{Images/chapter2/}{../Images/chapter2/}}
+\graphicspath{{Images/chapter2/}}
 
 <<ch2-setup, fig.keep='all', cache=FALSE, echo=FALSE, eval=TRUE, include=FALSE>>=
 options(replace.assign = TRUE, width = 70, scipen = 3)
