@@ -240,12 +240,12 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 \FloatBarrier
 
 \section{Model Diagnostics - Heatmaps}\label{ch3:heatmap}
+
 <<setup-heatmap>>=
 imgs <- list.files(here::here("Images", "chapter3", "heatmaps"), full.names = T)
 @
 
 <<generate-heatmaps, include = F>>=
-
 calc_heatmap(imgs[which(grepl("chevron-circle", imgs))], loaded_model) %>%
   prune_heatmap(c("chevron", "quad", "circle")) %>%
   create_composite(save_file = T, outdir = imgdir)
@@ -272,28 +272,27 @@ calc_heatmap(imgs[which(grepl("bowtie-star", imgs))], loaded_model) %>%
 heatmaps <- list.files(imgdir, pattern = "^heatmap")
 @
 
-<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing chevrons and circles.">>=
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
 @
 
-<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing none of the target classes.">>=
 knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
 @
 
-<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing quadrilaterals, triangles, and hexagons.">>=
 knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 @
 
-<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing quadrilaterals and stars.">>=
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
-
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing text.">>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Caption">>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing bowties and a star.">>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
 
