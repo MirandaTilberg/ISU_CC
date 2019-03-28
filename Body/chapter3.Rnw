@@ -81,10 +81,12 @@ data.frame(history$metrics) %>%
   scale_y_continuous("") +
   scale_x_continuous("Epoch") +
   ggtitle("CoNNOR Training Performance") + mytheme +
-  theme(axis.title.y = element_blank(), legend.position = c(1, .5), legend.justification = c(1.03, -0.05), legend.background = element_rect(fill = "white"))
+  theme(axis.title.y = element_blank(), legend.position = c(1, .5), 
+        legend.justification = c(1.03, -0.05), 
+        legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum; underfitting, on the other hand, may be suspected when the validation accuracy is still increasing toward the end of the fitting process. Neither of these outcomes appears in \autoref{fig:training-accuracy}, indicating that we have halted the model optimization process at an appropriate epoch.
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum; underfitting, on the other hand, may be suspected when the validation accuracy is still increasing toward the end of the fitting process. Neither of these outcomes appears in \autoref{fig:training-accuracy}, indicating that the model optimization process was halted at an appropriate epoch.
 
 \FloatBarrier
 
@@ -92,7 +94,7 @@ data.frame(history$metrics) %>%
 
 \paragraph{ROC}
 
-\autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs arguably \mt{significantly?} better than random chance.
+\autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
 
 <<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "Whole model ROC Curve">>=
 library(pROC)
@@ -143,10 +145,10 @@ ggplot() +
 \paragraph{Confusion Matrix}
 As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
 
-To our knowledge, confusion matrices have not previously been applied to multi-label classification problems\svp{; some efforts to generalize confusion matrices to multi-class problems do exist in the literature\citep{landgrebeEfficientMulticlassROC2008}}. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent \svp{(see \autoref{tab:error-3class-problem})}. The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
+Although some efforts to generalize confusion matrices to multi-class problems do exist in the literature \citep{landgrebeEfficientMulticlassROC2008}, it appears that confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent (see \autoref{tab:error-3class-problem}). The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
 
 
-<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculations.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
+<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculation of false positives.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs, threshold = thresholds) %>%
   set_names(str_to_title(classes)) %>%
@@ -166,7 +168,7 @@ get_confusion_matrix(predictions = preds, classes = classes,
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
 @
 
-\svp{This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix}, it can be seen that quads are overrepresented in the model predictions (the horizontal band indicates that quads are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are underpredicted relative to the images which actually contain these categories. }
+This modified confusion matrix preserves the ability to identify patterns in over- and under-predictions; for instance, in \autoref{fig:confusion_matrix}, it can be seen that quadrilaterals are overrepresented in the model predictions (the horizontal band indicates that quadrilaterals are predicted more often than they should be for every true label). We can also see that polygons, stars, and triangles are often are underpredicted relative to the images which actually contain these categories and produce a large number of false positive predictions into other categories (evidenced by the vertical bands in the confusion matrix).
 
 \autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not tell us where to look as to \emph{why} the model is not performing appropriately. In \autoref{ch3:model-consistency} and \autoref{ch3:heatmap}, we use alternative visualizations to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.
 
@@ -175,6 +177,7 @@ In order to examine the model's consistency, and whether it can successfully det
 
 \subsection{General shape recognition}
 \fix{Talk about Connor's ability to recognize different shapes successfully. Elaborate on image contrast issues - the pictures VGG16 was trained on were photos, and so are the images CoNNOR was trained on, but these are artifical photos where any color variation is due to the shoe, so it's definitely transferring to a different domain, and not always successfully.}
+
 <<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled `chevron'", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
 pred_prob_plot(chevron2, loaded_model)
