@@ -365,4 +365,4 @@ A confusion matrix is a cross-tabulation between the observed and the predicted 
 \caption[Model errors for a three-class binary decision problem.]{Model errors for a three-class binary decision problem. Correct decisions are shown along the diagonal; incorrect decisions are in the off-diagonal cells. Note that for each misclassification, two incorrect decisions are made---the omission of the correct label and the addition of an incorrect label.}\label{tab:error-3class-problem}
 \end{table}
 
-However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, a modification of the confusion matrix is possible to better visualize model performance, as described in Chapter~\ref{ch3:model-accuracy}.
+However, in some situations, it is possible to reduce the classification problem to a series of binary classifications; in these situations, a modification of the confusion matrix is possible to better visualize model performance, as described in Section~\ref{ch3:model-accuracy}.
