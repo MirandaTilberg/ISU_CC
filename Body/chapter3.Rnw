@@ -309,6 +309,6 @@ knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.">>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.scap = "Heatmaps of an image containing stars and bowties.">>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
