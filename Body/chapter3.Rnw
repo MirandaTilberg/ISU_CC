@@ -246,10 +246,9 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 \section{Model Diagnostics---Heatmaps}\label{ch3:heatmap}
 
 A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer---in this case, the final convolutional layer of VGG16---and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide useful information regarding which locations in an image contribute most to CoNNOR's image predictions.
+The following figures show a number of interesting examples, where the heatmaps show the three classes to which CoNNOR assigns the highest probabilities. \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a ribbon dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category "other", as the model must be evaluated on images which do not contain any of the classes.
 
 \mt{Very final thing: describe these to take up the whole page}
-\autoref{fig:chevron-circle-heatmap}
-\autoref{fig:corks-heatmap}
 \autoref{fig:quad-triangle-hexagon-heatmap}
 \autoref{fig:star-quad-heatmap}
 \autoref{fig:text-seychelles-heatmap}
@@ -294,7 +293,7 @@ heatmaps <- list.files(imgdir, pattern = "^heatmap")
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
 @
 
-<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "This outsole shows repeated outlines of corks, which do not fall into any of the nine classes; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.">>=
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "This outsole shows repeated outlines of corks, which do not fall into any of the nine classes; the concave corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.">>=
 knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
 @
 
