@@ -245,9 +245,11 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \section{Model Diagnostics---Heatmaps}\label{ch3:heatmap}
 
+
 A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer (in this case, the final convolutional layer of VGG16) and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide diagnostic information: using these graphics, we can identify which locations in an image contribute most to CoNNOR's predictions.
 
 \svp{In the figures in this subsection, heatmaps show the three classes with the highest output probabilities alongside the original image.} \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a \svp{line} dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category ``other" \svp{during model training}, as the model must be evaluated on images which do not contain any of the classes.
+
 
 \mt{Very final thing: describe these to take up the whole page}
 \autoref{fig:quad-triangle-hexagon-heatmap}
