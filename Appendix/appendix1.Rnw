@@ -3,7 +3,7 @@
 \appendix
 \chapter{COMPUTER CODE}\label{app:code}
 
-This appendix contains the code used to train CoNNOR. Before presenting the code, it will helpful to describe the structure of the full project directory .
+This appendix contains the code used to augment the training images and to train the model head of CoNNOR. Before presenting the code, it will helpful to describe the structure of the full project directory .
 
 \paragraph{Directory structure}
 
@@ -30,7 +30,7 @@ All code is contained in the /models/shoe\_nn directory. There are two main subd
 
 \newpage
 
-\paragraph{Setup}
+\textbf{Setup}
 
 <<packages, echo = T, eval = F>>=
 library(magrittr)
@@ -96,7 +96,7 @@ test_dir <- file.path(base_dir, "test")
 
 @
 
-\paragraph{Image Augmentation}
+\textbf{Image Augmentation}
 
 <<img-augmentation, echo = T, eval = F>>=
 n_train <- length(list.files(train_dir))
@@ -164,6 +164,9 @@ for (i in list.files(train_dir, "*.jpg", full.names = T)) {
 
 @
 
+\newpage
+\textbf{Convolutional Feature Extraction}
+
 This next section of code evaluates each image as processed by the convolutional base, and creates features from the last pooling layer. These features are used to train a new model head.
 
 <<data-preparation, echo = T, eval = F>>=
@@ -219,7 +222,7 @@ test$features <- reshape_features(test$features)
 
 @
 
-\paragraph{Training the Model Head}
+\textbf{Training the Model Head}
 
 <<model-head, echo = T, eval = F>>=
 
