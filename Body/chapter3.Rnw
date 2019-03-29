@@ -299,11 +299,12 @@ knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = 'p'>>=
+
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = '!h'>>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "Heatmaps of an image containing bowties and a star. CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.pos = 'b'>>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "Heatmaps of an image containing bowties and a star. CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.pos = '!h'>>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
 
