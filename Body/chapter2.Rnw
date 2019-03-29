@@ -120,7 +120,7 @@ Defining categories this way does not remove all ambiguities. The best example l
 
 Thousands of outsole images were scraped from Zappos.com, a large online shoe retailer. These images were then uploaded for use in a tool called LabelMe \citep{LabelMe}, a labeling/annotating interface which allows users to easily select and label regions of an image. To date, \Sexpr{unique(ann_df$base_image) %>% length()} shoes have been labeled, yielding \Sexpr{nrow(dfunion)} multi-label images.
 
-After annotation using the LabelMe software package, images are processed by an R script that identifies the minimum bounding rectangle of the region, crops the image to that region, and scales the cropped area to a 256 x 256 pixel image suitable for analysis by the convolutional neural network. During this process, aspect ratio is not preserved, though efforts are made to label images which are relatively square to minimize the effect of this distortion.
+After annotation using the LabelMe software package, images are processed by an R script that identifies the minimum bounding rectangle of the region, crops the image to that region, and scales the cropped area to a 256 x 256 pixel image suitable for analysis by the convolutional neural network. During this process, aspect ratio is not preserved, though efforts are made to label \svp{regions} which are relatively square to minimize the effect of this distortion.
 
 
 \subsection{Data Characteristics}
