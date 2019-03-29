@@ -93,7 +93,7 @@ data.frame(history$metrics) %>%
 
 \paragraph{ROC}
 
-\autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.83 (for star and triangle) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
+\autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.81 (for line) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
 
 <<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "Whole model ROC Curve">>=
 library(pROC)
@@ -173,7 +173,7 @@ This modified confusion matrix preserves the ability to identify patterns in ove
 
 
 \section{Model Consistency}\label{ch3:model-consistency}
-In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, several case studies are explored in this section, probing the model's strengths and weaknesses.
+In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, several case studies are explored in this section that probe the model's strengths and weaknesses.
 
 \subsection{General shape recognition}
 
@@ -247,6 +247,13 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer---in this case, the final convolutional layer of VGG16---and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide useful information regarding which locations in an image contribute most to CoNNOR's image predictions.
 
+\mt{Very final thing: describe these to take up the whole page}
+\autoref{fig:chevron-circle-heatmap}
+\autoref{fig:corks-heatmap}
+\autoref{fig:quad-triangle-hexagon-heatmap}
+\autoref{fig:star-quad-heatmap}
+\autoref{fig:text-seychelles-heatmap}
+\autoref{fig:bowtie-star-heatmap}
 
 
 <<setup-heatmap>>=
@@ -282,31 +289,27 @@ calc_heatmap(imgs[which(grepl("bowtie-star", imgs))], loaded_model) %>%
 heatmaps <- list.files(imgdir, pattern = "^heatmap")
 @
 
-<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing chevrons and circles.", fig.cap = "Heatmaps of an image containing chevrons and circles. Chevrons are identified by sharp corners and parallel lines, but the thick ribbon between the two shape sections is falsely identified as a quadrilateral.", fig.pos = 'h'>>=
+<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing chevrons and circles.", fig.cap = "Chevrons are identified by sharp corners and parallel lines, but the thick ribbon between the two shape sections is falsely identified as a quadrilateral.", fig.pos = "!t">>=
 heatmaps <- list.files(imgdir, pattern = "^heatmap")
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
 @
 
-<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing none of the target classes. This outsole shows repeated outlines of corks; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.", fig.pos = 'h'>>=
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "This outsole shows repeated outlines of corks, which do not fall into any of the nine classes; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.">>=
 knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
 @
 
-<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing quadrilaterals, triangles, and hexagons. The three prominent shapes in this image are all correctly identified, and the heatmap indicates that CoNNOR is using appropriate features for this classification.", fig.pos = 'p'>>=
+<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "The quadrilaterals, hexagons, and triangles in this image are all correctly identified, and the heatmap indicates that CoNNOR is using appropriate features for these classifications.">>=
 knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 @
 
-<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing quadrilaterals and a star.", fig.cap = "Heatmaps of an image containing quadrilaterals and a star. CoNNOR correctly identifies the quadrilaterals by looking at their corners, and the star is identified by the acute angles of its convex portions.", fig.pos = 'b'>>=
+<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing quadrilaterals and a star.", fig.cap = "CoNNOR correctly identifies the quadrilaterals by looking at their corners, and the star is identified by the acute angles of its convex portions.">>=
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
-\vfill
-\newpage
-
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = '!t'>>=
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "This heatmap illustrates that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.">>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "Heatmaps of an image containing bowties and a star. CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.pos = '!h'>>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.">>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
-
