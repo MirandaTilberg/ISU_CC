@@ -287,11 +287,11 @@ heatmaps <- list.files(imgdir, pattern = "^heatmap")
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
 @
 
-<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing none of the target classes. This outsole shows repeated outlines of corks; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.", fig.pos = 'b'>>=
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing none of the target classes. This outsole shows repeated outlines of corks; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.", fig.pos = 'h'>>=
 knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
 @
 
-<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing quadrilaterals, triangles, and hexagons. The three prominent shapes in this image are all correctly identified, and the heatmap indicates that CoNNOR is using appropriate features for this classification.", fig.pos = 't'>>=
+<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing quadrilaterals, triangles, and hexagons. The three prominent shapes in this image are all correctly identified, and the heatmap indicates that CoNNOR is using appropriate features for this classification.", fig.pos = 'p'>>=
 knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 @
 
@@ -299,7 +299,7 @@ knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = 't'>>=
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = 'p'>>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
