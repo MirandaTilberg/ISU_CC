@@ -234,7 +234,7 @@ pred_prob_plot(nike, loaded_model, sort = F)
 
 
 \subsection{Contrast Adjustment}\label{ch3:contrast-adjustment}
-In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing CoNNOR's ability to notice details. \autoref{fig:auto-color-balance} shows the original predictions of previous cases with low contrast paired with predictions of the images after adjusting for contrast. While the predictions did not change drastically, contrast correction does not seem to worsen predictions, and the predictions of the UGG and the New Balance logos show significant improvement.
+In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing CoNNOR's ability to notice details. \autoref{fig:auto-color-balance} shows the original predictions of previous cases with low contrast paired with predictions of the images after contrast adjustment. Predictions of the adjusted images are not drastically different; the chevrons at the bottom take on a moderate false positive bowtie prediction, but the predictions of the UGG and the New Balance logos show significant improvement.
 
 <<auto-color-balance, fig.width = 11, fig.height = 10, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
 lowcontrast <- list.files(here::here("Images", "chapter3", "test-imgs", "low-contrast"), full.names = T)
@@ -282,27 +282,28 @@ calc_heatmap(imgs[which(grepl("bowtie-star", imgs))], loaded_model) %>%
 heatmaps <- list.files(imgdir, pattern = "^heatmap")
 @
 
-<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of image containing chevrons and circles.", fig.cap = "Heatmaps of outsole image containing chevrons and circles.">>=
+<<chevron-circle-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing chevrons and circles.", fig.cap = "Heatmaps of an image containing chevrons and circles. Chevrons are identified by sharp corners and parallel lines, but the thick ribbon between the two shape sections is falsely identified as a quadrilateral.", fig.pos = 'h'>>=
+heatmaps <- list.files(imgdir, pattern = "^heatmap")
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
 @
 
-<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing none of the target classes.">>=
+<<corks-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing none of the target classes. This outsole shows repeated outlines of corks; the convex corners where the corks overlap are predicted to be stars, and the round edges lead to predictions of circles.", fig.pos = 'b'>>=
 knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
 @
 
-<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing quadrilaterals, triangles, and hexagons.">>=
+<<quad-triangle-hexagon-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing none of the target classes.", fig.cap = "Heatmaps of an image containing quadrilaterals, triangles, and hexagons. The three prominent shapes in this image are all correctly identified, and the heatmap indicates that CoNNOR is using appropriate features for this classification.", fig.pos = 't'>>=
 knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 @
 
-<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing quadrilaterals and stars.">>=
+<<star-quad-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing quadrilaterals and a star.", fig.cap = "Heatmaps of an image containing quadrilaterals and a star. CoNNOR correctly identifies the quadrilaterals by looking at their corners, and the star is identified by the acute angles of its convex portions.", fig.pos = 'b'>>=
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing text.">>=
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = 't'>>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of outsole image containing bowties and a star.">>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "Heatmaps of an image containing bowties and a star. CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.pos = 'b'>>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
 
