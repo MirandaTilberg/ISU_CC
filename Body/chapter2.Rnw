@@ -146,7 +146,7 @@ annotated_imgs %>%
         legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes at the expense of the rarer classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. Relevant model diagnostics (e.g., ROC curves) were also adjusted to account for class imbalance, particularly by breaking out measures for each class rather than relying on summary metrics that could obfuscate large errors in predicting small classes.
+\autoref{fig:class-characteristic-barchart} shows the relative frequency of each class in the labeled data. Quadrilaterals are the most frequent shape, followed by line and text; the least frequent shapes are bowtie and star. The large class imbalance must be accounted for in both model training and evaluation. Since backpropogation considers each training image equally when updating model weights, training with unbalanced data incentivizes the cost function to prioritize accuracy of the most common classes at the expense of the rarer classes. To mitigate this effect, the weight of each class was set during training with respect to its frequency in the data to ensure that training optimized performance across all classes evenly. Relevant model diagnostics (e.g., ROC curves) were also adjusted to account for class imbalance, \svp{most notably} by breaking out measures for each class rather than relying on summary metrics that could obfuscate large errors in predicting small classes.
 
 
 \subsection{Augmentation}
@@ -184,7 +184,7 @@ VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have sinc
 
 \subsection{Convolutional Filters}\label{subsec:vgg16-filters}
 
-Much like how the human visual system contains specialized feature detector cells for detecting specific angles, colors, and shapes, as described in \autoref{sec:general-approach}, convolutional filters are designed to detect a wide array of features. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
+Much \svp{as} the human visual system contains specialized feature detector cells for detecting specific angles, colors, and shapes, convolutional filters are designed to detect a wide array of features. The early convolutional layers of VGG16 contain 64 filters that primarily detect colors and edge patterns, as shown by the activation maps in \autoref{fig:b1} and \autoref{fig:b2}. Later convolutional layers detect increasingly complex features; \autoref{fig:b3} shows a selection of activation maps from convolutional layers in block 3 of the model, and \autoref{fig:b4} shows a selection from block 4 of the model. Note that some of the filters appear to detect more than one ``feature"; some filters are multi-purpose. The final convolutional layers of VGG16, in contrast, contain 512 filters that represent much more complex features, like animal fur patterns or distinct bird heads.
 
 In order to visualize the layers in a convolutional neural network, backpropagation can be used to generate an image which maximally activates a particular filter. This process generates so-called ``activation maps", which provide a visual reference for the features identified by a particular layer. The activation maps shown in this section are generated using the \texttt{KerasVis} R package, which makes functions from the \texttt{keras-vis} python library \citep{raghakotkerasvis} available in R.
 
@@ -234,7 +234,7 @@ gridExtra::grid.arrange(grobs = grobs, nrow = 3)
 
 Model training was conducted using the \texttt{keras} package in R \citep{keras-package}, which provides an interface to the Python keras API. The keras API uses a TensorFlow \citep{tensorflow2015-whitepaper} back end. The model was trained using CPUs; the amount of memory required in order to train the model using the GPU was prohibitive.
 
-Initial training utilized the output from the VGG16 convolutional base as input to a new model consisting of a densely connected layer with 50\% dropout, followed by an activation layer with a sigmoid activation function (see \autoref{fig:activation-functions}) and 9 output classes corresponding to the 9 geometric features that have been identified. Once the separate model head was fit, keras' facilities were utilized for loading model weights to combine the convolutional base of VGG16 with the model head into a single, unified model object.
+Initial training utilized the output from the VGG16 convolutional base as input to a new model consisting of a densely connected layer with 50\% dropout, followed by an activation layer with a sigmoid activation function (see \autoref{fig:activation-functions}) and 9 output classes corresponding to the 9 geometric features that have been identified. Once the separate model head was fit, \svp{weights from the two models were combined into a single, unified model object including the base from VGG16 as well as the model head trained on the shoe image data.}%, keras' facilities were utilized for loading model weights to combine the convolutional base of VGG16 with the model head into a single, unified model object.
 
 Code is provided in \autoref{app:code}.  Using a 48-thread CPU with 128 GB of RAM, the time required to process the LabelMe annotations, generate 256 $\times$ 256 pixel labeled images, augment these images, and train the model is just under 3 hours; the model fitting process itself takes less than one hour.
 
@@ -264,7 +264,7 @@ bind_cols(class = classes,
 \centering
 \begin{tabular}{lrr}
   \hline
-class & count & class\_proportion \\
+Class & Count & Class Proportion \\
   \hline
 bowtie & 1102 & 0.2422 \\
   chevron & 4372 & 0.0610 \\
@@ -276,10 +276,10 @@ bowtie & 1102 & 0.2422 \\
   text & 6144 & 0.0434 \\
   triangle & 2160 & 0.1235 \\
    \hline
-total & 36254 & 1.0000 \\
+Total & 36254 & 1.0000 \\
    \hline
 \end{tabular}
 \caption[Class counts and proportions.]{Class counts and proportions. Note that multiple-label images are counted separately for each label. Proportions are passed to keras as class weights to ensure that lower-probability classes are learned with equal attention to the available data.}\label{tab:model-weight}
 \end{table}
 
-During the model training process, there are a set number of ``epochs", which consist of a forward propagation step and a backpropagation step, for the entire set of training data. At the end of the forward propagation step, predicted probabilities are computed and the loss function is applied to the predictions; the average loss over all training images is then the cost function that is used in the backward propagation portion of the epoch. Finally, the validation data is used to assess the model's performance at the end of the backward propagation step; the validation data is used to assess the model, but is not used in any updating of weights. The separate validation set is used to assess the model's performance and identify any tendency toward overfitting. \autoref{ch:results} discusses the fitting process for this specific model and contains an evaluation of the model's performance.
+During the model training process, there are a set number of ``epochs", which consist of a forward propagation step and a backpropagation step, for the entire set of training data. At the end of the forward propagation step, predicted probabilities are computed and the loss function is applied to the predictions; the average loss over all training images is then the cost function that is used in the backward propagation portion of the epoch. Finally, the validation data is used to assess the model's performance at the end of the backward propagation step; the validation data is used to assess the model, but is not used in any updating of weights. The separate validation set is used to assess the model's performance and identify any tendency toward overfitting. Chapter~\ref{ch:results} discusses the fitting process for this specific model and contains an evaluation of the model's performance.
