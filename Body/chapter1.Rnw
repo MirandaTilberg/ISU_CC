@@ -188,7 +188,7 @@ df <- data.frame(x = plot$data$x,
 plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 @
 
-Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropagation (discussed in \autoref{sec:prop}) in order to minimize errors (measured by a cost function) and thus improve classification accuracy.
+Similarly, in densely connected or fully connected layers, each final feature produced by the convolutional and pooling layers is connected to each possible label through weights (hence the name ``densely connected") learned during the training process. Weights are optimized via backpropagation (discussed in \autoref{sec:prop}) in order to minimize errors (measured by a cost function) and improve classification accuracy.
 
 When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
