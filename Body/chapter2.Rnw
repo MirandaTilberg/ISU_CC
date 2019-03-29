@@ -102,7 +102,7 @@ Class characteristics, as defined in Chapter~\ref{sec:class-chars-desc}, are cha
      Triangle & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/triangle_examples.png}} &
       \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{class_examples/other_examples.png}} & Other \\
 \end{tabular}
-\caption[Geometric elements]{Geometric Elements. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
+\caption[Geometric elements used to classify tread patterns.]{A set of geometric elements used to classify tread patterns. Categories modified from \cite{grossVariabilitySignificanceClass2013}.}\label{tab:class-char-examples}
 \end{table}
 
 
@@ -111,7 +111,7 @@ Defining categories this way does not remove all ambiguities. The best example l
 \begin{figure}
 \centering
 \includegraphics[width=.6\textwidth]{class_examples/el-naturalista.jpg}
-\caption[Classification rule weaknesses]{A shoe which has elements which are not easily classified; the lines in the design do not meet the specified definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
+\caption[Classification outliers.]{A shoe which has elements which are not easily classified; the lines in the design do not meet the specified definition of lines (which must be roughly parallel). The rectangle in the center of the shoe can be correctly classified.}\label{fig:classification-is-hard}
 \end{figure}
 \FloatBarrier
 
@@ -125,7 +125,7 @@ After annotation using the LabelMe software package, images are processed by an 
 
 \subsection{Data Characteristics}
 
-<<class-characteristic-barchart, fig.width = 6, fig.height = 4, dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively rare.", fig.scap = "Distribution of classes in all labeled images">>=
+<<class-characteristic-barchart, fig.width = 6, fig.height = 4, dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively rare.", fig.scap = "Distribution of classes in all labeled images.">>=
 annotated_imgs %>%
   mutate(label_type = str_replace(label_type, "multi", "multiple")) %>%
   mutate(labels = str_to_title(labels)) %>%
@@ -163,7 +163,7 @@ Labeled images are scarce relative to the amount of data necessary to train a ne
 \includegraphics[width=.1\textwidth]{augmentation/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg}\hfill\hfill\hfill
 \includegraphics[width=.1\textwidth]{augmentation/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg}\hfill
 \includegraphics[width=.1\textwidth]{augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg}
-\caption[Original and augmented images]{Four sets of original (left) and augmented (right) labeled images.}\label{fig:augmented}
+\caption[Original and augmented images.]{Four sets of original (left) and augmented (right) labeled images.}\label{fig:augmented}
 \end{figure}
 
 
@@ -178,7 +178,7 @@ VGG16 and a similar network, VGG19, won the 2014 ILSVR challenge; they have sinc
 \begin{figure}
 \centering
 \includegraphics[width=.95\textwidth]{vgg16-layer-size}
-\caption[VGG16 model structure]{The VGG16 model structure, for input images of 256 x 256 pixels. There are 5 convolutional blocks in the VGG16 model base. Each block is followed by a max pooling layer, which reduces the size of the input to the next block by a factor of 4. The output of the final pooled block is then connected to output classes using several fully connected layers.} \label{fig:vgg16-structure}
+\caption[VGG16 model structure.]{The VGG16 model structure, for input images of 256 x 256 pixels. There are 5 convolutional blocks in the VGG16 model base. Each block is followed by a max pooling layer, which reduces the size of the input to the next block by a factor of 4. The output of the final pooled block is then connected to output classes using several fully connected layers.} \label{fig:vgg16-structure}
 \end{figure}
 
 
