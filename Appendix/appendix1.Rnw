@@ -3,7 +3,7 @@
 \appendix
 \chapter{COMPUTER CODE}\label{app:code}
 
-This appendix contains the code used to augment the training images and to train the model head of CoNNOR. Before presenting the code, it will helpful to describe the structure of the full project directory .
+This appendix contains the code used to augment the training images and to train the model head of CoNNOR. Before presenting the code, it will helpful to describe the structure of the full project directory.
 
 \paragraph{Directory structure}
 
