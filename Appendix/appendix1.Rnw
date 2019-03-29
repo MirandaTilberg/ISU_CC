@@ -3,7 +3,33 @@
 \appendix
 \chapter{COMPUTER CODE}\label{app:code}
 % \paragraph{Setup}
-\svp{Describe /model directory structure}
+The trained model, as well as the labeled and processed images used to train the model, are stored in a directory with the following structure. Each new trained model and updated set of images is stored in its own folder of the form "YYYYMMDD-HHMMSS" in the relevant directory.
+
+\textbf{Directory structure}
+\begin{itemize}
+  \item models/shoe\_nn/
+  \begin{itemize}
+    \item RProcessedImages/
+    \begin{itemize}
+      \item 20190307-130702/
+      \begin{itemize}
+        \item test/
+        \item train/
+        \item validation/
+      \end{itemize}
+    \end{itemize}
+    \item TrainedModels/
+    \begin{itemize}
+      \item 20190307-130702/
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item
+\end{itemize}
+
+
 <<packages, echo = T, eval = F>>=
 library(magrittr)
 library(lubridate)
