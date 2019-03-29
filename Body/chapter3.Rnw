@@ -85,13 +85,13 @@ data.frame(history$metrics) %>%
         legend.background = element_rect(fill = "white"))
 @
 
-\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum; underfitting, on the other hand, may be suspected when the validation accuracy is still increasing toward the end of the fitting process. Neither of these outcomes appears in \autoref{fig:training-accuracy}, indicating that the model optimization process was halted at an appropriate epoch.
+\autoref{fig:training-accuracy} shows the training and validation accuracy and loss at each epoch of the fitting process. Overfitting, or fitting a model which performs too well on the training data relative to the validation data, is seen when the validation loss starts to increase after reaching a global minimum. \svp{Alternately,} underfitting \svp{occurs when the} validation accuracy is still increasing \svp{when model optimization is terminated}. Neither of these outcomes appears in \autoref{fig:training-accuracy}, indicating that the model optimization process was halted at an appropriate epoch.
 
 \FloatBarrier
 
 \section{Model Accuracy}\label{ch3:model-accuracy}
 
-\paragraph{ROC}
+% \paragraph{ROC}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.81 (for line) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
 
@@ -141,8 +141,8 @@ ggplot() +
 
 \FloatBarrier
 
-\paragraph{Confusion Matrix}
-As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
+% \paragraph{Confusion Matrix}
+As \svp{discussed} in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
 
 Although some efforts to generalize confusion matrices to multi-class problems do exist in the literature \citep{landgrebeEfficientMulticlassROC2008}, it appears that confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent (see \autoref{tab:error-3class-problem}). The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
 
