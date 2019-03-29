@@ -167,7 +167,7 @@ for (i in list.files(train_dir, "*.jpg", full.names = T)) {
 \newpage
 \textbf{Convolutional Feature Extraction}
 
-This next section of code evaluates each image as processed by the convolutional base, and creates features from the last pooling layer. These features are used to train a new model head.
+This next section of code evaluates each image as processed by the convolutional base, and creates features from the last pooling layer. These features are used to train CoNNOR's model head.
 
 <<data-preparation, echo = T, eval = F>>=
 conv_base <- application_vgg16(
@@ -255,7 +255,7 @@ history <- model %>% fit(
 )
 @
 
-The output of the model training process is then saved in a variety of formats to facilitate different tasks - visualization of layers, predicting classes of new images, and more.
+The output of the model training process is then saved in a variety of formats to facilitate different tasks---visualization of layers, predicting classes of new images, and more.
 
 <<save-model, echo = T, eval = F>>=
 
