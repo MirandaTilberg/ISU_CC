@@ -2,10 +2,13 @@
 \appendixtitle
 \appendix
 \chapter{COMPUTER CODE}\label{app:code}
-% \paragraph{Setup}
-The trained model, as well as the labeled and processed images used to train the model, are stored in a directory with structure shown below. Each new trained model and updated set of images is stored in its own folder of the form "YYYYMMDD-HHMMSS" in the relevant directory. 
 
-\textbf{Directory structure}
+This appendix contains the code used to train CoNNOR. Before presenting the code, it will helpful to describe the structure of the full project directory .
+
+\paragraph{Directory structure}
+
+All code is contained in the /models/shoe\_nn directory. There are two main subdirectories---RProcessedImages and TrainedModels---that hold the labeled and processed images and the trained models, respectively. Each set of data and trained model are stored in directories that are named with the convention ''YYYYMMDD-HHMMSS". This structure is shown explicitly below.
+
 \begin{itemize}
   \item[/]models/shoe\_nn
   \begin{itemize}
@@ -26,6 +29,8 @@ The trained model, as well as the labeled and processed images used to train the
 \end{itemize}
 
 \newpage
+
+\paragraph{Setup}
 
 <<packages, echo = T, eval = F>>=
 library(magrittr)
@@ -90,7 +95,8 @@ validation_dir <- file.path(base_dir, "validation")
 test_dir <- file.path(base_dir, "test")
 
 @
-% \paragraph{Image Augmentation}
+
+\paragraph{Image Augmentation}
 
 <<img-augmentation, echo = T, eval = F>>=
 n_train <- length(list.files(train_dir))
@@ -159,6 +165,7 @@ for (i in list.files(train_dir, "*.jpg", full.names = T)) {
 @
 
 This next section of code evaluates each image as processed by the convolutional base, and creates features from the last pooling layer. These features are used to train a new model head.
+
 <<data-preparation, echo = T, eval = F>>=
 conv_base <- application_vgg16(
   weights = "imagenet",
@@ -211,7 +218,8 @@ validation$features <- reshape_features(validation$features)
 test$features <- reshape_features(test$features)
 
 @
-% \paragraph{Training the Model Head}
+
+\paragraph{Training the Model Head}
 
 <<model-head, echo = T, eval = F>>=
 

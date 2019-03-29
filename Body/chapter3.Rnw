@@ -299,8 +299,10 @@ knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 @
 
+\vfill
+\newpage
 
-<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = '!h'>>=
+<<text-seychelles-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing text.", fig.cap = "Heatmaps of an image containing text. This heatmap clearly shows that the high probability of a circle is a result of the highly curled tails of the 'S' in the text.", fig.pos = '!t'>>=
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
