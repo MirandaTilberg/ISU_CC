@@ -102,13 +102,15 @@ Convolutional neural networks make use of convolutional layers, which use image 
 
 Let \(x\) be an image represented as a numerical matrix, indexed by \(i, j\), and \(\beta\) be a filter of dimension \((2a + 1) \times (2b + 1)\). The convolution of image \(x\) and filter \(\beta\) is \begin{equation}\label{eqn:convolution}(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)\end{equation}
 
-Convolutional neural networks are named to highlight their use of image convolution operations to extract information from an image. As shown in \autoref{fig:image-convolution-setup}, a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image, as shown in \autoref{fig:image-convolution-illustration}. Once the entire image has been convolved with the filter, the feature map is transformed using a nonlinear activation function like those found in \autoref{fig:activation-functions}. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one feature map per filter.
+Convolutional neural networks are named to highlight their use of image convolution operations to extract information from an image. As shown in \autoref{fig:image-convolution-setup}, a single convolutional filter is a small array of real valued weights that represents some feature (shown in green). When a filter is applied to a portion of the image (shown in blue), a single value is returned that is associated with the presence of the feature for a given subsection of the input image. When applied over an entire image, the resulting matrix of values maps the strength of the feature across the entire image, as shown in \autoref{fig:image-convolution-illustration}. 
 
-\begin{figure}
+\begin{figure}[bh]
 \centering
 \includegraphics[width=.5\textwidth]{filter.png}
 \caption[Images and convolutional filters.]{An image (blue) and a convolutional filter (green). Image from \protect\citet{prabhuUnderstandingConvolutionalNeural2018}.}\label{fig:image-convolution-setup}
 \end{figure}
+
+Once the entire image has been convolved with the filter, the \svp{resulting} feature map is transformed using a nonlinear activation function like those found in \autoref{fig:activation-functions}. A convolutional layer of a CNN takes a large number of these filters and passes them over the image to return one \svp{activation layer} per filter.
 
 \begin{figure}
 \centering
