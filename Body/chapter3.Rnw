@@ -183,7 +183,7 @@ The images in \autoref{fig:generic-text-line} are primarily all identified as co
 
 The impact of contrast may be due to the artificiality of the shoe images. VGG16 was trained to recognize photographs of subjects that are more naturally-occurring and taken in real settings, such as in \autoref{fig:retrievers}. The outsole images used in this research, however, are much more artificial images, and any color variation in the image is part of the shoe design. Thus, the "color knowledge" of VGG16 is not perfectly generalizable to the domain of classifying outsole images. 
 
-<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled chevron.", dpi = 600>>=
+<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images containing chevrons.", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
 pred_prob_plot(chevron2, loaded_model)
 @
@@ -248,7 +248,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer (in this case, the final convolutional layer of VGG16) and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide diagnostic information: using these graphics, we can identify which locations in an image contribute most to CoNNOR's predictions.
 
-\svp{In the figures in this subsection, heatmaps show the three classes with the highest output probabilities alongside the original image.} \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a \svp{line} dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category ``other" \svp{during model training}, as the model must be evaluated on images which do not contain any of the classes.
+In the figures in this subsection, heatmaps show the three classes with the highest output probabilities alongside the original image. \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a line dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category ``other" during model training, as the model must be evaluated on images which do not contain any of the classes.
 
 
 \mt{Very final thing: describe these to take up the whole page}
@@ -312,6 +312,6 @@ knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.scap = "Heatmaps of an image containing stars and bowties.">>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.scap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.">>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
