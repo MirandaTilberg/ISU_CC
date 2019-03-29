@@ -95,7 +95,7 @@ data.frame(history$metrics) %>%
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.81 (for line) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
 
-<<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "Whole model ROC Curve">>=
+<<roc-code, fig.width = 5, fig.height = 5, out.width = ".5\\textwidth", fig.cap = "ROC curve showing overall model performance.", fig.scap = "Overall model performance ROC curve.">>=
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
@@ -147,7 +147,7 @@ As stated in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation 
 Although some efforts to generalize confusion matrices to multi-class problems do exist in the literature \citep{landgrebeEfficientMulticlassROC2008}, it appears that confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent (see \autoref{tab:error-3class-problem}). The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
 
 
-<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the full classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculation of false positives.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
+<<confusion_matrix, fig.width = 9, fig.height = 8, out.width = "\\textwidth", fig.cap = "Confusion matrix, showing on the diagonal the correct classification rate and on the off-diagonal, classification errors. Note that in multi-label images, correct off-diagonal labels have been excluded from the calculation of false positives.", fig.scap = "Confusion matrix, with correct and incorrect model classifications.", dpi = 600>>=
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs, threshold = thresholds) %>%
   set_names(str_to_title(classes)) %>%
@@ -183,12 +183,12 @@ The images in \autoref{fig:generic-text-line} are primarily all identified as co
 
 The impact of contrast may be due to the artificiality of the shoe images. VGG16 was trained to recognize photographs of subjects that are more naturally-occurring and taken in real settings, such as in \autoref{fig:retrievers}. The outsole images used in this research, however, are much more artificial images, and any color variation in the image is part of the shoe design. Thus, the "color knowledge" of VGG16 is not perfectly generalizable to the domain of classifying outsole images. 
 
-<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled `chevron'", dpi = 600>>=
+<<generic-chevron, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "Most chevrons are correctly classified, though instances where two quadrilaterals make up a chevron are missed, and one low-contrast light sole has low probability across all 9 geometric figures, indicating that low color contrast may be an issue for CoNNOR.", fig.scap = "Features detected in images labeled chevron.", dpi = 600>>=
 chevron2 <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-chevron"), full.names = T)
 pred_prob_plot(chevron2, loaded_model)
 @
 
-<<generic-text-line, fig.width = 11, fig.height = 6, out.width = "\\textwidth", fig.cap = "A selection of images containing text and/or lines. Most images are correctly identified as containing text, though again there is some indication that low-contrast images are poorly recognized. In addition, text which occurs towards the boundaries of the labeled region may not be successfully identified by the model.", fig.scap = "Features detected in  images with `text' and/or `line' labels.", dpi = 600>>=
+<<generic-text-line, fig.width = 11, fig.height = 6, out.width = "\\textwidth", fig.cap = "A selection of images containing text and/or lines. Most images are correctly identified as containing text, though again there is some indication that low-contrast images are poorly recognized. In addition, text which occurs towards the boundaries of the labeled region may not be successfully identified by the model.", fig.scap = "Features detected in images containing text.", dpi = 600>>=
 text_line <- list.files(here::here("Images", "chapter3", "test-imgs", "generic-text-line"), full.names = T)
 pred_prob_plot(text_line, loaded_model)
 @
@@ -209,17 +209,17 @@ chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pat
 pred_prob_plot(chevron, loaded_model, sort = F)
 @
 
-<<uggs, fig.width = 11, fig.height = 12, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<uggs, fig.width = 11, fig.height = 12, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, without a defined circle outline. The model predictions are relatively consistent, but detection of the circle and text elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG logo across different soles.", dpi = 600>>=
 uggs <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-star-logo"), full.names = T)
 pred_prob_plot(uggs, loaded_model)
 @
 
-<<uggs-with-circle, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, with a defined circle outline. Again, the model predictions are relatively consistent, but now detection of the triangle and star elements vary based on image contrast and color.", fig.scap = "Features detected in the UGG shoe logo across different shoe models", dpi = 600>>=
+<<uggs-with-circle, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "UGG logos as found on many different shoes, with a defined circle outline. Again, the model predictions are relatively consistent, but now detection of the triangle and star elements vary based on image contrast and color.", fig.scap = "Features detected in a variant of the  UGG logo on several shoes.", dpi = 600>>=
 uggs_circle <- list.files(here::here("Images", "chapter3", "test-imgs", "ugg-circle-star-logo"), full.names = T)
 pred_prob_plot(uggs_circle, loaded_model)
 @
 
-<<nb_logo, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "New Balance logos found on several different shoes; note that the model can sometimes detect the logo even with color/texture changes, but when the color pattern is of higher contrast than the logo, the model can no longer successfully recognize the logo.", fig.scap = "Features detected in the New Balance shoe logo across different shoe models.", dpi = 600>>=
+<<nb_logo, fig.width = 11, fig.height = 11, out.width = "\\textwidth", fig.cap = "New Balance logos found on several different shoes; note that the model can sometimes detect the logo even with color/texture changes, but when the color pattern is of higher contrast than the logo, the model can no longer successfully recognize the logo.", fig.scap = "Features detected in the New Balance logo on different shoes.", dpi = 600>>=
 nb_logo <- list.files(here::here("Images", "chapter3", "test-imgs", "nb-logo"), full.names = T)
 pred_prob_plot(nb_logo, loaded_model)
 @
@@ -245,9 +245,11 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \section{Model Diagnostics---Heatmaps}\label{ch3:heatmap}
 
-A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer---in this case, the final convolutional layer of VGG16---and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide useful information regarding which locations in an image contribute most to CoNNOR's image predictions.
 
-The following figures show a number of interesting examples, where the heatmaps show the three classes to which CoNNOR assigns the highest probabilities. \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a ribbon dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category "other", as the model must be evaluated on images which do not contain any of the classes.
+A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer (in this case, the final convolutional layer of VGG16) and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide diagnostic information: using these graphics, we can identify which locations in an image contribute most to CoNNOR's predictions.
+
+\svp{In the figures in this subsection, heatmaps show the three classes with the highest output probabilities alongside the original image.} \autoref{fig:chevron-circle-heatmap} shows a case where the chevron and circle predictions are quite good, but there is a \svp{line} dividing the two sections that is falsely predicted to be a quadrilateral. \autoref{fig:corks-heatmap} shows an outsole with cork shapes; the model bases its high prediction of star on the concave corners where the corks meet. This example also shows the importance of including the category ``other" \svp{during model training}, as the model must be evaluated on images which do not contain any of the classes.
+
 
 \mt{Very final thing: describe these to take up the whole page}
 \autoref{fig:quad-triangle-hexagon-heatmap}
@@ -310,6 +312,6 @@ knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
 knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 @
 
-<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.">>=
+<<bowtie-star-heatmap, eval = T, out.width = ".95\\textwidth", fig.width = 8, fig.height = 6, fig.cap = "Heatmaps of an image containing bowties and a star.", fig.cap = "CoNNOR identifies the star by its pointed ends, but appears to have difficulty locating and identifying the bowties.", fig.scap = "Heatmaps of an image containing stars and bowties.">>=
 knitr::include_graphics(heatmaps[grepl("bowtie", heatmaps)])
 @
