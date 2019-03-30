@@ -89,7 +89,7 @@ data.frame(history$metrics) %>%
 
 \FloatBarrier
 
-\section{Model Accuracy}\label{ch3:model-accuracy}
+\section{Model Accuracy}\label{sec:model-accuracy}
 
 \autoref{fig:roc-code} shows the ROC curve for the full model, and \autoref{fig:auc-code} shows the curve for each class. The full model has an AUC of 0.88, and the AUC for individual classes ranges from 0.81 (for line) to 0.91 (for bowtie and text). While the class performances do vary slightly, each ROC curve is the same general shape and performs significantly better than random chance.
 
@@ -139,7 +139,7 @@ ggplot() +
 
 \FloatBarrier
 
-As discussed in \autoref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
+As discussed in Section~\ref{sec:model-eval}, a confusion matrix is a cross-tabulation of the labels assigned to an image and the labels predicted by the model. In a single-label problem, an image belongs to only one category and the model predicts only one label, so applying the wrong label is equivalent to failing to apply the correct label. Thus, every possible combination of true label and applied prediction is represented in the two-dimensional/traditional confusion matrix. Extending the confusion matrix to more complex problems requires additional considerations.
 
 Although some efforts to generalize confusion matrices to multi-class problems do exist in the literature \citep{landgrebeEfficientMulticlassROC2008}, it appears that confusion matrices have not previously been applied to multi-label classification problems. Since a single image may belong to a combination of the $n$ categories, it is no longer true that a false positive and a false negative are equivalent (see \autoref{tab:error-3class-problem}). The confusion matrix presented in \autoref{fig:confusion_matrix} is like a traditional confusion matrix in that all values along the diagonal represent the proportion of true positives captured within each category. The off-diagonal values, however, are adjusted from the traditional method to remove the effect of any true positives from the calculation of false positive proportions. For example, to calculate the proportion of images that contain triangles but are being falsely labeled as containing quadrilaterals, any image that truly contains both triangles and quadrilaterals is removed before calculating the proportion of false quadrilateral labels.
 
@@ -168,10 +168,10 @@ This modified confusion matrix preserves the ability to identify patterns in ove
 
 Another interesting artifact in \autoref{fig:confusion_matrix} is that circles are often misclassified as text, and text is often mislabeled as containing circles. Not all of the images used in model training are accurately labeled: in some cases, the labels have not been updated after labeling guidelines have changed. The confusion between text and circles is a natural consequence of the overlap between geometric shapes and components of written text; it is not indicative of a lack of fit as much as a weakness in the classification system used to define the model.
 
-\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not necessarily suggest where to look as to \emph{why} the model is not performing appropriately. In sections~\ref{ch3:model-consistency} and \ref{ch3:heatmap}, alternative visualizations are used to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.
+\autoref{fig:confusion_matrix} shows the general weaknesses of the model, but does not necessarily suggest where to look as to \emph{why} the model is not performing appropriately. In sections~\ref{sec:model-consistency} and \ref{sec:heatmap}, alternative visualizations are used to better understand the weaknesses of the model when applied to actual images used to train, test, and validate the model.
 
 
-\section{Model Consistency}\label{ch3:model-consistency}
+\section{Model Consistency}\label{sec:model-consistency}
 In order to examine the model's consistency, and whether it can successfully detect features across a variety of images, several case studies are explored in this section that probe the model's strengths and weaknesses.
 
 \subsection{General shape recognition}
@@ -201,7 +201,7 @@ pred_prob_plot(triangle, loaded_model)
 \subsection{Recognition across colors}
 In order to more fully  understand CoNNOR's strengths and weaknesses, several shapes were identified which are consistently present in several different color patterns, either from the same shoe model, or from the same brand and very similar tread patterns. These cases explore model performance when the geometric patterns are controlled and color patterns are varied in real context---while colors could be varied artificially, additional artifacts may be introduced in the image manipulation process.
 
-In the more homogeneous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities---the lightest image has only slightly lower probability than the darker images. On the other hand, Figures~\ref{fig:uggs}, \ref{fig:uggs-with-circle}, \ref{fig:nb_logo}, and \ref{fig:nike} show cases where CoNNOR is able to identify shapes when contrast is moderate, but has greater difficulty when contrast is very low. The effect of contrast adjustment on CoNNOR's predictions is further explored in \autoref{ch3:contrast-adjustment}.
+In the more homogeneous contrast situation shown in \autoref{fig:chevron}, the color variation does not produce large variations in the output probabilities---the lightest image has only slightly lower probability than the darker images. On the other hand, Figures~\ref{fig:uggs}, \ref{fig:uggs-with-circle}, \ref{fig:nb_logo}, and \ref{fig:nike} show cases where CoNNOR is able to identify shapes when contrast is moderate, but has greater difficulty when contrast is very low. The effect of contrast adjustment on CoNNOR's predictions is further explored in Section~\ref{sec:contrast-adjustment}.
 
 <<chevron, fig.width = 11, fig.height = 9, out.width = "\\textwidth", fig.cap = "A selection of images containing a specific chevron pattern from Adidas shoes, in a variety of colors. In the more homogeneous contrast situations presented here, features are detected across color patterns. ", fig.scap = "Features detected in a chevron pattern across different colors.", dpi = 600>>=
 chevron <- list.files(here::here("Images", "chapter3", "test-imgs", "chevron-pattern"), full.names = T)
@@ -232,7 +232,7 @@ pred_prob_plot(nike, loaded_model, sort = F)
 @
 
 
-\subsection{Contrast Adjustment}\label{ch3:contrast-adjustment}
+\subsection{Contrast Adjustment}\label{sec:contrast-adjustment}
 In several of the model consistency case studies presented, color contrast was identified as a possible reason for poor feature identification. There are automatic ways to adjust the contrast of photos, enhancing CoNNOR's ability to notice details. \autoref{fig:auto-color-balance} shows the original predictions of previous cases with low contrast paired with predictions of the images after contrast adjustment. Predictions of the adjusted images are not drastically different; the chevrons at the bottom take on a moderate false positive bowtie prediction, but the predictions of the UGG and the New Balance logos show significant improvement.
 
 <<auto-color-balance, fig.width = 11, fig.height = 10, out.width = "\\textwidth", fig.cap = "Images with low contrast from previous cases, with corresponding auto-adjusted color balance images. The color balanced images are on top of the corresponding low-contrast images. In most cases, auto color balancing increases the output class probabilities for relevant categories, though the chevron image at the bottom is strongly recognized as a bowtie instead of a chevron pattern.", fig.scap = "An examination of color balance and its affect on identified features.", dpi = 600>>=
@@ -242,7 +242,7 @@ pred_prob_plot(lowcontrast, loaded_model, sort = F)
 
 \FloatBarrier
 
-\section{Model Diagnostics: Heatmaps}\label{ch3:heatmap}
+\section{Model Diagnostics: Heatmaps}\label{sec:heatmap}
 
 
 A heatmap is a visual diagnostic tool that displays the portions of an image that are most significant to classification for a given class. Belonging to a category of techniques called class activation map (CAM) visualizations, heatmaps are computed by taking the output feature map of a convolutional layer (in this case, the final convolutional layer of VGG16) and weighting each channel of the feature map by the gradient of the class with respect to the channel \citep{chollet_allaire_2018}. Heatmaps provide diagnostic information: using these graphics, we can identify which locations in an image contribute most to CoNNOR's predictions.
