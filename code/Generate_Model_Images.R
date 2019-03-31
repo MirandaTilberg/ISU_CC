@@ -548,4 +548,39 @@ plot_deepviz_sample <- function(n, dropout_rate = .5, edge_col = c("grey50", "gr
     theme_void()
 }
 
+
+plot_deepviz_arrows <- function(n, edge_col = "grey50", 
+                                line_type = "solid", rad = .1){
+  nodes <- make_nodes_df(n)
+  edges <- make_edges_df(n)
+  
+  tbl_graph(nodes = nodes, edges = edges) %>%
+    ggraph(layout = "manual", node.position = layout_keras(., n)) +
+    geom_edge_link(edge_colour = edge_col, linetype = line_type,
+                   arrow = arrow(length = unit(2, 'mm'),
+                                 type = "closed", angle = 20),
+                   end_cap = circle(5, 'mm')) +
+    geom_node_circle(aes(r = rad), fill = "grey95") +
+    coord_fixed() +
+    theme_void()
+}
+
+plot_deepviz_dropout <- function(n, rm_nodes) {
+  nodes <- make_nodes_df(n)
+  edges <- make_edges_df(n)
+  
+  rm_rows <- (edges$from %in% rm_nodes) | (edges$to %in% rm_nodes)
+  edges <- edges[!rm_rows,]
+  
+  tbl_graph(nodes = nodes, edges = edges) %>%
+    ggraph(layout = "manual", node.position = layout_keras(., n)) +
+    geom_edge_link(edge_colour = "grey50", linetype = "solid",
+                   arrow = arrow(length = unit(2, 'mm'),
+                                 type = "closed", angle = 20),
+                   end_cap = circle(5, 'mm')) +
+    geom_node_circle(aes(r = .1), fill = "grey95") +
+    coord_fixed() +
+    theme_void()
+}
+
 # ------------------------------------------------------------------------------
