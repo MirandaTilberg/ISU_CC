@@ -565,22 +565,35 @@ plot_deepviz_arrows <- function(n, edge_col = "grey50",
     theme_void()
 }
 
-plot_deepviz_dropout <- function(n, rm_nodes) {
+plot_deepviz_dropout <- function(n, rm_nodes, cross_out = F, r = .1) {
   nodes <- make_nodes_df(n)
   edges <- make_edges_df(n)
   
   rm_rows <- (edges$from %in% rm_nodes) | (edges$to %in% rm_nodes)
   edges <- edges[!rm_rows,]
   
-  tbl_graph(nodes = nodes, edges = edges) %>%
+  plot <- tbl_graph(nodes = nodes, edges = edges) %>%
     ggraph(layout = "manual", node.position = layout_keras(., n)) +
     geom_edge_link(edge_colour = "grey50", linetype = "solid",
                    arrow = arrow(length = unit(2, 'mm'),
                                  type = "closed", angle = 20),
                    end_cap = circle(5, 'mm')) +
-    geom_node_circle(aes(r = .1), fill = "grey95") +
+    geom_node_circle(aes(r = r), fill = "grey95") +
     coord_fixed() +
     theme_void()
+  if(cross_out) {
+    centers <- data.frame(x = plot$data$x, y = plot$data$y)[rm_nodes,]
+    d <- r / sqrt(2)
+    centers$xl <- centers$x - d
+    centers$xu <- centers$x + d
+    centers$yl <- centers$y - d
+    centers$yu <- centers$y + d
+    plot + 
+      geom_segment(aes(x = xl, xend = xu, y = yl, yend = yu),
+                   data = centers, size = .7) +
+      geom_segment(aes(x = xu, xend = xl, y = yl, yend = yu),
+                   data = centers, size = .7)
+  } else {plot}
 }
 
 # ------------------------------------------------------------------------------
