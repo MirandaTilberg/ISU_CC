@@ -69,9 +69,9 @@ source("../code/count_images.R")
 
 ```{r load-keras-model}
 library(keras)
-model-dir <- newest_model$path
+model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
-load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
+#load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
 load(file.path(get_newest(dir = "../model/TrainedModels")$path, 
                get_newest(dir = "../model/TrainedModels", 
                           pattern = "\\d.Rdata")$base_file))
@@ -100,3 +100,20 @@ class:primary
 plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
 ```
 
+---
+class:primary
+## Relevant Features
+
+| Bowtie | Chevron | Circle |
+| ------ | ------- | ------ |
+| ![Bowtie examples](class_examples/bowtie_examples.png) | ![Chevron examples](class_examples/chevron_examples.png) | ![Circle examples](class_examples/circle_examples.png) |
+
+| Line | Polygon | Quadrilateral |
+| ---- | ------- | ---- |
+| ![Line examples](class_examples/line_examples.png) | ![Polygon examples](class_examples/polygon_examples.png) | ![Quad examples](class_examples/quad_examples.png) |
+
+| Star | Text | Triangle |
+| ---- | ---- | -------- |
+| ![Star examples](class_examples/star_examples.png) | ![text examples](class_examples/text_examples.png) | ![Triangle examples](class_examples/triangle_examples.png) |
+
+Used to separate shoes...
