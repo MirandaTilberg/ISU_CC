@@ -1,0 +1,177 @@
+/* Margins */
+  .remark-slide-content {
+    padding-top: 175px;
+    padding-left: 30px;
+    padding-right: 190px;
+    padding-bottom: 20px;
+  }
+
+/* Background images */
+  .title-slide {
+    background-image: url("../images/titlepageimg.png");
+    background-size: contain;
+    background-position: 0 0;
+  }
+
+.inverse {
+  background-image: url("../images/titlepageimg.png");
+  background-size: contain;
+  background-position: 0 0;
+}
+
+.inv-center {
+  background-image: url("../images/titlepageimg.png");
+  background-size: contain;
+  background-position: 0 0;
+}
+
+.primary {
+  background-image: url("../images/primaryslideimg.png");
+  background-size: contain;
+  background-position: 0 0;
+}
+
+.secondary {
+  background: url("../images/secondaryslideimg.png");
+  background-size: contain;
+  background-position: 0 0;
+}
+
+/* Headers in the right place */
+  .inverse > h1:first-of-type {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    max-width: 620px;
+    max-height: 250px;
+    vertical-align: middle;
+    color: #ffffff;
+      text-align: left;
+  }
+
+.inv-center > h1:first-of-type {
+  position: absolute;
+  top: 120px;
+  left: 60px;
+  width: 620px;
+  height: 250px;
+  margin: 0px;
+  text-align:center !important;
+  color: #ffffff;
+}
+
+.title-slide > h3:first-of-type { /* Author */
+    padding-left: 30px;
+  margin: 0px;
+  color: #ffffff;
+    text-align: left;
+}
+
+.title-slide > h3:nth-of-type(2) { /* Date */
+    position: absolute;
+  bottom: 200px;
+  right: 286px;
+  max-width: 580px;
+  max-height: 50px;
+  margin-bottom: 0;
+  margin-top: 0;
+  color: #003a70;
+    text-align: right;
+  font-size: 90%;
+}
+
+.primary > h1:first-child, .primary > h2:first-child, .primary > h3:first-child {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  margin-top: 0px;
+  max-width:760px;
+  max-height: 170px;
+}
+
+/* Text formatting */
+  .primary > h1 {
+    color: #ffffff;
+      font-weight: bold;
+  }
+
+.primary > h2 {
+  font-weight: bold;
+}
+
+.figure p.caption{
+  display: none;
+  color: white;
+}
+
+.remark-slide-number {
+  top: 8px;
+  right: 8px;
+  text-shadow: 0 0 0;
+  font-size: 70%;
+}
+
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+/* Image and table formatting */
+  
+  .img75 img {
+    width: 75%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+  }
+
+/* Convenient text modifiers */
+  
+  .large { 
+    font-size: 130% 
+  }
+.slightly-small { 
+  font-size: 80% 
+}
+
+.smaller { 
+  font-size: 75% 
+}
+.small { 
+  font-size: 70% 
+}
+.tiny { 
+  font-size: 30% 
+}
+.grey {
+  color: #8a8a8d;
+}
+
+.footer {
+  position: absolute;
+  bottom: 3px;
+  width: 100%;
+  font-size: 50%;
+}
+
+/* Convenient position modifiers */
+  .move-margin {
+    position: absolute;
+    margin: auto;
+    top: 227px; bottom: 50px; right: 10px;
+    max-width: 160px;
+    max-height:400px;
+  }
+
+.move-up {
+  padding-top:-50px !important;
+}
+
+.move-left {
+  margin-left:-25px !important;
+}
+
+/* Allow printing w/ speaker notes...https://github.com/gnab/remark/issues/70 */
+  @media print {
+    .remark-container.remark-presenter-mode .remark-slide-notes {
+      margin-top:700px;
+    }
+  }

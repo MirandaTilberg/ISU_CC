@@ -1,0 +1,102 @@
+---
+title: "CoNNOR: Convolutional Neural Network for Outsole Recognition"
+author: "Miranda Tilton"
+date: "April 9, 2019"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: ["default", "css/csafe.css", "css/csafe-fonts.css", "css/this-presentation.css"]
+    lib_dir: libs
+    nature:
+      countIncrementalSlides: false
+---
+class: primary
+```{r setup, echo = F, cache = F, include = F}
+library(magrittr)
+library(tidyverse)
+library(ggplot2)
+library(keras)
+library(furrr)
+plan(multicore)
+mytheme <- theme_bw() + 
+  theme(panel.grid.major = element_line(color = "grey50"),
+        panel.grid.minor = element_line(color = "grey60"))
+theme_set(mytheme)
+knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, 
+                      cache = T, dpi = 300, dev = 'png')
+source("../code/Generate_Model_Images.R")
+```
+
+```{r load_refs, echo=FALSE, cache=FALSE, include = F, eval = F}
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "numeric", 
+           cite.style = 'authoryear', 
+           style = "html",
+           hyperlink = FALSE, 
+           no.print.fields = c("isbn", "urldate"),
+           dashed = FALSE)
+bb <- ReadBib("./refs.bib", check = T)
+```
+
+```{r unicode}
+# Unicode symbols for classes
+unicode_symbols <- c(bowtie = "",
+  star = "\u2605",
+  polygon = "\u2B23",
+  chevron = "\uFE3D",
+  triangle = "\u25BC",
+  other = "\u003F",
+  circle =  "\u23FA",
+  text = "a",
+  quad = "\u25A0",
+  line = "\u2225"
+  )
+unicode_symbols <- tibble(labels = names(unicode_symbols),
+                              shape = as.character(unicode_symbols))
+classes <- c("bowtie", "chevron", "circle", "line", "polygon", "quad", "star", 
+             "text", "triangle")
+```
+
+```{r labeled_data}
+model_path <- "../model/TrainedModels"
+newest_model <- get_newest(dir = model_path, pattern = "weights.h5")
+newest_data_file <- file.path("../model/RProcessedImages", newest_model$process_dir, "cropped_photos.Rdata")
+load(newest_data_file)
+
+source("../code/count_images.R")
+```
+
+```{r load-keras-model}
+library(keras)
+model-dir <- newest_model$path
+load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
+load(file.path(get_newest()$path, get_newest(pattern = "\\d.Rdata")$base_file))
+load(file.path(get_newest(dir = "../model/TrainedModels")$path, 
+               get_newest(dir = "../model/TrainedModels", 
+                          pattern = "\\d.Rdata")$base_file))
+```
+
+# Intro
+
+
+---
+class:primary
+
+# CNNs
+
+---
+class:primary
+# Fully connected
+
+```{r fully-connected, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
+plot_deepviz_arrows(c(6, 6, 3), r = .1)
+```
+---
+class:primary
+# Dropout
+
+```{r dropout, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
+plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
+```
+
