@@ -192,11 +192,11 @@ Similarly, in densely connected or fully connected layers, each final feature pr
 
 When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
-<<dense-layer, echo = F, fig.width = 5, fig.height = 3, out.width = ".45\\textwidth", fig.cap = "(Left) A densely-connected layer with 12 input nodes and 4 output nodes. (Right) A densely-connected layer with 12 input nodes, 4 output nodes, and a 50\\% dropout rate.", fig.scap = "Densely connected layers with and without dropout.", fig.show =  'hold'>>=
+<<dense-layer, echo = F, fig.width = 5, fig.height = 4, out.width = ".45\\textwidth", fig.cap = "(Left) A densely-connected layer with 6 input nodes, one hidden layer with 6 nodes, and 3 output nodes. (Right) A densely-connected layer with 6 input nodes, one hidden layer with 6 nodes, 3 output nodes, and a 50\\% dropout rate.", fig.scap = "Densely connected layers with and without dropout.", fig.show =  'hold'>>=
 source(file.path(codedir, "Generate_Model_Images.R"))
-plot_deepviz2(c(12, 4), r = .005)
+plot_deepviz_arrows(c(6,6,3)) 
 
-plot_deepviz_sample(c(12, 4), r = .005, dropout_rate = 0.5) +
+plot_deepviz_dropout(c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T) +
   theme(legend.position = c(1, 0), legend.justification = c(1, 0))
 @
 
