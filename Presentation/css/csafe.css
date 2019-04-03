@@ -174,4 +174,30 @@
     .remark-container.remark-presenter-mode .remark-slide-notes {
       margin-top:700px;
     }
-  }
+}
+
+ul li {
+  color: #3c3c3c;
+  /* set color of list item text */
+
+  list-style: none;
+}
+
+ul li::before {
+  color: #8bc540;
+  /* color of bullet or square */
+
+  content: "\25B8";
+  /* Unicode of character to precede the list item */
+
+  font-size: 1em;
+  /* em or %*/
+
+  padding-right: .75em;
+  /* use em*/
+
+  position: relative;
+  top: 0em;
+  /* use em or % */
+
+}

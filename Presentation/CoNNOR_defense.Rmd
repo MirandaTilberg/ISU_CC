@@ -102,11 +102,9 @@ class:primary
 
 ## Outsole Class Characteristics
 
-- Make, model, tread pattern, size, shoe type
-
-- Cannot be used for identification of an individual
-
-- Used for exclusion
+- Make, model, tread pattern, size, shoe type<br/><br/>
+- Cannot be used for identification of an individual<br/><br/>
+- Used for exclusion<br/><br/>
 
 <img src="images/converse-combined.png" width="40%" alt="Many sizes of Chuck Taylors" style="position:absolute;bottom:30px;right:30px"/>
 
@@ -131,10 +129,8 @@ class:primary
 
 ## Computational Image Analysis
 
-- Crime scene information comes as images, so this is an image analysis problem
-
-- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.
-
+- Crime scene information comes as images, so this is an image analysis problem<br/><br/>
+- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.<br/><br/>
 - Want method that predicts quickly and accurately, and produces interpretable features
 
 
