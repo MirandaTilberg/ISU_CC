@@ -274,26 +274,26 @@ Formulas
 ---
 class:primary
 
-## Max Pooling
+## Max Pooling 
 
 ![Input image and filter](../Images/chapter1/maxpooling.png)
 
 ---
 class:primary
-## Fully connected
+## Full Connected Layers
 
-```{r fully-connected, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
+```{r fully-connected, out.width = "75%", fig.width = 10, fig.height = 10, fig.align = "center"}
 #plot_deepviz_arrows(c(6, 6, 3), r = .1)
-plot_deepviz_arrows(c(20, 15, 9), r = .1)
+plot_deepviz_arrows(c(12, 9, 4), r = .1)
 ```
 ---
 class:primary
-# Dropout
+## Dropout
 
-```{r dropout, out.width = "75%", fig.width = 10, fig.height = 5, fig.align = "center"}
+```{r dropout, out.width = "75%", fig.width = 10, fig.height = 10, fig.align = "center"}
 #plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
-set.seed(1)
-plot_deepviz_dropout(n = c(20,15,9), rm_nodes = sample(1:35, 15), cross_out = T)
+set.seed(2)
+plot_deepviz_dropout(n = c(12,9,4), rm_nodes = c(sample(2:11, 5), sample(14:20, 4)), cross_out = T)
 ```
 
 
@@ -456,7 +456,7 @@ class:primary
 
 # ROC
 
-```{r auc-code}
+```{r class-roc, fig.width = 7.5, fig.height = 5, out.width = "99%"}
 aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
 thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
 aucs$data$thresholds <- thresholds
@@ -481,7 +481,7 @@ class:primary
 
 # Confusion Matrix
 
-```{r confusion-matrix}
+```{r confusion-matrix, fig.width = 7.5, fig.height = 6.5, out.width = "80%"}
 get_confusion_matrix(predictions = preds, classes = classes,
                      test_labels = test_labs, threshold = thresholds) %>%
   set_names(str_to_title(classes)) %>%
