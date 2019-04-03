@@ -77,7 +77,7 @@ load(file.path(get_newest(dir = "../model/TrainedModels")$path,
                           pattern = "\\d.Rdata")$base_file))
 ```
 
-# Estimating Random Match Probability
+## Estimating Random Match Probability
 
 1. Define the comparison population
 
@@ -98,7 +98,7 @@ $S$ similar shoes in the $N$ shoe sample
 ---
 class:primary
 
-# Outsole Class Characteristics
+## Outsole Class Characteristics
 
 - Make, model, tread pattern, size, shoe type
 
@@ -121,23 +121,136 @@ Use features other than make/model and size to characterize shoes
 
 | Dr. Martens | Eastland | Timberland |
 | --- | --- | --- |
-| <img src = "problem-definition/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "problem-definition/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "problem-definition/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> |
+| <img src = "images/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "images/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "images/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> |
 | Work 2295 Rigger | 1955 Edition Jett | 6" Premium Boot |
 
 ---
 class:primary
 
-# Computational Image Analysis
+## Computational Image Analysis
+
+- Crime scene information comes as images, so this is an image analysis problem
+
+- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.
+
+- Want method that predicts quickly and accurately, and produces interpretable features
+
 
 ---
 class:primary
 
-# Convolutional Neural Networks
+## Human Vision
+
+Brief overview of feature detectors
+
+---
+class:primary
+
+## Human Classification
+
+<img src = "../Images/chapter1/caterpillar.png" width = 45%/> <img src = "../Images/chapter1/carrots.png" width = 45%/>
+
+---
+class:primary
+
+## Human Classification
+
+```{r}
+source(file.path(codedir, "Generate_Model_Images.R"))
+col_vec <- rep("grey50", 32)
+col_vec[seq(1, 29, by = 4)] <- rep(c("blue", "orange"), 4)
+
+lty <- rep("solid", 32)
+lty[c(21,25)] <- "dashed"
+
+plot <- plot_deepviz2(c(4,2), edge_col = col_vec, line_type = lty)
+
+df <- data.frame(x = plot$data$x,
+                 y = plot$data$y,
+                 labs = c("Orange", "Long", "Fuzzy", "Pointy",
+                          "Caterpillar", "Carrot"))
+
+plot + geom_label(aes(x = x, y = y, label = labs), data = df)
+
+```
+
+
+---
+class: primary
+## CNN architecture
+
+![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
+
+---
+class: primary
+## Image Convolution
+
+Let $x$ be an image represented as a numerical matrix, indexed by $i, j$, and $\beta$ be a filter of dimension $(2a + 1) \times (2b + 1)$
+
+The convolution of image $x$ and filter $\beta$ is $$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter.png)
+
+.pull-left[.center[Input image 
+$\displaystyle x$
+]]
+.pull-right[.center[
+Weight matrix
+$\displaystyle \mathbf{\beta}$
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter1.png)
+
+.pull-left[.center[Convolution: 
+$\displaystyle \beta\ast x$
+]]
+.pull-right[.center[
+Feature Map
+$(\beta \ast x)(i, j)$
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter2.png)
+
+.pull-left[.center[Convolution: 
+$\displaystyle \beta\ast x$
+]]
+.pull-right[.center[
+Feature Map
+$(\beta \ast x)(i, j)$
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
 
 
 ---
 class:primary
-# Fully connected
+
+## Convolutional Neural Networks
+
+---
+class:primary
+## Fully connected
 
 ```{r fully-connected, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
 plot_deepviz_arrows(c(6, 6, 3), r = .1)
