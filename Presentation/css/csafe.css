@@ -116,7 +116,7 @@
 }
 
 /* Image and table formatting */
-  
+
   .img75 img {
     width: 75%;
     margin-left: 12.5%;
@@ -124,22 +124,22 @@
   }
 
 /* Convenient text modifiers */
-  
-  .large { 
-    font-size: 130% 
+
+  .large {
+    font-size: 130%
   }
-.slightly-small { 
-  font-size: 80% 
+.slightly-small {
+  font-size: 80%
 }
 
-.smaller { 
-  font-size: 75% 
+.smaller {
+  font-size: 75%
 }
-.small { 
-  font-size: 70% 
+.small {
+  font-size: 70%
 }
-.tiny { 
-  font-size: 30% 
+.tiny {
+  font-size: 30%
 }
 .grey {
   color: #8a8a8d;
@@ -153,7 +153,7 @@
 }
 
 /* Convenient position modifiers */
-  .move-margin {
+.move-margin {
     position: absolute;
     margin: auto;
     top: 227px; bottom: 50px; right: 10px;
@@ -170,7 +170,7 @@
 }
 
 /* Allow printing w/ speaker notes...https://github.com/gnab/remark/issues/70 */
-  @media print {
+@media print {
     .remark-container.remark-presenter-mode .remark-slide-notes {
       margin-top:700px;
     }
