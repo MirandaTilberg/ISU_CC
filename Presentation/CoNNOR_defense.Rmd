@@ -149,7 +149,7 @@ class:primary
 
 ## Human Classification
 
-<img src = "../Images/chapter1/caterpillar.png" width = 45%/> <img src = "../Images/chapter1/carrots.png" width = 45%/>
+.center[<img src = "../Images/chapter1/caterpillar.png" height = "220px"/> <img src = "../Images/chapter1/carrots.png" height = "220px"/>]
 
 ---
 class:primary
