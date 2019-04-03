@@ -24,7 +24,8 @@ mytheme <- theme_bw() +
         panel.grid.minor = element_line(color = "grey60"))
 theme_set(mytheme)
 knitr::opts_chunk$set(echo = FALSE, message = F, warning = F, 
-                      cache = T, dpi = 300, dev = 'png')
+                      cache = T, dpi = 300, dev = 'png', 
+                      fig.width = 8, fig.height = 6)
 source("../code/Generate_Model_Images.R")
 ```
 
@@ -244,10 +245,9 @@ $(\beta \ast x)(i, j)$
 
 ---
 class:primary
-
 ## Activation Functions
 
-```{r activation-functions}
+```{r activation-functions, fig.width = 8, fig.height = 2, out.width = "100%"}
 sigmoid <- function(x) 1/(1 + exp(-x))
 relu <- function(x) pmax(x, 0)
 elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
@@ -264,6 +264,7 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
   theme(axis.title = element_blank()) +
   coord_fixed()
 ```
+
 
 ---
 class:primary
