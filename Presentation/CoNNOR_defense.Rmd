@@ -156,7 +156,6 @@ class:primary
 ## Human Classification
 
 ```{r}
-source(file.path(codedir, "Generate_Model_Images.R"))
 col_vec <- rep("grey50", 32)
 col_vec[seq(1, 29, by = 4)] <- rep(c("blue", "orange"), 4)
 
@@ -177,7 +176,7 @@ plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 
 ---
 class: primary
-## CNN architecture
+## CNN Architecture
 
 ![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
 
@@ -242,30 +241,91 @@ $(\beta \ast x)(i, j)$
 .footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
 
 
+---
+class:primary
+
+## Activation Functions
+
+```{r activation-functions}
+sigmoid <- function(x) 1/(1 + exp(-x))
+relu <- function(x) pmax(x, 0)
+elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
+softplus <- function(x) log(1 + exp(x))
+
+x <- seq(-3, 3, .005)
+tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
+       ReLU = relu(x), ELU = elu(x, 1), SoftPlus = softplus(x)) %>%
+  gather(key = key, value = value, -x) %>%
+  mutate(key = factor(key, levels = c("Linear", "ReLU", "ELU",
+                                      "SoftPlus", "Sigmoid"))) %>%
+  ggplot(aes(x = x, y = value)) + geom_line() + facet_grid(.~key) +
+  ggtitle("Common Activation Functions") +
+  theme(axis.title = element_blank()) +
+  coord_fixed()
+```
 
 ---
 class:primary
 
-## Convolutional Neural Networks
+## Max Pooling
+
+Formulas
+
+---
+class:primary
+
+## Max Pooling
+
+![Input image and filter](../Images/chapter1/maxpooling.png)
 
 ---
 class:primary
 ## Fully connected
 
 ```{r fully-connected, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
-plot_deepviz_arrows(c(6, 6, 3), r = .1)
+#plot_deepviz_arrows(c(6, 6, 3), r = .1)
+plot_deepviz_arrows(c(20, 15, 9), r = .1)
 ```
 ---
 class:primary
 # Dropout
 
-```{r dropout, out.width = "75%", fig.width = 6, fig.height = 4, fig.align = "center"}
-plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
+```{r dropout, out.width = "75%", fig.width = 10, fig.height = 5, fig.align = "center"}
+#plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
+set.seed(1)
+plot_deepviz_dropout(n = c(20,15,9), rm_nodes = sample(1:35, 15), cross_out = T)
 ```
 
 
 
+---
+class: primary
+## CNN Architecture
 
+![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
+
+
+---
+class: primary
+## Forward Propogation
+
+Formulas, how an image goes through the model
+
+---
+class: primary
+## Backward Propogation
+
+Formulas, how an image updates weights through gradient descent
+
+
+
+---
+class: primary
+## Modularity and Transfer Learning
+
+- Difficult to train, need many images for many parameters
+
+-Use pretrained eyes and train new brain
 
 
 ---
@@ -286,12 +346,22 @@ class:primary
 | ![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
 
 
+
+---
+class:primary
+
+# Data Collection
+
+LabelMe image(s)
+
+
 ---
 class:primary
 
 # Data
 
 - To date, `r unique(ann_df$base_image) %>% length()` shoes have been labeled, yielding `r nrow(dfunion)` multi-label images.
+- 60/20/20 data split for train/validation/test
 
 ```{r class-characteristic-barchart, fig.width = 5.5, fig.height = 3.75, out.width = "90%", dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively uncommon."}
 annotated_imgs %>%
@@ -328,17 +398,110 @@ class:primary
 ---
 class:primary
 
-# Model Training
+## Model Training
+
+```{r training-accuracy}
+data.frame(history$metrics) %>%
+  mutate(epoch = 1:n()) %>%
+  gather(key = "measure", value = "value", -epoch) %>%
+  mutate(Type = ifelse(str_detect(measure, "val"), "Validation", "Training"),
+         measure = ifelse(str_detect(measure, "acc"), "Accuracy", "Loss")) %>%
+  # bind_rows(tibble(epoch = NA, value =  .6, measure = "Accuracy", Type = "Validation")) %>%
+  # bind_rows(tibble(epoch = NA, value =  .33, measure = "Loss", Type = "Validation")) %>%
+  ggplot(aes(x = epoch, y = value, color = Type)) +
+  geom_point() +
+  geom_smooth(se = F) +
+  facet_grid(measure~., scales = "free_y", switch = "both") +
+  theme_bw() +
+  scale_y_continuous("") +
+  scale_x_continuous("Epoch") +
+  ggtitle("CoNNOR Training Performance") + mytheme +
+  theme(axis.title.y = element_blank(), legend.position = c(1, .5),
+        legend.justification = c(1.03, -0.05),
+        legend.background = element_rect(fill = "white"))
+```
 
 ---
 class:primary
 
 # ROC
 
+```{r, roc-code}
+library(pROC)
+pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
+test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
+whole_model_roc <- roc(test_labs_df$value, pred_df$value)
+
+whole_model_roc_df <- tibble(tpr = whole_model_roc$sensitivities,
+                             fpr = 1 - whole_model_roc$specificities,
+                             thresholds = whole_model_roc$thresholds,
+                             auc = whole_model_roc$auc[1]) %>%
+  nest(tpr, fpr, thresholds, .key =  "roc_plot") %>%
+  mutate(eer = purrr::map(roc_plot, eer))
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(whole_model_roc_df, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = .07, label = sprintf("AUC: %0.2f", auc)), hjust = 1, vjust = -0.2, data = whole_model_roc_df) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error Rate"), data = unnest(whole_model_roc_df, eer), size = 2) +
+  scale_color_manual("", values = "black") +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance (All Classes)") +
+  coord_fixed() + mytheme +
+  theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
+
+```
+
+---
+class:primary
+
+# ROC
+
+```{r auc-code}
+aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
+thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
+aucs$data$thresholds <- thresholds
+
+ggplot() +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(aucs$data, roc_plot), size = 1.25) +
+  geom_label(aes(x = 1, y = 0, label = sprintf("AUC: %0.2f\nEER: %0.2f", auc, thresholds)), hjust = 1, vjust = -0.02, data = aucs$data) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error\nRate (EER)"), data = unnest(aucs$data, eer), size = 2.5) +
+  scale_color_manual("", values = "black") +
+  facet_wrap(~class) +
+  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  ggtitle("CoNNOR Test Set Performance") +
+  facet_wrap(~class, nrow = 2) +
+  coord_fixed() +
+  theme(legend.position = c(1, 0), legend.justification = c(1, 0))
+```
+
+
 ---
 class:primary
 
 # Confusion Matrix
+
+```{r confusion-matrix}
+get_confusion_matrix(predictions = preds, classes = classes,
+                     test_labels = test_labs, threshold = thresholds) %>%
+  set_names(str_to_title(classes)) %>%
+  ggcorrplot(., hc.order = F, outline.col = "white", lab = T) +
+  scale_fill_gradient("Classification\nRate", low = "white",
+                      high = "cornflowerblue", limits = c(0, 1)) +
+  scale_x_discrete("Image Label") + scale_y_discrete("Prediction") +
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14, angle = 90, vjust = 1)) +
+  ggtitle("CoNNOR Multi-Class Confusion Matrix: Test Set Performance") +
+  theme_bw() +
+  theme(panel.grid.major = element_line(color = "grey50"),
+        panel.grid.minor = element_line(color = "grey60")) +
+  theme(plot.margin = grid::unit(c(0,0,0,0), "mm"),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        plot.subtitle = element_blank(), plot.caption = element_blank(),
+        panel.spacing = unit(c(0, 0, 0, 0), "mm"))
+
+
+```
 
 ---
 class:primary
