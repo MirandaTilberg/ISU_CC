@@ -99,6 +99,7 @@ $S$ similar shoes in the $N$ shoe sample
 
 ---
 class:primary
+
 ## Relevant Features
 
 Use features other than make/model and size to characterize shoes
@@ -117,10 +118,8 @@ class:primary
 
 ## Computational Image <br/> Analysis
 
-- Crime scene information comes as images, so this is an image analysis problem
-
-- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.
-
+- Crime scene information comes as images, so this is an image analysis problem<br/><br/>
+- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.<br/><br/>
 - Want method that predicts quickly and accurately, and produces interpretable features
 
 
