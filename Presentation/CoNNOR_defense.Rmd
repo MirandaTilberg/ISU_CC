@@ -9,6 +9,7 @@ output:
     lib_dir: libs
     nature:
       countIncrementalSlides: false
+      beforeInit: "js/macros.js"
 ---
 class: primary
 ```{r setup, echo = F, cache = F, include = F}
