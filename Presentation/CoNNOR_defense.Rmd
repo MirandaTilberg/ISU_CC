@@ -99,20 +99,6 @@ $S$ similar shoes in the $N$ shoe sample
 
 ---
 class:primary
-
-## Outsole Class Characteristics
-
-- Make, model, tread pattern, size, shoe type
-
-- Cannot be used for identification of an individual
-
-- Used for exclusion
-
-<img src="images/converse-combined.png" width="40%" alt="Many sizes of Chuck Taylors" style="position:absolute;bottom:30px;right:30px"/>
-
-
----
-class:primary
 ## Relevant Features
 
 Use features other than make/model and size to characterize shoes
@@ -129,7 +115,7 @@ Use features other than make/model and size to characterize shoes
 ---
 class:primary
 
-## Computational Image Analysis
+## Computational Image <br/> Analysis
 
 - Crime scene information comes as images, so this is an image analysis problem
 
@@ -137,13 +123,6 @@ class:primary
 
 - Want method that predicts quickly and accurately, and produces interpretable features
 
-
----
-class:primary
-
-## Human Vision
-
-Brief overview of feature detectors
 
 ---
 class:primary
@@ -157,7 +136,7 @@ class:primary
 
 ## Human Classification
 
-```{r}
+```{r carrot-caterpillar-nodes, fig.height = 2.5, fig.width = 4, out.width = "100%", fig.align = "center"}
 col_vec <- rep("grey50", 32)
 col_vec[seq(1, 29, by = 4)] <- rep(c("blue", "orange"), 4)
 
@@ -170,7 +149,7 @@ df <- data.frame(x = plot$data$x,
                  y = plot$data$y,
                  labs = c("Orange", "Long", "Fuzzy", "Pointy",
                           "Caterpillar", "Carrot"))
-
+ 
 plot + geom_label(aes(x = x, y = y, label = labs), data = df)
 
 ```
