@@ -225,7 +225,7 @@ $(\beta \ast x)(i, j)$
 class:primary
 ## Activation Functions
 
-```{r activation-functions, fig.width = 8, fig.height = 2, out.width = "100%"}
+```{r activation-functions, fig.width = 4, fig.height = 3, out.width = "90%"}
 sigmoid <- function(x) 1/(1 + exp(-x))
 relu <- function(x) pmax(x, 0)
 elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
@@ -237,7 +237,7 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
   gather(key = key, value = value, -x) %>%
   mutate(key = factor(key, levels = c("Linear", "ReLU", "ELU",
                                       "SoftPlus", "Sigmoid"))) %>%
-  ggplot(aes(x = x, y = value)) + geom_line() + facet_grid(.~key) +
+  ggplot(aes(x = x, y = value)) + geom_line() + facet_wrap(.~key) +
   ggtitle("Common Activation Functions") +
   theme(axis.title = element_blank()) +
   coord_fixed()
@@ -247,30 +247,31 @@ tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
 ---
 class:primary
 
-## Max Pooling
-
-Formulas
-
----
-class:primary
-
 ## Max Pooling 
 
 ![Input image and filter](../Images/chapter1/maxpooling.png)
 
+$$ x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right) $$
+
+\begin{align} p\left(x, f, w, s\right) &= \text{matrix-wise pooling on matrix } x \text{ with function } f, \\
+& \text{ with window } w, \text{ and stride } s \end{align}
+
+
+
 ---
 class:primary
-## Full Connected Layers
+## Densely Connected Layers
 
-```{r fully-connected, out.width = "75%", fig.width = 10, fig.height = 10, fig.align = "center"}
+```{r densely-connected, out.width = "75%", fig.width = 10, fig.height = 8, fig.align = "center"}
 #plot_deepviz_arrows(c(6, 6, 3), r = .1)
 plot_deepviz_arrows(c(12, 9, 4), r = .1)
 ```
+
 ---
 class:primary
 ## Dropout
 
-```{r dropout, out.width = "75%", fig.width = 10, fig.height = 10, fig.align = "center"}
+```{r dropout, out.width = "75%", fig.width = 10, fig.height = 8, fig.align = "center"}
 #plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
 set.seed(2)
 plot_deepviz_dropout(n = c(12,9,4), rm_nodes = c(sample(2:11, 5), sample(14:20, 4)), cross_out = T)
@@ -289,15 +290,39 @@ class: primary
 class: primary
 ## Forward Propogation
 
-Formulas, how an image goes through the model
+
+\begin{align}
+x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution} \\
+x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling layers}\nonumber \\
+x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
+\end{align}
+
+```{r, fig.height = 4, fig.width = 6, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("images/vgg16-shoe-forward-propagation.png")
+```
+
+---
+class: primary
+## Binary Cross-Entropy Loss
+
+- Multi-class, multi-label classification uses sigmoid activation function for each class
+
+\begin{align}
+L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
+\end{align}
 
 ---
 class: primary
 ## Backward Propogation
 
-Formulas, how an image updates weights through gradient descent
+\begin{align}
+\left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\
+\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)} &= \frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right]\nonumber
+\end{align}
 
-
+```{r, fig.height = 4, fig.width = 6, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("images/vgg16-shoe-backward-propagation.png")
+```
 
 ---
 class: primary
@@ -332,7 +357,14 @@ class:primary
 
 # Data Collection
 
-LabelMe image(s)
+![Bowtie examples](images/labelme1.png) 
+
+---
+class:primary
+
+# Data Collection
+
+![Bowtie examples](images/labelme2.png)
 
 
 ---
