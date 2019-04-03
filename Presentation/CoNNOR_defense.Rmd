@@ -77,13 +77,63 @@ load(file.path(get_newest(dir = "../model/TrainedModels")$path,
                           pattern = "\\d.Rdata")$base_file))
 ```
 
-# Intro
+# Estimating Random Match Probability
+
+1. Define the comparison population
+
+2. Sample from the comparison population    
+$N$ total shoes
+
+3. Identify similar shoes from the comparison population    
+$S$ similar shoes in the $N$ shoe sample
+
+4. Estimate the probability of a coincidental match: $$\hat{p} = \frac{S}{N}$$
+
+--
+<br/>
+
+> .large[Quantifying the frequency of shoes in a local population is an unsolveable problem]<br/> - Leslie Hammer, [Hammer Forensics](https://hammerforensics.com/), March 2018
 
 
 ---
 class:primary
 
-# CNNs
+# Outsole Class Characteristics
+
+- Make, model, tread pattern, size, shoe type
+
+- Cannot be used for identification of an individual
+
+- Used for exclusion
+
+<img src="images/converse-combined.png" width="40%" alt="Many sizes of Chuck Taylors" style="position:absolute;bottom:30px;right:30px"/>
+
+
+---
+class:primary
+## Relevant Features
+
+Use features other than make/model and size to characterize shoes
+
+- Knockoffs often have very similar tread patterns
+- Similar styles have similar tread patterns across brands
+- Unknown shoes can still be classified and assessed
+
+| Dr. Martens | Eastland | Timberland |
+| --- | --- | --- |
+| <img src = "problem-definition/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "problem-definition/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> | <img src = "problem-definition/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/> |
+| Work 2295 Rigger | 1955 Edition Jett | 6" Premium Boot |
+
+---
+class:primary
+
+# Computational Image Analysis
+
+---
+class:primary
+
+# Convolutional Neural Networks
+
 
 ---
 class:primary
@@ -100,20 +150,94 @@ class:primary
 plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
 ```
 
+
+
+
+
+
 ---
 class:primary
-## Relevant Features
+# Geometric Features
+
 
 | Bowtie | Chevron | Circle |
 | ------ | ------- | ------ |
-| ![Bowtie examples](class_examples/bowtie_examples.png) | ![Chevron examples](class_examples/chevron_examples.png) | ![Circle examples](class_examples/circle_examples.png) |
+| ![Bowtie examples](../Images/chapter2/class_examples/bowtie_examples.png) | ![Chevron examples](../Images/chapter2/class_examples/chevron_examples.png) | ![Circle examples](../Images/chapter2/class_examples/circle_examples.png) |
 
 | Line | Polygon | Quadrilateral |
 | ---- | ------- | ---- |
-| ![Line examples](class_examples/line_examples.png) | ![Polygon examples](class_examples/polygon_examples.png) | ![Quad examples](class_examples/quad_examples.png) |
+| ![Line examples](../Images/chapter2/class_examples/line_examples.png) | ![Polygon examples](../Images/chapter2/class_examples/polygon_examples.png) | ![Quad examples](../Images/chapter2/class_examples/quad_examples.png) |
 
 | Star | Text | Triangle |
 | ---- | ---- | -------- |
-| ![Star examples](class_examples/star_examples.png) | ![text examples](class_examples/text_examples.png) | ![Triangle examples](class_examples/triangle_examples.png) |
+| ![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
 
-Used to separate shoes...
+
+---
+class:primary
+
+# Data
+
+- To date, `r unique(ann_df$base_image) %>% length()` shoes have been labeled, yielding `r nrow(dfunion)` multi-label images.
+
+```{r class-characteristic-barchart, fig.width = 5.5, fig.height = 3.75, out.width = "90%", dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively uncommon."}
+annotated_imgs %>%
+  mutate(label_type = str_replace(label_type, "multi", "multiple")) %>%
+  mutate(labels = str_to_title(labels)) %>%
+  mutate(labels = factor(labels, levels = c("Quad", "Line", "Text", "Circle",
+                                            "Chevron", "Triangle", "Polygon",
+                                            "Star", "Bowtie", "Other"))) %>%
+  ggplot() +
+  geom_bar(aes(x = labels, fill = label_type), color = "black") +
+  scale_fill_manual("Labels", values = c("single" = "#6ba2b9",
+                                         "multiple" = "#2e5597")) +
+  coord_flip() +
+  ylab("# Labeled Images") +
+  xlab("")  +
+  ggtitle("Current Class Distribution (All Labeled Images)") +
+  mytheme +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1.03, 1.03),
+        legend.background = element_rect(fill = "white"))
+
+```
+
+---
+class:primary
+
+# VGG16
+
+---
+class:primary
+
+# Data
+
+---
+class:primary
+
+# Model Training
+
+---
+class:primary
+
+# ROC
+
+---
+class:primary
+
+# Confusion Matrix
+
+---
+class:primary
+
+# Model Consistency
+
+---
+class:primary
+
+#Heatmaps
+
+---
+class:primary
+
+# Conclusion
