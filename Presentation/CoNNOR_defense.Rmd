@@ -290,6 +290,7 @@ class: primary
 class: primary
 ## Forward Propogation
 
+- The process by which an input image moves through the layers of the network<br/>
 
 \begin{align}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution} \\
@@ -297,7 +298,7 @@ x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling la
 x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
-```{r, fig.height = 4, fig.width = 6, out.width = "60%", fig.align = "center"}
+```{r, fig.height = 4, fig.width = 6, out.width = "50%", fig.align = "center"}
 knitr::include_graphics("images/vgg16-shoe-forward-propagation.png")
 ```
 
@@ -305,22 +306,34 @@ knitr::include_graphics("images/vgg16-shoe-forward-propagation.png")
 class: primary
 ## Binary Cross-Entropy Loss
 
-- Multi-class, multi-label classification uses sigmoid activation function for each class
+- For a single input image $x^{(0)}$ with true labels $\textbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{\hat{p}} \in [0,1]^C$,<br/>
 
 \begin{align}
 L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
+```{r, fig.height = 4, fig.width = 8, out.width = "80%", fig.align = "center"}
+L <- function(y, p) -(y * log(p) + (1-y)*log(1-p))
+p <- seq(.01, 1, .01)
+
+tibble(p = p, Loss = L(0, p)) %>%
+  ggplot(aes(x = p, y = Loss)) + geom_line() +
+  ggtitle("Single Class Loss for Y = 0") 
+
+```
+
 ---
 class: primary
 ## Backward Propogation
+
+- The process by which a network "learns"
 
 \begin{align}
 \left(\frac{\partial L}{\partial \beta^\ell_k}\right) &= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\
 \frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)} &= \frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right]\nonumber
 \end{align}
 
-```{r, fig.height = 4, fig.width = 6, out.width = "60%", fig.align = "center"}
+```{r, fig.height = 4, fig.width = 6, out.width = "50%", fig.align = "center"}
 knitr::include_graphics("images/vgg16-shoe-backward-propagation.png")
 ```
 
@@ -370,7 +383,7 @@ class:primary
 ---
 class:primary
 
-# Data
+## Data
 
 - To date, `r unique(ann_df$base_image) %>% length()` shoes have been labeled, yielding `r nrow(dfunion)` multi-label images.
 - 60/20/20 data split for train/validation/test
@@ -400,12 +413,12 @@ annotated_imgs %>%
 ---
 class:primary
 
-# VGG16
+## VGG16
 
 ---
 class:primary
 
-# Data
+## Data
 
 ---
 class:primary
