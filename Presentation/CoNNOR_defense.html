@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CoNNOR: Convolutional Neural Network for Outsole Recognition</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Miranda Tilton" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css\csafe.css" type="text/css" />
+    <link rel="stylesheet" href="css\csafe-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="css\this-presentation.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CoNNOR: Convolutional Neural Network for Outsole Recognition
+### Miranda Tilton
+### April 9, 2019
+
+---
+
+class: primary
+
+
+
+
+
+
+
+
+
+
+## Estimating Random Match Probability
+
+1. Define the comparison population
+
+2. Sample from the comparison population    
+`\(N\)` total shoes
+
+3. Identify similar shoes from the comparison population    
+`\(S\)` similar shoes in the `\(N\)` shoe sample
+
+4. Estimate the probability of a coincidental match: `$$\hat{p} = \frac{S}{N}$$`
+
+--
+&lt;br/&gt;
+
+&gt; .large[Quantifying the frequency of shoes in a local population is an unsolveable problem]&lt;br/&gt; - Leslie Hammer, [Hammer Forensics](https://hammerforensics.com/), March 2018
+
+
+---
+class:primary
+
+## Relevant Features
+
+Use features other than make/model and size to characterize shoes
+
+- Knockoffs often have very similar tread patterns
+- Similar styles have similar tread patterns across brands
+- Unknown shoes can still be classified and assessed
+
+| Dr. Martens | Eastland | Timberland |
+| --- | --- | --- |
+| &lt;img src = "images/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "images/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "images/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; |
+| Work 2295 Rigger | 1955 Edition Jett | 6" Premium Boot |
+
+---
+class:primary
+
+## Computational Image &lt;br/&gt; Analysis
+
+- Crime scene information comes as images, so this is an image analysis problem&lt;br/&gt;&lt;br/&gt;
+- Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.&lt;br/&gt;&lt;br/&gt;
+- Want a method that predicts quickly and accurately, and produces interpretable features
+
+
+---
+class:primary
+
+## Human Classification
+
+.center[&lt;img src = "../Images/chapter1/caterpillar.png" height = "220px"/&gt; &lt;img src = "../Images/chapter1/carrots.png" height = "220px"/&gt;]
+
+---
+class:primary
+
+## Human Classification
+
+&lt;img src="CoNNOR_defense_files/figure-html/carrot-caterpillar-nodes-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: primary
+## CNN Architecture
+
+![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
+
+---
+class: primary
+## Image Convolution
+
+Let `\(x\)` be an image represented as a numerical matrix, indexed by `\(i, j\)`, and `\(\beta\)` be a filter of dimension `\((2a + 1) \times (2b + 1)\)`
+
+The convolution of image `\(x\)` and filter `\(\beta\)` is `$$(\beta \ast x)(i, j) = \sum_{s = -a}^a\sum_{t = -b}^b \beta(s, t) x(i-s, j-t)$$`
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter.png)
+
+.pull-left[.center[Input image 
+`\(\displaystyle x\)`
+]]
+.pull-right[.center[
+Weight matrix
+`\(\displaystyle \mathbf{\beta}\)`
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter1.png)
+
+.pull-left[.center[Convolution: 
+`\(\displaystyle \beta\ast x\)`
+]]
+.pull-right[.center[
+Feature Map
+`\((\beta \ast x)(i, j)\)`
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
+
+
+---
+class: primary
+## Convolutional Layers
+
+![Input image and filter](../Images/chapter1/filter2.png)
+
+.pull-left[.center[Convolution: 
+`\(\displaystyle \beta\ast x\)`
+]]
+.pull-right[.center[
+Feature Map
+`\((\beta \ast x)(i, j)\)`
+]]
+
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
+
+
+---
+class:primary
+## Activation Functions
+
+&lt;img src="CoNNOR_defense_files/figure-html/activation-functions-1.png" width="90%" /&gt;
+
+
+---
+class:primary
+
+## Max Pooling 
+
+![Input image and filter](../Images/chapter1/maxpooling.png)
+
+
+`$$\begin{align} p\left(x, f, w, s\right) =&amp; \text{ matrix-wise pooling on matrix } x \text{ with function } f, \\
+&amp; \text{ with window } w, \text{ and stride } s
+\end{align}$$`
+
+
+
+---
+class:primary
+## Densely Connected Layers
+
+&lt;img src="CoNNOR_defense_files/figure-html/densely-connected-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+class:primary
+## Dropout
+
+&lt;img src="CoNNOR_defense_files/figure-html/dropout-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+class: primary
+## CNN Architecture
+
+![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
+
+
+---
+class: primary
+## Forward Propogation
+
+- The process by which an input image moves through the layers of the network&lt;br/&gt;
+
+`\begin{align}
+x^{(\ell)}_k &amp;= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution} \\
+x^{(\ell)}_k &amp;= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling layers}\nonumber \\
+x^{(\ell)}_k &amp;= \sigma^\ell\left(Wx^{(\ell-1)} + \gamma^\ell\right) \text{ for densely connected layers}\nonumber
+\end{align}`
+
+&lt;img src="images/vgg16-shoe-forward-propagation.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+class: primary
+## Binary Cross-Entropy Loss
+
+- For a single input image `\(x^{(0)}\)` with true labels `\(\textbf{y} \in \left\{0,1\right\}^C\)` and prediction `\(\mathbf{p} \in [0,1]^C\)`,&lt;br/&gt;
+
+`\begin{align}
+L(\mathbf{y}, \mathbf{p}) &amp;= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
+\end{align}`
+
+&lt;img src="CoNNOR_defense_files/figure-html/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+class: primary
+## Backward Propogation
+
+- The process by which a network "learns"
+
+`\begin{align}
+\left(\frac{\partial L}{\partial \beta^\ell_k}\right) &amp;= \underbrace{\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)}}_\text{gradient} x^{\ell-1}\\
+\frac{\partial L}{\partial \left(\beta^\ell_k \ast x^{\ell - 1}\right)} &amp;= \frac{\partial L}{\partial x^\ell} \left[\sigma'\left(\beta^\ell_k \ast x^{\ell - 1}\right)\right]\nonumber
+\end{align}`
+
+&lt;img src="images/vgg16-shoe-backward-propagation.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+class: primary
+## Parameter Space
+
+- Convolutional base: ~14.5 million parameters &lt;br/&gt;&lt;br/&gt;
+- Simple model head (9 output classes): ~8.4 million parameters &lt;br/&gt;&lt;br/&gt;
+- Total parameter space: ~22.9 million &lt;br/&gt;&lt;br/&gt;
+- Estimated model optimization time: 2-3 weeks with 4 GPUs &lt;br/&gt;&lt;br/&gt;
+- Data requirements: &gt; 1 million labeled images &lt;br/&gt;&lt;br/&gt;
+
+--
+
+&lt;br/&gt;
+
+.large[.center[We have &lt;27.5k labeled images]]
+
+
+---
+class: primary
+## Transfer learning
+
+- Use weights from a model trained on different input data &lt;br/&gt;&lt;br/&gt;
+- Train a new model head with one hidden layer of 256 nodes and 9 output nodes &lt;br/&gt;&lt;br/&gt;
+- Total parameter space: 8.4 million &lt;br/&gt;&lt;br/&gt;
+- Model optimization time: &lt;3 hours &lt;br/&gt;&lt;br/&gt;
+
+--
+
+#### VGG16
+- Pre-trained CNN (Simonyan, et al., 2014) &lt;br/&gt;&lt;br/&gt; 
+    - Trained on 1.3 million images from ImageNet (Krizhevsky, et al., 2012) &lt;br/&gt;&lt;br/&gt; 
+    - Simple structure
+
+
+---
+class:primary
+## Geometric Features
+
+
+| Bowtie | Chevron | Circle |
+| ------ | ------- | ------ |
+| ![Bowtie examples](../Images/chapter2/class_examples/bowtie_examples.png) | ![Chevron examples](../Images/chapter2/class_examples/chevron_examples.png) | ![Circle examples](../Images/chapter2/class_examples/circle_examples.png) |
+
+| Line | Polygon | Quadrilateral |
+| ---- | ------- | ---- |
+| ![Line examples](../Images/chapter2/class_examples/line_examples.png) | ![Polygon examples](../Images/chapter2/class_examples/polygon_examples.png) | ![Quad examples](../Images/chapter2/class_examples/quad_examples.png) |
+
+| Star | Text | Triangle |
+| ---- | ---- | -------- |
+| ![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
+
+
+
+---
+class:primary
+
+## Data Collection
+
+![LabelMe](images/labelme1.png) 
+
+---
+class:primary
+
+## Data Collection
+
+![LabelMe](images/labelme2.png)
+
+
+---
+class:primary
+
+## Data
+
+- To date, 4371 shoes have been labeled, yielding 27135 multi-label images.
+- 60/20/20 data split for train/validation/test
+
+&lt;img src="CoNNOR_defense_files/figure-html/class-characteristic-barchart-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class:primary
+
+## Model Training
+
+- 256 x 256 pixel images &lt;br/&gt;&lt;br/&gt;
+- Training data (60%): &lt;br/&gt;&lt;br/&gt;
+    - 1x Augmented images (rotation, skew, zoom, crop) to prevent overfitting&lt;br/&gt;&lt;br/&gt;
+    - Class weights used to counteract uneven class sizes &lt;br/&gt;&lt;br/&gt;
+- Validation and test data (20% each)&lt;br/&gt;&lt;br/&gt;
+- Fit using the `keras` package in R, which provides a high-level API for the `tensorflow` library
+
+&lt;div class="move-margin"&gt;
+&lt;img src="../Images/chapter2/augmentation/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%; margin-top:5%;"/&gt; &lt;img src="../Images/chapter2/augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg" width = "45%" style = "margin-bottom:2%; margin-top:5%;"/&gt;
+&lt;img src="../Images/chapter2/augmentation/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/&gt; &lt;img src="../Images/chapter2/augmentation/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg" width = "45%" style = "margin-bottom:2%;"/&gt;
+&lt;img src="../Images/chapter2/augmentation/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/&gt; &lt;img src="../Images/chapter2/augmentation/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg" width = "45%" style = "margin-bottom:2%;"/&gt; 
+&lt;img src="../Images/chapter2/augmentation/quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/&gt; &lt;img src="../Images/chapter2/augmentation/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg" width = "45%" style = "margin-bottom:2%;"/&gt;
+&lt;/div&gt;
+
+
+
+---
+class:primary
+
+## Model Training
+
+&lt;img src="CoNNOR_defense_files/figure-html/training-accuracy-1.png" width="90%" /&gt;
+
+---
+class:primary
+
+## Whole Model ROC
+
+&lt;img src="CoNNOR_defense_files/figure-html/whole-model-roc-1.png" width="100%" /&gt;
+
+---
+class:primary
+
+## ROC by Class
+
+&lt;img src="CoNNOR_defense_files/figure-html/class-roc-1.png" width="99%" /&gt;
+
+
+---
+class:primary
+
+## Confusion Matrix
+
+&lt;img src="CoNNOR_defense_files/figure-html/confusion-matrix-1.png" width="80%" /&gt;
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+&lt;img src="CoNNOR_defense_files/figure-html/generic-chevron-1.png" width="100%" /&gt;
+]
+
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+&lt;img src="CoNNOR_defense_files/figure-html/text-line-1.png" width="100%" /&gt;
+]
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+&lt;img src="CoNNOR_defense_files/figure-html/fix-contrast-1.png" width="100%" /&gt;
+]
+
+---
+class:primary
+
+## Class Activation Maps
+
+&lt;img src="../figure/chapter3/heatmap-chevron-circle.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-text-seychelles.png" width="95%" /&gt;
+
+&lt;br/&gt;
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label]
+
+
+---
+class:primary
+
+## Class Activation Maps
+
+&lt;img src="../figure/chapter3/heatmap-star-quad.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-quad-triangle-polygon.png" width="95%" /&gt;
+
+&lt;br/&gt;
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label]
+
+---
+class:primary
+
+## Class Activation Maps
+
+&lt;img src="../figure/chapter3/heatmap-corks.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-bowtie-star.png" width="95%" /&gt;
+
+&lt;br/&gt;
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label]
+
+
+---
+class:primary
+
+## Class Activation Maps
+
+&lt;img src="images/heatmap-test_image.png" width="95%" /&gt;&lt;img src="images/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png" width="95%" /&gt;
+
+&lt;br/&gt;
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[&lt;br/&gt;&lt;br/&gt;Blue: Prediction matches image label &lt;br/&gt;&lt;br/&gt;Grey: Prediction does not match image label]
+
+
+---
+class:primary
+
+## Future Work
+
+- Image color-correction to reduce effect of contrast &lt;br/&gt;&lt;br/&gt;
+- Explore texture/color segmentation to reduce effect of color &lt;br/&gt;&lt;br/&gt;
+- Compare prediction without final convolutional block &lt;br/&gt;&lt;br/&gt;
+- Integrate spatial information for whole-shoe predictions &lt;br/&gt;&lt;br/&gt;
+  - Split shoe into pieces and predict individually &lt;br/&gt;&lt;br/&gt;
+  - Train a Fully Convolutional Network (FCN) and fit model to aggregate features &lt;br/&gt;&lt;br/&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
