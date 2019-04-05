@@ -2,6 +2,6 @@
 theme: jekyll-theme-modernist
 ---
 
-[Creative Component](thesis.pdf)
+[Creative Component](MirandaTilton-CreativeComponent.pdf)
 
 [Presentation](Presentation/CoNNOR_defense.html)
