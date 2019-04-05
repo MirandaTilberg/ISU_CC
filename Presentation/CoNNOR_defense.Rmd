@@ -10,14 +10,6 @@ output:
     nature:
       countIncrementalSlides: false
       beforeInit: "js/macros.js"
-      
----
-class:primary
-
-## To Do
-
-- Citations? <br/>
-- Add pred prob images <br/>
 
 ---
 class: primary
