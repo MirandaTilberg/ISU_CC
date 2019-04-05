@@ -88,7 +88,7 @@ load(newest_data_file)
 source("../code/count_images.R")
 ```
 
-```{r load-keras-model}
+```{r load-keras-model, cache = F}
 library(keras)
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
@@ -96,6 +96,9 @@ load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest(dir = "../model/TrainedModels")$path, 
                get_newest(dir = "../model/TrainedModels", 
                           pattern = "\\d.Rdata")$base_file))
+
+model_wts_file <- file.path(newest_model$path, newest_model$base_file)
+loaded_model <- set_weights(model_wts_file)
 ```
 
 ## Estimating Random Match Probability
