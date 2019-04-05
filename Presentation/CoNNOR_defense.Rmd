@@ -353,7 +353,7 @@ class: primary
 
 --
 
-<br/><br/>
+<br/>
 
 .large[.center[We have <27.5k labeled images]]
 
