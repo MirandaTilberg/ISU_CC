@@ -355,17 +355,6 @@ knitr::include_graphics("images/vgg16-shoe-backward-propagation.png")
 
 ---
 class: primary
-## Modularity and Transfer Learning
-
-- Deep CNNs have millions of parameters. <br/><br/>
-  - E.g., VGG16 model base has 14,714,688 trainable parameters <br/><br/>
-- Once trained, model layers can be split apart and used separately <br/><br/>
-- Using the existing model base ("eyes") and retraining the classifier ("brain") brings the required number of images down from millions to only thousands
-
-
-
----
-class: primary
 ## Parameter Space
 
 - Convolutional base: ~14.5 million parameters <br/><br/>
@@ -393,7 +382,7 @@ class: primary
 --
 
 #### VGG16
-- Pre-trained CNN <br/><br/> 
+- Pre-trained CNN  (Simonyan, et al., 2014) <br/><br/> 
     - Trained on 1.3 million images from ImageNet <br/><br/> 
     - Simple structure
 
@@ -646,6 +635,22 @@ Heatmaps are scaled by class. Yellow = high activation
 
 .move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
 
+
+---
+class:primary
+
+## Class Activation Maps
+
+```{r out.width = "95%", fig.width = 8, fig.height = 6}
+heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
+knitr::include_graphics("images/heatmap-test_image.png")
+knitr::include_graphics("images/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png")
+```
+
+<br/>
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
 
 
 ---
