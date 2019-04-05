@@ -414,14 +414,14 @@ class:primary
 
 ## Data Collection
 
-![LabelMe](images/labelme1.png) 
+![LabelMe](images/LabelMe1.png) 
 
 ---
 class:primary
 
 ## Data Collection
 
-![LabelMe](images/labelme2.png)
+![LabelMe](images/LabelMe2.png)
 
 
 ---
