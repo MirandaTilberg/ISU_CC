@@ -399,14 +399,14 @@ class:primary
 
 ## Data Collection
 
-![LabelMe](images/labelme1.png) 
+![LabelMe](images/LabelMe1.png) 
 
 ---
 class:primary
 
 ## Data Collection
 
-![LabelMe](images/labelme2.png)
+![LabelMe](images/LabelMe2.png)
 
 
 ---
@@ -587,6 +587,16 @@ class:primary
 ```{r text-line, fig.width = 7.33, fig.height = 4, out.width = "100%", dpi = 600}
 text <- list.files(here::here("Presentation", "images", "generic-text-line"), full.names = T)
 pred_prob_plot(text, loaded_model)
+```
+]
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+```{r uggs, fig.width = 7.33, fig.height = 5.33, out.width = "100%", dpi = 600, class.output='move-up'}
+ugg <- list.files(here::here("Presentation", "images", "ugg-circle-star-logo"), full.names = T)
+pred_prob_plot(ugg, loaded_model, sort = F)
 ```
 ]
 
