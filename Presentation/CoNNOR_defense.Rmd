@@ -16,15 +16,12 @@ class:primary
 
 ## To Do
 
-- Fix pooling LaTeX <br/>
-- Format backprop <br/>
-- Fix loss notation?
 - Citations? <br/>
-- Fix augmentation images <br/>
 - Add pred prob images <br/>
 - CoNNOR's classifier: 32768 to 256 to 9 (paper?) <br/>
 - Rename heatmaps in paper to Class Activation Map? <br/>
 - Get DC heatmap <br/>
+- Fix loss notation in paper
 
 
 
@@ -270,10 +267,10 @@ class:primary
 
 ![Input image and filter](../Images/chapter1/maxpooling.png)
 
-$$ x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right) $$
 
-\begin{align} p\left(x, f, w, s\right) &= \text{matrix-wise pooling on matrix } x \text{ with function } f, \\
-& \text{ with window } w, \text{ and stride } s \end{align}
+$$\begin{align} p\left(x, f, w, s\right) =& \text{ matrix-wise pooling on matrix } x \text{ with function } f, \\
+& \text{ with window } w, \text{ and stride } s
+\end{align}$$
 
 
 
@@ -325,10 +322,10 @@ knitr::include_graphics("images/vgg16-shoe-forward-propagation.png")
 class: primary
 ## Binary Cross-Entropy Loss
 
-- For a single input image $x^{(0)}$ with true labels $\textbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{\hat{p}} \in [0,1]^C$,<br/>
+- For a single input image $x^{(0)}$ with true labels $\textbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{p} \in [0,1]^C$,<br/>
 
 \begin{align}
-L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
+L(\mathbf{y}, \mathbf{p}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
 ```{r, fig.height = 2.5, fig.width = 5, out.width = "80%", fig.align = "center"}
