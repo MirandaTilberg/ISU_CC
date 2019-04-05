@@ -18,10 +18,13 @@ class:primary
 
 - Fix pooling LaTeX <br/>
 - Format backprop <br/>
-- Get DC heatmap <br/>
+- Fix loss notation?
 - Citations? <br/>
-- Augmentation images <br/>
-- Pred prob images <br/>
+- Fix augmentation images <br/>
+- Add pred prob images <br/>
+- CoNNOR's classifier: 32768 to 256 to 9 (paper?) <br/>
+- Rename heatmaps in paper to Class Activation Map? <br/>
+- Get DC heatmap <br/>
 
 
 
@@ -400,7 +403,7 @@ class: primary
 
 ---
 class:primary
-# Geometric Features
+## Geometric Features
 
 
 | Bowtie | Chevron | Circle |
@@ -420,16 +423,16 @@ class:primary
 ---
 class:primary
 
-# Data Collection
+## Data Collection
 
-![Bowtie examples](images/labelme1.png) 
+![LabelMe](images/labelme1.png) 
 
 ---
 class:primary
 
-# Data Collection
+## Data Collection
 
-![Bowtie examples](images/labelme2.png)
+![LabelMe](images/labelme2.png)
 
 
 ---
@@ -543,7 +546,7 @@ ggplot() +
 ---
 class:primary
 
-## Class ROC
+## ROC by Class
 
 ```{r class-roc, fig.width = 7.5, fig.height = 5, out.width = "99%"}
 aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
@@ -605,17 +608,9 @@ class:primary
 ```{r out.width = "95%", fig.width = 8, fig.height = 6}
 heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
 knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
+knitr::include_graphics(heatmaps[grepl("text", heatmaps)])
 ```
 
-
----
-class:primary
-## Class Activation Maps
-
-<br/>
-<br/>
-![unscaled heatmapp - DC](heatmaps/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png)
-<br/>
 <br/>
 Heatmaps are scaled by class. Yellow = high activation
 
@@ -625,4 +620,38 @@ Heatmaps are scaled by class. Yellow = high activation
 ---
 class:primary
 
+## Class Activation Maps
+
+```{r out.width = "95%", fig.width = 8, fig.height = 6}
+heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
+knitr::include_graphics(heatmaps[grepl("star-quad", heatmaps)])
+knitr::include_graphics(heatmaps[grepl("quad-triangle-polygon", heatmaps)])
+```
+
+<br/>
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
+
+---
+class:primary
+
+## Class Activation Maps
+
+```{r out.width = "95%", fig.width = 8, fig.height = 6}
+heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
+knitr::include_graphics(heatmaps[grepl("corks", heatmaps)])
+knitr::include_graphics(heatmaps[grepl("bowtie-star", heatmaps)])
+```
+
+<br/>
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
+
+---
+class:primary
+
 ## Conclusion
+
+
