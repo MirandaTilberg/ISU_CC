@@ -348,7 +348,7 @@ class: primary
 - Convolutional base: ~14.5 million parameters <br/><br/>
 - Simple model head (9 output classes): ~8.4 million parameters <br/><br/>
 - Total parameter space: ~22.9 million <br/><br/>
-- Estimated model optimization time: 2-3 weeks with 4 GPUs <br/>
+- Estimated model optimization time: 2-3 weeks with 4 GPUs <br/><br/>
 - Data requirements: > 1 million labeled images <br/><br/>
 
 --
