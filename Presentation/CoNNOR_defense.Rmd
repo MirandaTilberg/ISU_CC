@@ -85,7 +85,7 @@ load(newest_data_file)
 source("../code/count_images.R")
 ```
 
-```{r load-keras-model}
+```{r load-keras-model, cache = F}
 library(keras)
 model_dir <- newest_model$path
 load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
@@ -93,6 +93,9 @@ load(list.files(model_dir, "-history.Rdata", full.names = T)[1])
 load(file.path(get_newest(dir = "../model/TrainedModels")$path, 
                get_newest(dir = "../model/TrainedModels", 
                           pattern = "\\d.Rdata")$base_file))
+
+model_wts_file <- file.path(newest_model$path, newest_model$base_file)
+loaded_model <- set_weights(model_wts_file)
 ```
 
 ## Estimating Random Match Probability
@@ -583,8 +586,34 @@ get_confusion_matrix(predictions = preds, classes = classes,
 
 ---
 class:primary
-
 ## Model Consistency
+.nudge-up[
+```{r generic-chevron, fig.width = 7.33, fig.height = 4, out.width = "100%", dpi = 600}
+chevron2 <- list.files(here::here("Presentation", "images", "generic-chevron"), full.names = T)
+pred_prob_plot(chevron2, loaded_model)
+```
+]
+
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+```{r text-line, fig.width = 7.33, fig.height = 4, out.width = "100%", dpi = 600}
+text <- list.files(here::here("Presentation", "images", "generic-text-line"), full.names = T)
+pred_prob_plot(text, loaded_model)
+```
+]
+
+---
+class:primary
+## Model Consistency
+.nudge-up[
+```{r fix-contrast, fig.width = 7.33, fig.height = 5.33, out.width = "100%", dpi = 600, class.output='move-up'}
+lc <- list.files(here::here("Presentation", "images", "low-contrast"), full.names = T)
+pred_prob_plot(lc, loaded_model, sort = F)
+```
+]
 
 ---
 class:primary
