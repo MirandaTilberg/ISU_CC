@@ -464,12 +464,12 @@ class:primary
 - Validation and test data (20% each)<br/><br/>
 - Fit using the `keras` package in R, which provides a high-level API for the `tensorflow` library
 
-.move-margin[
+<div class="move-margin">
 <img src="../Images/chapter2/augmentation/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%; margin-top:5%;"/> <img src="../Images/chapter2/augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg" width = "45%" style = "margin-bottom:2%; margin-top:5%;"/>
-<img src=../Images/chapter2/augmentation/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg" width = "45%" style = "margin-bottom:2%;"/>
-<img src="../Images/chapter2/augmentation/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg" width = "45%" style = "margin-bottom:2%;"/>
+<img src="../Images/chapter2/augmentation/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg" width = "45%" style = "margin-bottom:2%;"/>
+<img src="../Images/chapter2/augmentation/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg" width = "45%" style = "margin-bottom:2%;"/> 
 <img src="../Images/chapter2/augmentation/quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg" width = "45%" style = "margin-bottom:2%;"/>
-]
+</div>
 
 
 
