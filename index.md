@@ -1,6 +1,3 @@
----
-theme: jekyll-theme-modernist
----
 
 [Creative Component](MirandaTilton-CreativeComponent.pdf)
 
