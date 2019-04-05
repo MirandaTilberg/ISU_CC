@@ -214,7 +214,7 @@ During forward propagation, the calculation of the $\ell$th layer uses the $\ell
 \begin{align}\label{math:forwardprop}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution}\\
 x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling layers}\nonumber\\
-x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
+x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)} + \gamma^\ell\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
 \paragraph{Loss and Cost Functions}
