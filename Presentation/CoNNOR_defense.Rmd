@@ -16,15 +16,12 @@ class:primary
 
 ## To Do
 
-- Fix pooling LaTeX <br/>
-- Format backprop <br/>
-- Fix loss notation?
 - Citations? <br/>
-- Fix augmentation images <br/>
 - Add pred prob images <br/>
 - CoNNOR's classifier: 32768 to 256 to 9 (paper?) <br/>
 - Rename heatmaps in paper to Class Activation Map? <br/>
 - Get DC heatmap <br/>
+- Fix loss notation in paper
 
 
 
@@ -273,10 +270,10 @@ class:primary
 
 ![Input image and filter](../Images/chapter1/maxpooling.png)
 
-$$ x^\ell_{ij} = f\left(x^{\ell - 1}_{(i - 1)s + 1 \leq y \leq is, (j - 1)s + 1\leq z\leq js} \right) $$
 
-\begin{align} p\left(x, f, w, s\right) &= \text{matrix-wise pooling on matrix } x \text{ with function } f, \\
-& \text{ with window } w, \text{ and stride } s \end{align}
+$$\begin{align} p\left(x, f, w, s\right) =& \text{ matrix-wise pooling on matrix } x \text{ with function } f, \\
+& \text{ with window } w, \text{ and stride } s
+\end{align}$$
 
 
 
@@ -328,10 +325,10 @@ knitr::include_graphics("images/vgg16-shoe-forward-propagation.png")
 class: primary
 ## Binary Cross-Entropy Loss
 
-- For a single input image $x^{(0)}$ with true labels $\textbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{\hat{p}} \in [0,1]^C$,<br/>
+- For a single input image $x^{(0)}$ with true labels $\textbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{p} \in [0,1]^C$,<br/>
 
 \begin{align}
-L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
+L(\mathbf{y}, \mathbf{p}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
 ```{r, fig.height = 2.5, fig.width = 5, out.width = "80%", fig.align = "center"}
@@ -358,17 +355,6 @@ class: primary
 ```{r, fig.height = 4, fig.width = 6, out.width = "50%", fig.align = "center"}
 knitr::include_graphics("images/vgg16-shoe-backward-propagation.png")
 ```
-
----
-class: primary
-## Modularity and Transfer Learning
-
-- Deep CNNs have millions of parameters. <br/><br/>
-  - E.g., VGG16 model base has 14,714,688 trainable parameters <br/><br/>
-- Once trained, model layers can be split apart and used separately <br/><br/>
-- Using the existing model base ("eyes") and retraining the classifier ("brain") brings the required number of images down from millions to only thousands
-
-
 
 ---
 class: primary
@@ -399,7 +385,7 @@ class: primary
 --
 
 #### VGG16
-- Pre-trained CNN <br/><br/> 
+- Pre-trained CNN  (Simonyan, et al., 2014) <br/><br/> 
     - Trained on 1.3 million images from ImageNet <br/><br/> 
     - Simple structure
 
@@ -678,6 +664,22 @@ Heatmaps are scaled by class. Yellow = high activation
 
 .move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
 
+
+---
+class:primary
+
+## Class Activation Maps
+
+```{r out.width = "95%", fig.width = 8, fig.height = 6}
+heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
+knitr::include_graphics("images/heatmap-test_image.png")
+knitr::include_graphics("images/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png")
+```
+
+<br/>
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
 
 
 ---
