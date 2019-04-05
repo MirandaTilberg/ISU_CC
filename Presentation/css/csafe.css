@@ -160,9 +160,12 @@
     max-width: 160px;
     max-height:400px;
   }
+.nudge-up {
+  margin-top:-20px !important;
+}
 
 .move-up {
-  padding-top:-50px !important;
+  margin-top:-50px !important;
 }
 
 .move-left {
