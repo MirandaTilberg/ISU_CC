@@ -10,21 +10,6 @@ output:
     nature:
       countIncrementalSlides: false
       beforeInit: "js/macros.js"
-      
----
-class:primary
-
-## To Do
-
-- Citations? <br/>
-- Add pred prob images <br/>
-- CoNNOR's classifier: 32768 to 256 to 9 (paper?) <br/>
-- Rename heatmaps in paper to Class Activation Map? <br/>
-- Get DC heatmap <br/>
-- Fix loss notation in paper
-
-
-
 
 ---
 class: primary
@@ -378,15 +363,15 @@ class: primary
 ## Transfer learning
 
 - Use weights from a model trained on different input data <br/><br/>
-- Train a new model head <br/><br/>
+- Train a new model head with one hidden layer of 256 nodes and 9 output nodes <br/><br/>
 - Total parameter space: 8.4 million <br/><br/>
 - Model optimization time: <3 hours <br/><br/>
 
 --
 
 #### VGG16
-- Pre-trained CNN  (Simonyan, et al., 2014) <br/><br/> 
-    - Trained on 1.3 million images from ImageNet <br/><br/> 
+- Pre-trained CNN (Simonyan, et al., 2014) <br/><br/> 
+    - Trained on 1.3 million images from ImageNet (Krizhevsky, et al., 2012) <br/><br/> 
     - Simple structure
 
 

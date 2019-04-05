@@ -192,7 +192,7 @@ Similarly, in densely connected or fully connected layers, each final feature pr
 
 When training fully connected layers there is a danger that co-dependence will develop between nodes, which lessens the power of each individual node and usually leads to over-fitting. To prevent this, fully connected layers are often trained by utilizing a pruning mechanism known as drop-out, where at any given stage each node is kept in the model with probability $p$ or temporarily disabled with probability $1-p$ and training is performed on the reduced model. Densely connected layers with and without dropout nodes are shown in \autoref{fig:dense-layer}.
 
-<<dense-layer, echo = F, fig.width = 5, fig.height = 4, out.width = ".45\\textwidth", fig.cap = "(Left) A densely-connected layer with 6 input nodes, one hidden layer with 6 nodes, and 3 output nodes. (Right) A densely-connected layer with 6 input nodes, one hidden layer with 6 nodes, 3 output nodes, and a 50\\% dropout rate.", fig.scap = "Densely connected layers with and without dropout.", fig.show =  'hold'>>=
+<<dense-layer, echo = F, fig.width = 5, fig.height = 4, out.width = ".45\\textwidth", fig.cap = "(Left) A densely-connected network with 6 input nodes, one hidden layer with 6 nodes, and 3 output nodes. (Right) A densely-connected network with 6 input nodes, one hidden layer with 6 nodes, 3 output nodes, and a 50\\% dropout rate.", fig.scap = "Densely connected layers with and without dropout.", fig.show =  'hold'>>=
 source(file.path(codedir, "Generate_Model_Images.R"))
 plot_deepviz_arrows(c(6,6,3)) 
 
@@ -219,10 +219,10 @@ x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connect
 
 \paragraph{Loss and Cost Functions}
 
-In a multi-label classification task, the standard loss function used is binary cross-entropy loss. For a single input image $x^{(0)}$ with true labels $\mathbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{\hat{p}} \in [0,1]^C$, where $C$ is the number of output classes,
+In a multi-label classification task, the standard loss function used is binary cross-entropy loss. For a single input image $x^{(0)}$ with true labels $\mathbf{y} \in \left\{0,1\right\}^C$ and prediction $\mathbf{p} \in [0,1]^C$, where $C$ is the number of output classes,
 
 \begin{align}
-L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
+L(\mathbf{y}, \mathbf{p}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
 The cost function is defined as the average of the loss function over all training images.
