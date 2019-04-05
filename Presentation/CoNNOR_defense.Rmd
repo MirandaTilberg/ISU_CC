@@ -649,9 +649,18 @@ Heatmaps are scaled by class. Yellow = high activation
 
 .move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
 
+
+
 ---
 class:primary
 
-## Conclusion
+## Future Work
+
+- Image color-correction to reduce effect of contrast <br/><br/>
+- Explore texture/color segmentation to reduce effect of color <br/><br/>
+- Compare prediction without final convolutional block <br/><br/>
+- Integrate spatial information for whole-shoe predictions <br/><br/>
+  - Split shoe into pieces and predict individually <br/><br/>
+  - Train a Fully Convolutional Network (FCN) and fit model to aggregate features <br/><br/>
 
 
