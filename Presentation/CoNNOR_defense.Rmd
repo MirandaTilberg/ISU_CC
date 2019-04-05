@@ -10,6 +10,22 @@ output:
     nature:
       countIncrementalSlides: false
       beforeInit: "js/macros.js"
+      
+---
+class:primary
+
+## To Do
+
+- Fix pooling LaTeX <br/>
+- Format backprop <br/>
+- Get DC heatmap <br/>
+- Citations? <br/>
+- Augmentation images <br/>
+- Pred prob images <br/>
+
+
+
+
 ---
 class: primary
 ```{r setup, echo = F, cache = F, include = F}
@@ -120,7 +136,7 @@ class:primary
 
 - Crime scene information comes as images, so this is an image analysis problem<br/><br/>
 - Classical methods exist (e.g., Hough transform, primitive feature detection), but they work on small scales and are not robust.<br/><br/>
-- Want method that predicts quickly and accurately, and produces interpretable features
+- Want a method that predicts quickly and accurately, and produces interpretable features
 
 
 ---
@@ -295,7 +311,7 @@ class: primary
 \begin{align}
 x^{(\ell)}_k &= \sigma^\ell\left({\beta^\ell_k}\ast x^{(\ell-1)} + \gamma^\ell\right) \text{ for convolution} \\
 x^{(\ell)}_k &= p\left(x^{(\ell-1)}, \max, s, s\right) \text{ for max pooling layers}\nonumber \\
-x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)}\right) \text{ for densely connected layers}\nonumber
+x^{(\ell)}_k &= \sigma^\ell\left(Wx^{(\ell-1)} + \gamma^\ell\right) \text{ for densely connected layers}\nonumber
 \end{align}
 
 ```{r, fig.height = 4, fig.width = 6, out.width = "50%", fig.align = "center"}
@@ -312,7 +328,7 @@ class: primary
 L(\mathbf{y}, \mathbf{\hat{p}}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
-```{r, fig.height = 4, fig.width = 8, out.width = "80%", fig.align = "center"}
+```{r, fig.height = 2.5, fig.width = 5, out.width = "80%", fig.align = "center"}
 L <- function(y, p) -(y * log(p) + (1-y)*log(1-p))
 p <- seq(.01, 1, .01)
 
@@ -341,9 +357,45 @@ knitr::include_graphics("images/vgg16-shoe-backward-propagation.png")
 class: primary
 ## Modularity and Transfer Learning
 
-- Difficult to train, need many images for many parameters
+- Deep CNNs have millions of parameters. <br/><br/>
+  - E.g., VGG16 model base has 14,714,688 trainable parameters <br/><br/>
+- Once trained, model layers can be split apart and used separately <br/><br/>
+- Using the existing model base ("eyes") and retraining the classifier ("brain") brings the required number of images down from millions to only thousands
 
--Use pretrained eyes and train new brain
+
+
+---
+class: primary
+## Parameter Space
+
+- Convolutional base: ~14.5 million parameters <br/><br/>
+- Simple model head (9 output classes): ~8.4 million parameters <br/><br/>
+- Total parameter space: ~22.9 million <br/><br/>
+- Estimated model optimization time: 2-3 weeks with 4 GPUs <br/>
+- Data requirements: > 1 million labeled images <br/><br/>
+
+--
+
+<br/><br/>
+
+.large[.center[We have <27.5k labeled images]]
+
+
+---
+class: primary
+## Transfer learning
+
+- Use weights from a model trained on different input data <br/><br/>
+- Train a new model head <br/><br/>
+- Total parameter space: 8.4 million <br/><br/>
+- Model optimization time: <3 hours <br/><br/>
+
+--
+
+#### VGG16
+- Pre-trained CNN <br/><br/> 
+    - Trained on 1.3 million images from ImageNet <br/><br/> 
+    - Simple structure
 
 
 ---
@@ -388,7 +440,7 @@ class:primary
 - To date, `r unique(ann_df$base_image) %>% length()` shoes have been labeled, yielding `r nrow(dfunion)` multi-label images.
 - 60/20/20 data split for train/validation/test
 
-```{r class-characteristic-barchart, fig.width = 5.5, fig.height = 3.75, out.width = "90%", dpi = 300, fig.cap = "Distribution of classes in all labeled images. Quadrilaterals, lines, circles, text, and chevrons are relatively common; stars, polygons, and bowties are relatively uncommon."}
+```{r class-characteristic-barchart, fig.width = 5.5, fig.height = 3.75, out.width = "80%", dpi = 300, fig.align = "center"}
 annotated_imgs %>%
   mutate(label_type = str_replace(label_type, "multi", "multiple")) %>%
   mutate(labels = str_to_title(labels)) %>%
@@ -410,22 +462,34 @@ annotated_imgs %>%
 
 ```
 
----
-class:primary
-
-## VGG16
-
----
-class:primary
-
-## Data
 
 ---
 class:primary
 
 ## Model Training
 
-```{r training-accuracy}
+- 256 x 256 pixel images <br/><br/>
+- Training data (60%): <br/><br/>
+    - 1x Augmented images (rotation, skew, zoom, crop) to prevent overfitting<br/><br/>
+    - Class weights used to counteract uneven class sizes <br/><br/>
+- Validation and test data (20% each)<br/><br/>
+- Fit using the `keras` package in R, which provides a high-level API for the `tensorflow` library
+
+.move-margin[
+<img src="../Images/chapter2/augmentation/text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%; margin-top:5%;"/> <img src="../Images/chapter2/augmentation/aug_text-1-bernie-mev-kids-catwalk-little-kid-big-kid-multi-camo_product_9084647_color_87089_0_1891.jpg" width = "45%" style = "margin-bottom:2%; margin-top:5%;"/>
+<img src=../Images/chapter2/augmentation/quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_quad-2-nike-kids-downshifter-7-infant-toddler-gunsmoke-sunset-pulse-atmosphere-grey_product_8800875_color_720973_0_7533.jpg" width = "45%" style = "margin-bottom:2%;"/>
+<img src="../Images/chapter2/augmentation/bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_bowtie(R)-1-ugg-sienna-enamel-blue_product_8726365_color_120557_0_8344.jpg" width = "45%" style = "margin-bottom:2%;"/>
+<img src="../Images/chapter2/augmentation/quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426.jpg" width = "45%" style = "margin-right:2%; margin-bottom:2%;"/> <img src="../Images/chapter2/augmentation/aug_quad-2-puma-suede-classic-x-mac-three-port-royale-port-royale_product_9123838_color_251426_0_5689.jpg" width = "45%" style = "margin-bottom:2%;"/>
+]
+
+
+
+---
+class:primary
+
+## Model Training
+
+```{r training-accuracy, out.width = "90%"}
 data.frame(history$metrics) %>%
   mutate(epoch = 1:n()) %>%
   gather(key = "measure", value = "value", -epoch) %>%
@@ -449,9 +513,9 @@ data.frame(history$metrics) %>%
 ---
 class:primary
 
-# ROC
+## Whole Model ROC
 
-```{r, roc-code}
+```{r whole-model-roc, out.width = "100%", fig.width = 7, fig.height = 4.375}
 library(pROC)
 pred_df <- as_tibble(preds) %>% gather(key = feature, value = value)
 test_labs_df <- as_tibble(test_labs) %>% gather(key = feature, value = value)
@@ -479,7 +543,7 @@ ggplot() +
 ---
 class:primary
 
-# ROC
+## Class ROC
 
 ```{r class-roc, fig.width = 7.5, fig.height = 5, out.width = "99%"}
 aucs <- plot_onehot_roc(preds, test_labs, str_to_title(classes))
@@ -504,7 +568,7 @@ ggplot() +
 ---
 class:primary
 
-# Confusion Matrix
+## Confusion Matrix
 
 ```{r confusion-matrix, fig.width = 7.5, fig.height = 6.5, out.width = "80%"}
 get_confusion_matrix(predictions = preds, classes = classes,
@@ -531,14 +595,34 @@ get_confusion_matrix(predictions = preds, classes = classes,
 ---
 class:primary
 
-# Model Consistency
+## Model Consistency
 
 ---
 class:primary
 
-#Heatmaps
+## Class Activation Maps
+
+```{r out.width = "95%", fig.width = 8, fig.height = 6}
+heatmaps <- list.files("../figure/chapter3/", pattern = "^heatmap", full.names = T)
+knitr::include_graphics(heatmaps[grepl("chevron-circle", heatmaps)])
+```
+
+
+---
+class:primary
+## Class Activation Maps
+
+<br/>
+<br/>
+![unscaled heatmapp - DC](heatmaps/heatmap-quad-4-dc-pure-se-navy_product_7270757_color_9.png)
+<br/>
+<br/>
+Heatmaps are scaled by class. Yellow = high activation
+
+.move-margin[<br/><br/>Blue: Prediction matches image label <br/><br/>Grey: Prediction does not match image label]
+
 
 ---
 class:primary
 
-# Conclusion
+## Conclusion
