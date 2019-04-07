@@ -688,5 +688,52 @@ class:primary
 - Integrate spatial information for whole-shoe predictions <br/><br/>
   - Split shoe into pieces and predict individually <br/><br/>
   - Train a Fully Convolutional Network (FCN) and fit model to aggregate features <br/><br/>
+  
+---
+class:primary
 
+## Block 1
 
+```{r b1, fig.width = 5.8, fig.height = 2.35, out.width = "100%", cache = T}
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b1"), full.names = T)[c(-6,-12)]
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 2)
+```
+
+---
+class:primary
+
+## Block 3
+
+```{r b3, fig.width = 5.8, fig.height = 3.53, out.width = "100%", cache = T}
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b3"), full.names = T)[c(-3,-7,-18)]
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 3)
+```
+
+---
+class:primary
+
+## Block 5
+
+```{r b5, fig.width = 5.8, fig.height = 3.53, out.width = "100%", cache = T}
+imgs <- list.files(here::here("Images", "chapter2", "vgg16layers", "b5"), full.names = T)[c(-3,-8,-13)]
+pngs <- lapply(imgs, function(x) png::readPNG(x)[46:1596, 32:1582, ])
+grobs <- lapply(pngs, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 3)
+```
+
+---
+class:primary
+
+## Texture vs. Color
+
+```{r texture-vs-color, fig.height = 6, fig.width = 6, out.width = "65%", fig.align = "center"}
+img <- here::here("Images", "chapter2", "vgg16layers", "b4",
+                  "block4_conv1_post_Filter_13.png")
+png <- lapply(img, function(x) png::readPNG(x)[46:1596, 32:1582, ])
+grobs <- lapply(png, grid::rasterGrob)
+gridExtra::grid.arrange(grobs = grobs, nrow = 1)
+```
