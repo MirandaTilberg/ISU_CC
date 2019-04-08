@@ -260,6 +260,7 @@ $$\begin{align} p\left(x, f, w, s\right) =& \text{ matrix-wise pooling on matrix
 & \text{ with window } w, \text{ and stride } s
 \end{align}$$
 
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
 
 
 ---
