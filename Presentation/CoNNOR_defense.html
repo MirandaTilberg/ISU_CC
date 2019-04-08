@@ -4,11 +4,10 @@
     <title>CoNNOR: Convolutional Neural Network for Outsole Recognition</title>
     <meta charset="utf-8">
     <meta name="author" content="Miranda Tilton" />
-    <meta name="date" content="2019-04-09" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/csafe.css" type="text/css" />
-    <link rel="stylesheet" href="css/csafe-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="css/this-presentation.css" type="text/css" />
+    <link rel="stylesheet" href="css\csafe.css" type="text/css" />
+    <link rel="stylesheet" href="css\csafe-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="css\this-presentation.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -28,6 +27,22 @@ class: primary
 
 
 
+
+
+## Outline
+
+- [Forensics Context](#3)&lt;br/&gt;&lt;br/&gt;
+- [Image Analysis](#6)&lt;br/&gt;&lt;br/&gt;
+- [Convolutional Neural Networks](#9)&lt;br/&gt;&lt;br/&gt;
+- [Data](#24)&lt;br/&gt;&lt;br/&gt;
+- [CoNNOR - Training](#28)&lt;br/&gt;&lt;br/&gt;
+- [CoNNOR - Accuracy](#30)&lt;br/&gt;&lt;br/&gt;
+- [CoNNOR - Consistency](#33)&lt;br/&gt;&lt;br/&gt;
+- [CoNNOR - Heatmaps](#37)&lt;br/&gt;&lt;br/&gt;
+- [Future Work](#41)&lt;br/&gt;&lt;br/&gt;
+
+---
+class:primary
 
 ## Estimating Random Match Probability
 
@@ -62,6 +77,25 @@ Use features other than make/model and size to characterize shoes
 | --- | --- | --- |
 | &lt;img src = "images/dr-martens-work-2295-rigger-tan-greenland_product_114677_color_201711.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "images/eastland-1955-edition-jett-brown_product_8946957_color_6.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; | &lt;img src = "images/timberland-6-premium-boot-coal-waterbuck_product_8906913_color_761877.jpg" max-width = "40%" height = "250px" style = "padding-left:25%;padding-right:25%"/&gt; |
 | Work 2295 Rigger | 1955 Edition Jett | 6" Premium Boot |
+
+
+---
+class:primary
+## Geometric Features
+
+
+| Bowtie | Chevron | Circle |
+| ------ | ------- | ------ |
+| ![Bowtie examples](../Images/chapter2/class_examples/bowtie_examples.png) | ![Chevron examples](../Images/chapter2/class_examples/chevron_examples.png) | ![Circle examples](../Images/chapter2/class_examples/circle_examples.png) |
+
+| Line | Polygon | Quadrilateral |
+| ---- | ------- | ---- |
+| ![Line examples](../Images/chapter2/class_examples/line_examples.png) | ![Polygon examples](../Images/chapter2/class_examples/polygon_examples.png) | ![Quad examples](../Images/chapter2/class_examples/quad_examples.png) |
+
+| Star | Text | Triangle |
+| ---- | ---- | -------- |
+| ![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
+
 
 ---
 class:primary
@@ -174,6 +208,7 @@ class:primary
 &amp; \text{ with window } w, \text{ and stride } s
 \end{align}$$`
 
+.footer[Image source: https://towardsdatascience.com/applied-deep-learning-part-4-convolutional-neural-networks-584bc134c1e2]
 
 
 ---
@@ -309,7 +344,7 @@ class:primary
 
 ## Data
 
-- To date, 4439 shoes have been labeled, yielding 27519 multi-label images.
+- To date, 4371 shoes have been labeled, yielding 27135 multi-label images.
 - 60/20/20 data split for train/validation/test
 
 &lt;img src="CoNNOR_defense_files/figure-html/class-characteristic-barchart-1.png" width="80%" style="display: block; margin: auto;" /&gt;
@@ -399,7 +434,7 @@ class:primary
 
 ## Class Activation Maps
 
-&lt;img src="../figure/chapter3//heatmap-chevron-circle.png" width="95%" /&gt;&lt;img src="../figure/chapter3//heatmap-text-seychelles.png" width="95%" /&gt;
+&lt;img src="../figure/chapter3/heatmap-chevron-circle.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-text-seychelles.png" width="95%" /&gt;
 
 &lt;br/&gt;
 Heatmaps are scaled by class. Yellow = high activation
@@ -412,7 +447,7 @@ class:primary
 
 ## Class Activation Maps
 
-&lt;img src="../figure/chapter3//heatmap-star-quad.png" width="95%" /&gt;&lt;img src="../figure/chapter3//heatmap-quad-triangle-polygon.png" width="95%" /&gt;
+&lt;img src="../figure/chapter3/heatmap-star-quad.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-quad-triangle-polygon.png" width="95%" /&gt;
 
 &lt;br/&gt;
 Heatmaps are scaled by class. Yellow = high activation
@@ -424,7 +459,7 @@ class:primary
 
 ## Class Activation Maps
 
-&lt;img src="../figure/chapter3//heatmap-corks.png" width="95%" /&gt;&lt;img src="../figure/chapter3//heatmap-bowtie-star.png" width="95%" /&gt;
+&lt;img src="../figure/chapter3/heatmap-corks.png" width="95%" /&gt;&lt;img src="../figure/chapter3/heatmap-bowtie-star.png" width="95%" /&gt;
 
 &lt;br/&gt;
 Heatmaps are scaled by class. Yellow = high activation
