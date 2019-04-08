@@ -76,14 +76,14 @@ loaded_model <- set_weights(model_wts_file)
 ## Outline
 
 - [Forensics Context](#3)<br/><br/>
-- [Image Analysis](#6)<br/><br/>
-- [Convolutional Neural Networks](#9)<br/><br/>
-- [Data](#24)<br/><br/>
-- [CoNNOR - Training](#28)<br/><br/>
-- [CoNNOR - Accuracy](#30)<br/><br/>
-- [CoNNOR - Consistency](#33)<br/><br/>
-- [CoNNOR - Heatmaps](#37)<br/><br/>
-- [Future Work](#41)<br/><br/>
+- [Image Analysis](#7)<br/><br/>
+- [Convolutional Neural Networks](#10)<br/><br/>
+- [Data](#27)<br/><br/>
+- [CoNNOR - Training](#31)<br/><br/>
+- [CoNNOR - Accuracy](#33)<br/><br/>
+- [CoNNOR - Consistency](#36)<br/><br/>
+- [CoNNOR - Heatmaps](#40)<br/><br/>
+- [Future Work](#44)<br/><br/>
 
 ---
 class:primary
@@ -130,15 +130,15 @@ class:primary
 
 | Bowtie | Chevron | Circle |
 | ------ | ------- | ------ |
-| ![Bowtie examples](../Images/chapter2/class_examples/bowtie_examples.png) | ![Chevron examples](../Images/chapter2/class_examples/chevron_examples.png) | ![Circle examples](../Images/chapter2/class_examples/circle_examples.png) |
+|![Bowtie examples](../Images/chapter2/class_examples/bowtie_examples.png) | ![Chevron examples](../Images/chapter2/class_examples/chevron_examples.png) | ![Circle examples](../Images/chapter2/class_examples/circle_examples.png) |
 
 | Line | Polygon | Quadrilateral |
 | ---- | ------- | ---- |
-| ![Line examples](../Images/chapter2/class_examples/line_examples.png) | ![Polygon examples](../Images/chapter2/class_examples/polygon_examples.png) | ![Quad examples](../Images/chapter2/class_examples/quad_examples.png) |
+|![Line examples](../Images/chapter2/class_examples/line_examples.png) | ![Polygon examples](../Images/chapter2/class_examples/polygon_examples.png) | ![Quad examples](../Images/chapter2/class_examples/quad_examples.png) |
 
 | Star | Text | Triangle |
 | ---- | ---- | -------- |
-| ![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
+|![Star examples](../Images/chapter2/class_examples/star_examples.png) | ![text examples](../Images/chapter2/class_examples/text_examples.png) | ![Triangle examples](../Images/chapter2/class_examples/triangle_examples.png) |
 
 
 ---
