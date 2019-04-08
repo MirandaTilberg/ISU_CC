@@ -30,18 +30,6 @@ knitr::opts_chunk$set(echo = FALSE, message = F, warning = F,
 source("../code/Generate_Model_Images.R")
 ```
 
-```{r load_refs, echo=FALSE, cache=FALSE, include = F, eval = F}
-library(RefManageR)
-BibOptions(check.entries = FALSE, 
-           bib.style = "numeric", 
-           cite.style = 'authoryear', 
-           style = "html",
-           hyperlink = FALSE, 
-           no.print.fields = c("isbn", "urldate"),
-           dashed = FALSE)
-bb <- ReadBib("./refs.bib", check = T)
-```
-
 ```{r unicode}
 # Unicode symbols for classes
 unicode_symbols <- c(bowtie = "",
@@ -57,6 +45,7 @@ unicode_symbols <- c(bowtie = "",
   )
 unicode_symbols <- tibble(labels = names(unicode_symbols),
                               shape = as.character(unicode_symbols))
+
 classes <- c("bowtie", "chevron", "circle", "line", "polygon", "quad", "star", 
              "text", "triangle")
 ```
@@ -154,7 +143,6 @@ df <- data.frame(x = plot$data$x,
                           "Caterpillar", "Carrot"))
  
 plot + geom_label(aes(x = x, y = y, label = labs), data = df)
-
 ```
 
 
@@ -236,6 +224,7 @@ elu <- function(x, a) a*(exp(x) - 1) * (x < 0) + x * (x > 0)
 softplus <- function(x) log(1 + exp(x))
 
 x <- seq(-3, 3, .005)
+
 tibble(x = x, Linear = x, Sigmoid = sigmoid(x),
        ReLU = relu(x), ELU = elu(x, 1), SoftPlus = softplus(x)) %>%
   gather(key = key, value = value, -x) %>%
@@ -267,7 +256,6 @@ class:primary
 ## Densely Connected Layers
 
 ```{r densely-connected, out.width = "75%", fig.width = 10, fig.height = 8, fig.align = "center"}
-#plot_deepviz_arrows(c(6, 6, 3), r = .1)
 plot_deepviz_arrows(c(12, 9, 4), r = .1)
 ```
 
@@ -276,7 +264,6 @@ class:primary
 ## Dropout
 
 ```{r dropout, out.width = "75%", fig.width = 10, fig.height = 8, fig.align = "center"}
-#plot_deepviz_dropout(n = c(6,6,3), rm_nodes = c(3,4,6,8,10,11), cross_out = T)
 set.seed(2)
 plot_deepviz_dropout(n = c(12,9,4), rm_nodes = c(sample(2:11, 5), sample(14:20, 4)), cross_out = T)
 ```
@@ -316,14 +303,13 @@ class: primary
 L(\mathbf{y}, \mathbf{p}) &= \sum_{i=1}^C -\left[y_i \log(p_i) + (1 - y_i)\log(1-p_i) \right]
 \end{align}
 
-```{r, fig.height = 2.5, fig.width = 5, out.width = "80%", fig.align = "center"}
+```{r loss-function, fig.height = 2.5, fig.width = 5, out.width = "80%", fig.align = "center"}
 L <- function(y, p) -(y * log(p) + (1-y)*log(1-p))
 p <- seq(.01, 1, .01)
 
 tibble(p = p, Loss = L(0, p)) %>%
   ggplot(aes(x = p, y = Loss)) + geom_line() +
   ggtitle("Single Class Loss for Y = 0") 
-
 ```
 
 ---
@@ -436,7 +422,6 @@ annotated_imgs %>%
   theme(legend.position = c(1, 1),
         legend.justification = c(1.03, 1.03),
         legend.background = element_rect(fill = "white"))
-
 ```
 
 
@@ -514,7 +499,6 @@ ggplot() +
   ggtitle("CoNNOR Test Set Performance (All Classes)") +
   coord_fixed() + mytheme +
   theme(legend.position = c(1, 0), legend.justification = c(1.01, -0.01), legend.title = element_blank(), legend.background = element_rect(fill = "white"))
-
 ```
 
 ---
@@ -528,13 +512,21 @@ thresholds <- purrr::map_dbl(aucs$data$eer, ~.$thresholds)
 aucs$data$thresholds <- thresholds
 
 ggplot() +
-  geom_line(aes(x = fpr, y = tpr), data = unnest(aucs$data, roc_plot), size = 1.25) +
-  geom_label(aes(x = 1, y = 0, label = sprintf("AUC: %0.2f\nEER: %0.2f", auc, thresholds)), hjust = 1, vjust = -0.02, data = aucs$data) +
-  geom_point(aes(x = fpr, y = tpr, color = "Equal Error\nRate (EER)"), data = unnest(aucs$data, eer), size = 2.5) +
+  geom_line(aes(x = fpr, y = tpr), data = unnest(aucs$data, roc_plot), 
+            size = 1.25) +
+  geom_label(aes(x = 1, y = 0, 
+                 label = sprintf("AUC: %0.2f\nEER: %0.2f", auc, thresholds)), 
+             hjust = 1, vjust = -0.02, data = aucs$data) +
+  geom_point(aes(x = fpr, y = tpr, color = "Equal Error\nRate (EER)"), 
+             data = unnest(aucs$data, eer), size = 2.5) +
   scale_color_manual("", values = "black") +
   facet_wrap(~class) +
-  scale_x_continuous("False Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
-  scale_y_continuous("True Positive Rate", breaks = c(0, .25, .5, .75, 1), labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_x_continuous("False Positive Rate", 
+                     breaks = c(0, .25, .5, .75, 1), 
+                     labels = c("0.0", "", "0.5", "", "1.0")) +
+  scale_y_continuous("True Positive Rate", 
+                     breaks = c(0, .25, .5, .75, 1), 
+                     labels = c("0.0", "", "0.5", "", "1.0")) +
   ggtitle("CoNNOR Test Set Performance") +
   facet_wrap(~class, nrow = 2) +
   coord_fixed() +
@@ -565,8 +557,6 @@ get_confusion_matrix(predictions = preds, classes = classes,
         plot.background = element_rect(fill = "transparent", color = NA),
         plot.subtitle = element_blank(), plot.caption = element_blank(),
         panel.spacing = unit(c(0, 0, 0, 0), "mm"))
-
-
 ```
 
 ---
