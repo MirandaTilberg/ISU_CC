@@ -310,7 +310,7 @@ plot_deepviz_dropout(n = c(12,9,4), rm_nodes = c(sample(2:11, 5), sample(14:20, 
 class: primary
 ## CNN Architecture
 
-![VGG16 Structure](../Images/chapter1/vgg16-base-head.png)
+![VGG16 Structure](../Images/chapter2/vgg16-layer-size.png)
 
 
 ---
