@@ -487,7 +487,7 @@ class:primary
 
 ## Model Training
 
-```{r training-accuracy, out.width = "90%"}
+```{r training-accuracy, fig.height = 3.7, fig.width = 5, out.width = "90%"}
 data.frame(history$metrics) %>%
   mutate(epoch = 1:n()) %>%
   gather(key = "measure", value = "value", -epoch) %>%
