@@ -315,7 +315,7 @@ class: primary
 
 ---
 class: primary
-## Forward Propogation
+## Forward Propagation
 
 - The process by which an input image moves through the layers of the network<br/>
 
@@ -350,7 +350,7 @@ tibble(p = p, Loss = L(0, p)) %>%
 
 ---
 class: primary
-## Backward Propogation
+## Backward Propagation
 
 - The process by which a network "learns"
 
